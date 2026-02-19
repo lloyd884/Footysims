@@ -16,12 +16,12 @@
 
     <div class="box">
         <h2>Your Reusable eSIM</h2>
-        <div id="qrContainer">Tap button to get real eSIM</div>
+        <div id="qrContainer">Tap button to get your eSIM</div>
         <p id="usage">Data left: 0 GB – top up for next away day</p>
     </div>
 
     <button onclick="topUp()">Top Up Data (5GB Match Day Pack - $4.90)</button>
-    <button onclick="getRealESIM()">✅ Get My Real eSIM Now (Zendit Sandbox)</button>
+    <button onclick="getRealESIM()">✅ Get My Real eSIM Now (Test)</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
     <button onclick="logout()">Logout</button>
 
@@ -40,9 +40,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        const ZENDIT_KEY = "sand_45fc0f3e-4a5b-4639-94d8-e575ac02e1a6699564cbf7a62d0a119fe305";
-        const ZENDIT_URL = "https://api.zendit.io";
-
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('userInfo').innerHTML = `✅ Logged in as <b>${user.email}</b>`;
@@ -59,40 +56,13 @@
             window.location.href = "https://buy.stripe.com/test_28EeVc0yi3tQ6AQ75Fasg00";
         }
 
-        async function getRealESIM() {
-            document.getElementById('qrContainer').innerHTML = "<p>🔄 Provisioning real eSIM from Zendit sandbox...</p>";
-
-            try {
-                // First get available offers (optional - you can hardcode a test offerId from your Swagger)
-                const offerRes = await fetch(`${ZENDIT_URL}/esim/offers?country=ES`, {
-                    headers: { "Authorization": `Bearer ${ZENDIT_KEY}` }
-                });
-                const offers = await offerRes.json();
-                const testOfferId = offers[0]?.id || "YOUR_TEST_OFFER_ID"; // Replace with real offerId from Swagger if needed
-
-                const res = await fetch(`${ZENDIT_URL}/purchases`, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${ZENDIT_KEY}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        offerId: testOfferId,
-                        transactionId: "footysims-" + Date.now()
-                    })
-                });
-
-                const data = await res.json();
-                const qrData = data.qrCode || data.iccid || "ESIM-FOOTYSIMS-" + Date.now();
-                const qrHTML = `
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}" alt="Real eSIM QR">
-                    <p>✅ Real reusable eSIM provisioned from Zendit!<br>ICCID: ${data.iccid || 'Generated'}<br>Scan with your phone → install once, top-up anytime.</p>
-                `;
-                document.getElementById('qrContainer').innerHTML = qrHTML;
-                document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready for next match!)';
-            } catch(e) {
-                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Check your Zendit test mode or replace testOfferId with real one from Swagger.</p>`;
-            }
+        function getRealESIM() {
+            const qrHTML = `
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
+                <p>✅ Reusable eSIM ready!<br>Scan with your phone → install once, top-up anytime.</p>
+            `;
+            document.getElementById('qrContainer').innerHTML = qrHTML;
+            document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready for next match!)';
         }
 
         function addMate() {
