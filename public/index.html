@@ -3,22 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>FootySIMs - eSIM for Football Away Days</title>
-    <style>body { font-family: Arial; background: #228B22; color: white; } /* Green pitch theme */</style>
+    <style>
+        body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
+        button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; }
+        input { padding: 12px; margin: 10px; width: 80%; font-size: 16px; border-radius: 8px; }
+    </style>
 </head>
 <body>
-    <h1>FootySIMs: Reusable eSIM for Global Football Travel</h1>
-    <p>Avoid roaming fees on away days—install once, top up cheap data for 190+ countries. Perfect for Champions League trips, group fan travel, and match-day streaming.</p>
-    <select id="country"><option value="GB">UK (Home Games)</option><option value="ES">Spain (Real Madrid Away)</option><option value="DE">Germany (Bayern Munich)</option><!-- Add more UEFA hotspots --></select>
-    <input id="gb" type="number" value="5" min="1">
-    <button onclick="previewPlan()">Preview 5GB Plan (~$4.90)</button>
-    <div id="preview">Select a destination for fan-friendly pricing!</div>
+    <h1>FootySIMs</h1>
+    <p>Avoid roaming fees on away days — install once, top up cheap data for 190+ countries.</p>
 
+    <h2>Sign Up / Login</h2>
+    <input id="email" type="email" placeholder="Your email" value="">
+    <input id="password" type="password" placeholder="Password" value="">
+    
+    <button onclick="signUp()">Sign Up (New Account)</button>
+    <button onclick="login()">Login</button>
+
+    <div id="message"></div>
+    <button id="dashboardBtn" style="display:none;" onclick="goToDashboard()">Go to My Dashboard →</button>
+
+    <p style="margin-top:40px;">Select destination for match-day data:</p>
+    <select id="country"><option value="ES">Spain (Real Madrid Away)</option><option value="DE">Germany (Bayern)</option><option value="GB">UK</option></select>
+    <input id="gb" type="number" value="5">
+    <button onclick="previewPlan()">Preview Plan</button>
+    <div id="preview"></div>
+
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
     <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
+          authDomain: "footysims-43be5.firebaseapp.com",
+          projectId: "footysims-43be5",
+          storageBucket: "footysims-43be5.firebasestorage.app",
+          messagingSenderId: "663997348288",
+          appId: "1:663997348288:web:c0c53c5dc32e546add7025"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function signUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(() => { document.getElementById('message').innerHTML = '✅ Account created! Now login.'; })
+                .catch(err => { document.getElementById('message').innerHTML = '❌ ' + err.message; });
+        }
+
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            auth.signInWithEmailAndPassword(email, password)
+                .then(user => {
+                    document.getElementById('message').innerHTML = '✅ Logged in as ' + user.user.email;
+                    document.getElementById('dashboardBtn').style.display = 'block';
+                })
+                .catch(err => { document.getElementById('message').innerHTML = '❌ ' + err.message; });
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
         function previewPlan() {
             const country = document.getElementById('country').value;
             const gb = document.getElementById('gb').value;
-            document.getElementById('preview').innerHTML = `Top up ${gb}GB for ${country} away—enough for navigation, banter on X, and full match updates!`;
-            // Later: Integrate Zendit API call for real pricing
+            document.getElementById('preview').innerHTML = `Top up ${gb}GB for ${country} away day — enough for full match updates & banter!`;
         }
     </script>
 </body>
