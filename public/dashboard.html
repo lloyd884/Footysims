@@ -1,19 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>FootySIMs Dashboard</title>
-    <style>body { font-family: Arial; background: #228B22; color: white; }</style>
+    <style>
+        body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
+        button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; }
+        .box { background: rgba(255,255,255,0.1); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
+    </style>
 </head>
 <body>
     <h1>Your FootySIMs Dashboard</h1>
-    <p>Manage eSIMs for you and your mates—track data for the next away day.</p>
-    <div id="esims">Loading your squad's eSIMs...</div>
-    <button>Add Mate's eSIM (Group Travel)</button>
-    <button>Top Up for Next Match</button>
+    <div id="userInfo" class="box">Loading...</div>
 
+    <div class="box">
+        <h2>Your eSIM</h2>
+        <p id="qr">QR code will appear here after you buy your first plan</p>
+        <p id="usage">Data left: 0 GB (top up for next away day)</p>
+    </div>
+
+    <button onclick="topUp()">Top Up Data (Match Day Pack)</button>
+    <button onclick="addMate()">Add Mate (Group Travel)</button>
+    <button onclick="logout()">Logout</button>
+
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
     <script>
-        // Later: Fetch from Zendit API (e.g., usage for ICCID)
-        document.getElementById('esims').innerHTML = 'Test Mode: Sample eSIM - 3GB left (enough for half-time highlights)';
+        const firebaseConfig = {
+          apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
+          authDomain: "footysims-43be5.firebaseapp.com",
+          projectId: "footysims-43be5",
+          storageBucket: "footysims-43be5.firebasestorage.app",
+          messagingSenderId: "663997348288",
+          appId: "1:663997348288:web:c0c53c5dc32e546add7025"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('userInfo').innerHTML = `✅ Logged in as <b>${user.email}</b>`;
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+
+        function logout() {
+            auth.signOut().then(() => window.location.href = 'index.html');
+        }
+
+        function topUp() {
+            alert("Top-up screen coming soon – $1/GB for your next away day!");
+        }
+
+        function addMate() {
+            alert("Add mate's email for group eSIM sharing (family/fan crew)");
+        }
     </script>
 </body>
 </html>
