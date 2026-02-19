@@ -7,6 +7,7 @@
         body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
         button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; }
         .box { background: rgba(255,255,255,0.1); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
+        img { max-width: 300px; margin: 20px auto; border: 4px solid white; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -14,12 +15,13 @@
     <div id="userInfo" class="box">Loading...</div>
 
     <div class="box">
-        <h2>Your eSIM</h2>
-        <p id="qr">QR code will appear here after first top-up</p>
+        <h2>Your Reusable eSIM</h2>
+        <div id="qrContainer"></div>
         <p id="usage">Data left: 0 GB (top up for next away day)</p>
     </div>
 
     <button onclick="topUp()">Top Up Data (5GB Match Day Pack - $4.90)</button>
+    <button onclick="simulatePaid()">✅ I just paid – show my eSIM QR</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
     <button onclick="logout()">Logout</button>
 
@@ -52,6 +54,15 @@
 
         function topUp() {
             window.location.href = "https://buy.stripe.com/test_28EeVc0yi3tQ6AQ75Fasg00";
+        }
+
+        function simulatePaid() {
+            const qrHTML = `
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ESIM-FOOTYSIMS-TEST-12345-REUSABLE" alt="Your eSIM QR">
+                <p>✅ Reusable eSIM created!<br>Scan with your phone camera → install once, top-up anytime.</p>
+            `;
+            document.getElementById('qrContainer').innerHTML = qrHTML;
+            document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready for next away day!)';
         }
 
         function addMate() {
