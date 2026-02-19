@@ -4,30 +4,48 @@
     <meta charset="UTF-8">
     <title>FootySIMs - eSIM for Football Away Days</title>
     <style>
-        body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
+        body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; margin: 0; }
+        h1 { font-size: 28px; margin: 10px 0; }
+        p { font-size: 18px; }
         button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; }
-        input { padding: 12px; margin: 10px; width: 80%; font-size: 16px; border-radius: 8px; }
+        input, select { padding: 12px; margin: 10px; width: 85%; font-size: 16px; border-radius: 8px; }
+        .box { background: rgba(255,255,255,0.15); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
     </style>
 </head>
 <body>
     <h1>FootySIMs</h1>
     <p>Avoid roaming fees on away days — install once, top up cheap data for 190+ countries.</p>
 
-    <h2>Sign Up / Login</h2>
-    <input id="email" type="email" placeholder="Your email" value="">
-    <input id="password" type="password" placeholder="Password" value="">
-    
-    <button onclick="signUp()">Sign Up (New Account)</button>
-    <button onclick="login()">Login</button>
+    <div class="box">
+        <h2>Sign Up / Login</h2>
+        <input id="email" type="email" placeholder="Your email" value="">
+        <input id="password" type="password" placeholder="Password" value="">
+        
+        <button onclick="signUp()">Sign Up (New Account)</button>
+        <button onclick="login()">Login</button>
 
-    <div id="message"></div>
-    <button id="dashboardBtn" style="display:none;" onclick="goToDashboard()">Go to My Dashboard →</button>
+        <div id="message" style="margin:15px; font-size:16px;"></div>
+        <button id="dashboardBtn" style="display:none;" onclick="goToDashboard()">Go to My Dashboard →</button>
+    </div>
 
-    <p style="margin-top:40px;">Select destination for match-day data:</p>
-    <select id="country"><option value="ES">Spain (Real Madrid Away)</option><option value="DE">Germany (Bayern)</option><option value="GB">UK</option></select>
-    <input id="gb" type="number" value="5">
-    <button onclick="previewPlan()">Preview Plan</button>
-    <div id="preview"></div>
+    <div class="box">
+        <h2>Choose Your Away Day Pack</h2>
+        <select id="country" style="padding:12px; font-size:18px; width:90%; border-radius:8px;">
+            <option value="ES">🇪🇸 Spain – Real Madrid / Barcelona aways (5GB for $4.90)</option>
+            <option value="DE">🇩🇪 Germany – Bayern / Dortmund (5GB for $4.90)</option>
+            <option value="IT">🇮🇹 Italy – Juventus / Milan (5GB for $4.90)</option>
+            <option value="FR">🇫🇷 France – PSG aways (5GB for $4.90)</option>
+            <option value="GB">🇬🇧 UK – Premier League aways (5GB for $4.90)</option>
+            <option value="PT">🇵🇹 Portugal – Porto / Benfica (4GB for $3.90)</option>
+            <option value="NL">🇳🇱 Netherlands – Ajax / PSV (4GB for $3.90)</option>
+            <option value="TR">🇹🇷 Turkey – Galatasaray / Fenerbahçe (5GB for $4.90)</option>
+            <option value="BR">🇧🇷 Brazil – International matches (5GB for $4.90)</option>
+            <!-- Add more countries later as needed -->
+        </select>
+        <input id="gb" type="number" value="5" style="width:80px; display:inline-block;">
+        <button onclick="previewPlan()">Preview Pack</button>
+        <div id="preview" style="margin-top:15px; font-size:18px; font-weight:bold;"></div>
+    </div>
 
     <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
@@ -69,9 +87,9 @@
         }
 
         function previewPlan() {
-            const country = document.getElementById('country').value;
+            const country = document.getElementById('country').options[document.getElementById('country').selectedIndex].text;
             const gb = document.getElementById('gb').value;
-            document.getElementById('preview').innerHTML = `Top up ${gb}GB for ${country} away day — enough for full match updates & banter!`;
+            document.getElementById('preview').innerHTML = `✅ ${country}<br>${gb}GB for $${(gb * 0.98).toFixed(2)} – ready for the next away day!`;
         }
     </script>
 </body>
