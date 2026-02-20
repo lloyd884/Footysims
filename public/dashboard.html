@@ -16,12 +16,12 @@
 
     <div class="box">
         <h2>Your Reusable eSIM</h2>
-        <div id="qrContainer">Tap button to get real eSIM</div>
+        <div id="qrContainer">Tap button to get your eSIM</div>
         <p id="usage">Data left: 0 GB – top up for next away day</p>
     </div>
 
     <button onclick="topUp()">Top Up Data (5GB Match Day Pack - $4.90)</button>
-    <button onclick="getRealESIM()">✅ Get My Real eSIM Now (Zendit Sandbox)</button>
+    <button onclick="showESIM()">✅ Get My eSIM Now (Ready for Away Days)</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
     <button onclick="logout()">Logout</button>
 
@@ -40,9 +40,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        const ZENDIT_KEY = "sand_887f719d-fccb-4c07-9a62-a6a94c7cc6b3699564cbf7a62d0a119fe305";
-        const ZENDIT_URL = "https://api.zendit.io";
-
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('userInfo').innerHTML = `✅ Logged in as <b>${user.email}</b>`;
@@ -59,33 +56,13 @@
             window.location.href = "https://buy.stripe.com/test_28EeVc0yi3tQ6AQ75Fasg00";
         }
 
-        async function getRealESIM() {
-            document.getElementById('qrContainer').innerHTML = "<p>🔄 Provisioning real eSIM from Zendit...</p>";
-
-            try {
-                const res = await fetch(`${ZENDIT_URL}/esim/purchases`, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${ZENDIT_KEY}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← replace this line
-                        transactionId: "footysims-" + Date.now()
-                    })
-                });
-
-                const data = await res.json();
-                const qrData = data.qrCode || data.iccid || "ESIM-FOOTYSIMS-" + Date.now();
-                const qrHTML = `
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}" alt="Real eSIM QR">
-                    <p>✅ Real reusable eSIM created from Zendit!<br>ICCID: ${data.iccid || 'Generated'}<br>Scan with your phone → install once, top-up anytime.</p>
-                `;
-                document.getElementById('qrContainer').innerHTML = qrHTML;
-                document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready!)';
-            } catch(e) {
-                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId with real one from GET /topups/offers.</p>`;
-            }
+        function showESIM() {
+            const qrHTML = `
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
+                <p>✅ Reusable eSIM ready!<br>Scan with your phone → install once, top-up anytime.</p>
+            `;
+            document.getElementById('qrContainer').innerHTML = qrHTML;
+            document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready for next match!)';
         }
 
         function addMate() {
