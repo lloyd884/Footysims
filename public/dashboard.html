@@ -7,7 +7,7 @@
         body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
         button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; }
         .box { background: rgba(255,255,255,0.1); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
-        img { max-width: 300px; margin: 20px auto; border: 4px solid white; border-radius: 12px; }
+        img { max-width: 340px; margin: 20px auto; border: 8px solid white; border-radius: 16px; }
     </style>
 </head>
 <body>
@@ -59,8 +59,8 @@
 
         function showESIM() {
             const qrHTML = `
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
-                <p>✅ Reusable eSIM ready!<br>Scan with your phone → install once, top-up anytime.</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
+                <p style="margin-top:15px;">Screenshot this QR (power + volume down) or use your phone's eSIM scanner directly on the screen.</p>
             `;
             document.getElementById('qrContainer').innerHTML = qrHTML;
             document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready for next match!)';
