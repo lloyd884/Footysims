@@ -40,7 +40,7 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        const ZENDIT_KEY = "sand_45fc0f3e-4a5b-4639-94d8-e575ac02e1a6699564cbf7a62d0a119fe305";
+        const ZENDIT_KEY = "sand_887f719d-fccb-4c07-9a62-a6a94c7cc6b3699564cbf7a62d0a119fe305";
         const ZENDIT_URL = "https://api.zendit.io";
 
         auth.onAuthStateChanged(user => {
@@ -70,7 +70,7 @@
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← replace this line with the real offerId
+                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← replace this line
                         transactionId: "footysims-" + Date.now()
                     })
                 });
@@ -84,7 +84,7 @@
                 document.getElementById('qrContainer').innerHTML = qrHTML;
                 document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready!)';
             } catch(e) {
-                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId in code with real one from Swagger.</p>`;
+                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId with real one from GET /topups/offers.</p>`;
             }
         }
 
