@@ -21,7 +21,7 @@
     </div>
 
     <button onclick="topUp()">Top Up Data (5GB Match Day Pack - $4.90)</button>
-    <button onclick="getRealESIM()">✅ Get My Real eSIM Now (Test)</button>
+    <button onclick="showESIM()">✅ Get My eSIM Now (Ready for Away Days)</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
     <button onclick="logout()">Logout</button>
 
@@ -56,7 +56,7 @@
             window.location.href = "https://buy.stripe.com/test_28EeVc0yi3tQ6AQ75Fasg00";
         }
 
-        function getRealESIM() {
+        function showESIM() {
             const qrHTML = `
                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
                 <p>✅ Reusable eSIM ready!<br>Scan with your phone → install once, top-up anytime.</p>
