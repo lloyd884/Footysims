@@ -4,50 +4,53 @@
     <meta charset="UTF-8">
     <title>FootySIMs - eSIM for Football Away Days</title>
     <style>
-        body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; margin: 0; }
-        h1 { font-size: 28px; margin: 10px 0; }
+        body { font-family: Arial; background: linear-gradient(#228B22, #006400); color: white; text-align: center; padding: 20px; margin: 0; }
+        h1 { font-size: 32px; margin: 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
         p { font-size: 18px; }
-        button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; }
-        input, select { padding: 12px; margin: 10px; width: 85%; font-size: 16px; border-radius: 8px; }
-        .box { background: rgba(255,255,255,0.15); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
+        .hero { background: rgba(0,0,0,0.3); padding: 30px; border-radius: 16px; margin: 20px auto; max-width: 420px; }
+        button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        input, select { padding: 14px; margin: 10px; width: 85%; font-size: 17px; border-radius: 12px; border: none; }
+        .box { background: rgba(255,255,255,0.15); padding: 25px; margin: 20px auto; max-width: 420px; border-radius: 16px; }
+        .flag { font-size: 28px; margin: 0 4px; }
     </style>
 </head>
 <body>
-    <h1>FootySIMs</h1>
-    <p>Avoid roaming fees on away days — install once, top up cheap data for 190+ countries.</p>
+    <div class="hero">
+        <h1>⚽ FootySIMs</h1>
+        <p>Install once. Top up $1/GB. Ready for every away day.</p>
+    </div>
 
     <div class="box">
         <h2>Sign Up / Login</h2>
-        <input id="email" type="email" placeholder="Your email" value="">
-        <input id="password" type="password" placeholder="Password" value="">
+        <input id="email" type="email" placeholder="Your email">
+        <input id="password" type="password" placeholder="Password">
         
         <button onclick="signUp()">Sign Up (New Account)</button>
         <button onclick="login()">Login</button>
 
-        <div id="message" style="margin:15px; font-size:16px;"></div>
+        <div id="message" style="margin:15px; font-size:16px; min-height:24px;"></div>
         <button id="dashboardBtn" style="display:none;" onclick="goToDashboard()">Go to My Dashboard →</button>
     </div>
 
     <div class="box">
-        <h2>Choose Your Away Day Pack</h2>
-        <select id="country" style="padding:12px; font-size:18px; width:90%; border-radius:8px;">
-            <option value="US">🇺🇸 USA – World Cup 2026 matches (5GB for $4.90)</option>
-            <option value="ES">🇪🇸 Spain – Real Madrid / Barcelona aways (5GB for $4.90)</option>
-            <option value="DE">🇩🇪 Germany – Bayern / Dortmund (5GB for $4.90)</option>
-            <option value="IT">🇮🇹 Italy – Juventus / Milan (5GB for $4.90)</option>
-            <option value="FR">🇫🇷 France – PSG aways (5GB for $4.90)</option>
-            <option value="GB">🇬🇧 UK – Premier League aways (5GB for $4.90)</option>
-            <option value="PT">🇵🇹 Portugal – Porto / Benfica (4GB for $3.90)</option>
-            <option value="NL">🇳🇱 Netherlands – Ajax / PSV (4GB for $3.90)</option>
-            <option value="TR">🇹🇷 Turkey – Galatasaray / Fenerbahçe (5GB for $4.90)</option>
-            <option value="BR">🇧🇷 Brazil – International matches (5GB for $4.90)</option>
+        <h2>Choose Your Away Day Pack 🌍</h2>
+        <select id="country" style="padding:14px; font-size:18px; width:90%; border-radius:12px;">
+            <option value="US">🇺🇸 USA – World Cup 2026 (5GB $4.90)</option>
+            <option value="ES">🇪🇸 Spain – Real Madrid / Barcelona (5GB $4.90)</option>
+            <option value="DE">🇩🇪 Germany – Bayern / Dortmund (5GB $4.90)</option>
+            <option value="IT">🇮🇹 Italy – Juventus / Milan (5GB $4.90)</option>
+            <option value="FR">🇫🇷 France – PSG (5GB $4.90)</option>
+            <option value="GB">🇬🇧 UK – Premier League (5GB $4.90)</option>
+            <option value="PT">🇵🇹 Portugal (4GB $3.90)</option>
+            <option value="NL">🇳🇱 Netherlands (4GB $3.90)</option>
+            <option value="TR">🇹🇷 Turkey (5GB $4.90)</option>
+            <option value="BR">🇧🇷 Brazil (5GB $4.90)</option>
         </select>
         <input id="gb" type="number" value="5" style="width:80px; display:inline-block;">
         <button onclick="previewPlan()">Preview Pack</button>
-        <div id="preview" style="margin-top:15px; font-size:18px; font-weight:bold;"></div>
+        <div id="preview" style="margin-top:15px; font-size:19px; font-weight:bold;"></div>
     </div>
 
-    <!-- Firebase Scripts -->
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
     <script>
@@ -76,7 +79,7 @@
             const password = document.getElementById('password').value;
             auth.signInWithEmailAndPassword(email, password)
                 .then(user => {
-                    document.getElementById('message').innerHTML = '✅ Logged in as ' + user.user.email;
+                    document.getElementById('message').innerHTML = '✅ Logged in!';
                     document.getElementById('dashboardBtn').style.display = 'block';
                 })
                 .catch(err => { document.getElementById('message').innerHTML = '❌ ' + err.message; });
@@ -87,9 +90,9 @@
         }
 
         function previewPlan() {
-            const country = document.getElementById('country').options[document.getElementById('country').selectedIndex].text;
+            const countryText = document.getElementById('country').options[document.getElementById('country').selectedIndex].text;
             const gb = document.getElementById('gb').value;
-            document.getElementById('preview').innerHTML = `✅ ${country}<br>${gb}GB for $${(gb * 0.98).toFixed(2)} – ready for the next away day!`;
+            document.getElementById('preview').innerHTML = `✅ ${countryText}<br>${gb}GB for $${(gb * 0.98).toFixed(2)} – ready for the next away day!`;
         }
     </script>
 </body>
