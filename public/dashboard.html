@@ -6,10 +6,9 @@
     <style>
         body { font-family: Arial; background: #228B22; color: white; text-align: center; padding: 20px; }
         button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; }
-        .box { background: rgba(255,255,255,0.1); padding: 25px; margin: 20px auto; max-width: 420px; border-radius: 16px; }
-        img { max-width: 340px; margin: 20px auto; border: 8px solid white; border-radius: 16px; }
-        select, input { padding: 14px; margin: 10px; width: 90%; font-size: 17px; border-radius: 12px; border: none; }
-        .flag { font-size: 26px; }
+        .box { background: rgba(255,255,255,0.1); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
+        img { max-width: 300px; margin: 20px auto; border: 4px solid white; border-radius: 12px; }
+        select, input { padding: 12px; margin: 10px; width: 85%; font-size: 16px; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -19,89 +18,30 @@
     <div class="box">
         <h2>Your Reusable eSIM</h2>
         <div id="qrContainer">Tap button to get your eSIM</div>
-        <p id="usage">Data left: 0 GB – top up for next trip</p>
+        <p id="usage">Data left: 0 GB – top up for next away day</p>
     </div>
 
     <div class="box">
-        <h2>Choose Next Pack 🌍</h2>
+        <h2>Choose Your Away Day Pack</h2>
         <select id="country">
-            <option value="US">🇺🇸 USA (5GB $4.90)</option>
-            <option value="AF">🇦🇫 Afghanistan (5GB $4.90)</option>
-            <option value="AL">🇦🇱 Albania (5GB $4.90)</option>
-            <option value="DZ">🇩🇿 Algeria (5GB $4.90)</option>
-            <option value="AR">🇦🇷 Argentina (5GB $4.90)</option>
-            <option value="AU">🇦🇺 Australia (5GB $4.90)</option>
-            <option value="AT">🇦🇹 Austria (5GB $4.90)</option>
-            <option value="BH">🇧🇭 Bahrain (5GB $4.90)</option>
-            <option value="BE">🇧🇪 Belgium (5GB $4.90)</option>
-            <option value="BR">🇧🇷 Brazil (5GB $4.90)</option>
-            <option value="BG">🇧🇬 Bulgaria (5GB $4.90)</option>
-            <option value="CA">🇨🇦 Canada (5GB $4.90)</option>
-            <option value="CL">🇨🇱 Chile (5GB $4.90)</option>
-            <option value="CN">🇨🇳 China (5GB $4.90)</option>
-            <option value="CO">🇨🇴 Colombia (5GB $4.90)</option>
-            <option value="HR">🇭🇷 Croatia (5GB $4.90)</option>
-            <option value="CY">🇨🇾 Cyprus (5GB $4.90)</option>
-            <option value="CZ">🇨🇿 Czech Republic (5GB $4.90)</option>
-            <option value="DK">🇩🇰 Denmark (5GB $4.90)</option>
-            <option value="EG">🇪🇬 Egypt (5GB $4.90)</option>
-            <option value="EE">🇪🇪 Estonia (5GB $4.90)</option>
-            <option value="FI">🇫🇮 Finland (5GB $4.90)</option>
-            <option value="FR">🇫🇷 France (5GB $4.90)</option>
-            <option value="DE">🇩🇪 Germany (5GB $4.90)</option>
-            <option value="GR">🇬🇷 Greece (5GB $4.90)</option>
-            <option value="HK">🇭🇰 Hong Kong (5GB $4.90)</option>
-            <option value="HU">🇭🇺 Hungary (5GB $4.90)</option>
-            <option value="IS">🇮🇸 Iceland (5GB $4.90)</option>
-            <option value="IN">🇮🇳 India (5GB $4.90)</option>
-            <option value="ID">🇮🇩 Indonesia (5GB $4.90)</option>
-            <option value="IE">🇮🇪 Ireland (5GB $4.90)</option>
-            <option value="IL">🇮🇱 Israel (5GB $4.90)</option>
-            <option value="IT">🇮🇹 Italy (5GB $4.90)</option>
-            <option value="JP">🇯🇵 Japan (5GB $4.90)</option>
-            <option value="KR">🇰🇷 Korea (5GB $4.90)</option>
-            <option value="KW">🇰🇼 Kuwait (5GB $4.90)</option>
-            <option value="LV">🇱🇻 Latvia (5GB $4.90)</option>
-            <option value="LB">🇱🇧 Lebanon (5GB $4.90)</option>
-            <option value="LT">🇱🇹 Lithuania (5GB $4.90)</option>
-            <option value="LU">🇱🇺 Luxembourg (5GB $4.90)</option>
-            <option value="MY">🇲🇾 Malaysia (5GB $4.90)</option>
-            <option value="MT">🇲🇹 Malta (5GB $4.90)</option>
-            <option value="MX">🇲🇽 Mexico (5GB $4.90)</option>
-            <option value="NL">🇳🇱 Netherlands (5GB $4.90)</option>
-            <option value="NZ">🇳🇿 New Zealand (5GB $4.90)</option>
-            <option value="NO">🇳🇴 Norway (5GB $4.90)</option>
-            <option value="OM">🇴🇲 Oman (5GB $4.90)</option>
-            <option value="PE">🇵🇪 Peru (5GB $4.90)</option>
-            <option value="PH">🇵🇭 Philippines (5GB $4.90)</option>
-            <option value="PL">🇵🇱 Poland (5GB $4.90)</option>
-            <option value="PT">🇵🇹 Portugal (5GB $4.90)</option>
-            <option value="QA">🇶🇦 Qatar (5GB $4.90)</option>
-            <option value="RO">🇷🇴 Romania (5GB $4.90)</option>
-            <option value="RU">🇷🇺 Russia (5GB $4.90)</option>
-            <option value="SA">🇸🇦 Saudi Arabia (5GB $4.90)</option>
-            <option value="SG">🇸🇬 Singapore (5GB $4.90)</option>
-            <option value="SK">🇸🇰 Slovakia (5GB $4.90)</option>
-            <option value="SI">🇸🇮 Slovenia (5GB $4.90)</option>
-            <option value="ZA">🇿🇦 South Africa (5GB $4.90)</option>
-            <option value="ES">🇪🇸 Spain (5GB $4.90)</option>
-            <option value="SE">🇸🇪 Sweden (5GB $4.90)</option>
-            <option value="CH">🇨🇭 Switzerland (5GB $4.90)</option>
-            <option value="TW">🇹🇼 Taiwan (5GB $4.90)</option>
-            <option value="TH">🇹🇭 Thailand (5GB $4.90)</option>
-            <option value="TR">🇹🇷 Turkey (5GB $4.90)</option>
-            <option value="UA">🇺🇦 Ukraine (5GB $4.90)</option>
-            <option value="AE">🇦🇪 United Arab Emirates (5GB $4.90)</option>
-            <option value="GB">🇬🇧 United Kingdom (5GB $4.90)</option>
-            <option value="UY">🇺🇾 Uruguay (5GB $4.90)</option>
-            <option value="VN">🇻🇳 Vietnam (5GB $4.90)</option>
+            <option value="TH">🇹🇭 Thailand (5GB for $4.90)</option>
+            <option value="US">🇺🇸 USA – World Cup 2026 (5GB for $4.90)</option>
+            <option value="ES">🇪🇸 Spain (5GB for $4.90)</option>
+            <option value="DE">🇩🇪 Germany (5GB for $4.90)</option>
+            <option value="IT">🇮🇹 Italy (5GB for $4.90)</option>
+            <option value="FR">🇫🇷 France (5GB for $4.90)</option>
+            <option value="GB">🇬🇧 UK (5GB for $4.90)</option>
+            <option value="PT">🇵🇹 Portugal (4GB for $3.90)</option>
+            <option value="NL">🇳🇱 Netherlands (4GB for $3.90)</option>
+            <option value="TR">🇹🇷 Turkey (5GB for $4.90)</option>
+            <option value="BR">🇧🇷 Brazil (5GB for $4.90)</option>
         </select>
-        <input id="gb" type="number" value="5" style="width:80px;">
+        <input id="gb" type="number" value="5" style="width:80px; display:inline-block;">
         <button onclick="previewPlan()">Preview Pack</button>
-        <div id="preview" style="margin-top:15px; font-size:19px; font-weight:bold;"></div>
+        <div id="preview" style="margin-top:15px; font-size:18px; font-weight:bold;"></div>
     </div>
 
-    <button onclick="topUp()">Top Up Selected Pack Now</button>
+    <button onclick="topUp()">Top Up Selected Pack</button>
     <button onclick="showESIM()">✅ Get My eSIM Now</button>
     <button onclick="window.location.href='howto.html'">📖 How to Use eSIM</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
@@ -131,6 +71,7 @@
         });
 
         function logout() { auth.signOut().then(() => window.location.href = 'index.html'); }
+
         function topUp() { window.location.href = "https://buy.stripe.com/9B6bJ3giNbAi6RW6jk04800"; }
 
         function previewPlan() {
