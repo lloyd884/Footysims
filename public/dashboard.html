@@ -18,8 +18,8 @@
 
     <div class="box">
         <h2>Your Reusable eSIM</h2>
-        <div id="qrContainer">Tap button to get your eSIM</div>
-        <p id="usage">Data left: 0 GB – top up for next trip</p>
+        <div id="qrContainer">Tap button to get your Thailand eSIM</div>
+        <p id="usage">Data left: 0 GB – top up for Thailand trip</p>
     </div>
 
     <div class="box">
@@ -27,6 +27,15 @@
         <select id="country">
             <option value="TH">🇹🇭 Thailand (5GB $4.90)</option>
             <option value="US">🇺🇸 USA (5GB $4.90)</option>
+            <option value="ES">🇪🇸 Spain (5GB $4.90)</option>
+            <option value="DE">🇩🇪 Germany (5GB $4.90)</option>
+            <option value="IT">🇮🇹 Italy (5GB $4.90)</option>
+            <option value="FR">🇫🇷 France (5GB $4.90)</option>
+            <option value="GB">🇬🇧 UK (5GB $4.90)</option>
+            <option value="PT">🇵🇹 Portugal (4GB $3.90)</option>
+            <option value="NL">🇳🇱 Netherlands (4GB $3.90)</option>
+            <option value="TR">🇹🇷 Turkey (5GB $4.90)</option>
+            <option value="BR">🇧🇷 Brazil (5GB $4.90)</option>
             <option value="AF">🇦🇫 Afghanistan (5GB $4.90)</option>
             <option value="AL">🇦🇱 Albania (5GB $4.90)</option>
             <option value="DZ">🇩🇿 Algeria (5GB $4.90)</option>
@@ -35,7 +44,6 @@
             <option value="AT">🇦🇹 Austria (5GB $4.90)</option>
             <option value="BH">🇧🇭 Bahrain (5GB $4.90)</option>
             <option value="BE">🇧🇪 Belgium (5GB $4.90)</option>
-            <option value="BR">🇧🇷 Brazil (5GB $4.90)</option>
             <option value="BG">🇧🇬 Bulgaria (5GB $4.90)</option>
             <option value="CA">🇨🇦 Canada (5GB $4.90)</option>
             <option value="CL">🇨🇱 Chile (5GB $4.90)</option>
@@ -48,8 +56,6 @@
             <option value="EG">🇪🇬 Egypt (5GB $4.90)</option>
             <option value="EE">🇪🇪 Estonia (5GB $4.90)</option>
             <option value="FI">🇫🇮 Finland (5GB $4.90)</option>
-            <option value="FR">🇫🇷 France (5GB $4.90)</option>
-            <option value="DE">🇩🇪 Germany (5GB $4.90)</option>
             <option value="GR">🇬🇷 Greece (5GB $4.90)</option>
             <option value="HK">🇭🇰 Hong Kong (5GB $4.90)</option>
             <option value="HU">🇭🇺 Hungary (5GB $4.90)</option>
@@ -58,7 +64,6 @@
             <option value="ID">🇮🇩 Indonesia (5GB $4.90)</option>
             <option value="IE">🇮🇪 Ireland (5GB $4.90)</option>
             <option value="IL">🇮🇱 Israel (5GB $4.90)</option>
-            <option value="IT">🇮🇹 Italy (5GB $4.90)</option>
             <option value="JP">🇯🇵 Japan (5GB $4.90)</option>
             <option value="KR">🇰🇷 Korea (5GB $4.90)</option>
             <option value="KW">🇰🇼 Kuwait (5GB $4.90)</option>
@@ -69,14 +74,12 @@
             <option value="MY">🇲🇾 Malaysia (5GB $4.90)</option>
             <option value="MT">🇲🇹 Malta (5GB $4.90)</option>
             <option value="MX">🇲🇽 Mexico (5GB $4.90)</option>
-            <option value="NL">🇳🇱 Netherlands (5GB $4.90)</option>
             <option value="NZ">🇳🇿 New Zealand (5GB $4.90)</option>
             <option value="NO">🇳🇴 Norway (5GB $4.90)</option>
             <option value="OM">🇴🇲 Oman (5GB $4.90)</option>
             <option value="PE">🇵🇪 Peru (5GB $4.90)</option>
             <option value="PH">🇵🇭 Philippines (5GB $4.90)</option>
             <option value="PL">🇵🇱 Poland (5GB $4.90)</option>
-            <option value="PT">🇵🇹 Portugal (5GB $4.90)</option>
             <option value="QA">🇶🇦 Qatar (5GB $4.90)</option>
             <option value="RO">🇷🇴 Romania (5GB $4.90)</option>
             <option value="RU">🇷🇺 Russia (5GB $4.90)</option>
@@ -85,11 +88,9 @@
             <option value="SK">🇸🇰 Slovakia (5GB $4.90)</option>
             <option value="SI">🇸🇮 Slovenia (5GB $4.90)</option>
             <option value="ZA">🇿🇦 South Africa (5GB $4.90)</option>
-            <option value="ES">🇪🇸 Spain (5GB $4.90)</option>
             <option value="SE">🇸🇪 Sweden (5GB $4.90)</option>
             <option value="CH">🇨🇭 Switzerland (5GB $4.90)</option>
             <option value="TW">🇹🇼 Taiwan (5GB $4.90)</option>
-            <option value="TH">🇹🇭 Thailand (5GB $4.90)</option>
             <option value="TR">🇹🇷 Turkey (5GB $4.90)</option>
             <option value="UA">🇺🇦 Ukraine (5GB $4.90)</option>
             <option value="AE">🇦🇪 United Arab Emirates (5GB $4.90)</option>
@@ -142,11 +143,11 @@
 
         function showESIM() {
             const qrHTML = `
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
-                <p>Screenshot this QR (power + volume down) or scan directly on screen.</p>
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=THAILAND-ESIM-FOOTYSIMS-REUSABLE-12345" alt="Thailand eSIM QR">
+                <p>✅ Thailand eSIM ready!<br>Scan with your phone → install once, top-up anytime.</p>
             `;
             document.getElementById('qrContainer').innerHTML = qrHTML;
-            document.getElementById('usage').innerHTML = 'Data left: 5 GB – ready for next trip!';
+            document.getElementById('usage').innerHTML = 'Data left: 5 GB (Thailand – ready for your trip!)';
         }
 
         function addMate() { alert("Add mate's email for group eSIM sharing (coming soon)"); }
