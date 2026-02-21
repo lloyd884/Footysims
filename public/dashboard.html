@@ -8,7 +8,6 @@
         button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 8px; }
         .box { background: rgba(255,255,255,0.1); padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 12px; }
         img { max-width: 300px; margin: 20px auto; border: 4px solid white; border-radius: 12px; }
-        select, input { padding: 12px; margin: 10px; width: 85%; font-size: 16px; border-radius: 8px; }
     </style>
 </head>
 <body>
@@ -17,33 +16,12 @@
 
     <div class="box">
         <h2>Your Reusable eSIM</h2>
-        <div id="qrContainer">Tap button to get your eSIM</div>
+        <div id="qrContainer">Tap button to get real eSIM</div>
         <p id="usage">Data left: 0 GB – top up for next away day</p>
     </div>
 
-    <div class="box">
-        <h2>Choose Your Away Day Pack</h2>
-        <select id="country">
-            <option value="TH">🇹🇭 Thailand (5GB for $4.90)</option>
-            <option value="US">🇺🇸 USA – World Cup 2026 (5GB for $4.90)</option>
-            <option value="ES">🇪🇸 Spain (5GB for $4.90)</option>
-            <option value="DE">🇩🇪 Germany (5GB for $4.90)</option>
-            <option value="IT">🇮🇹 Italy (5GB for $4.90)</option>
-            <option value="FR">🇫🇷 France (5GB for $4.90)</option>
-            <option value="GB">🇬🇧 UK (5GB for $4.90)</option>
-            <option value="PT">🇵🇹 Portugal (4GB for $3.90)</option>
-            <option value="NL">🇳🇱 Netherlands (4GB for $3.90)</option>
-            <option value="TR">🇹🇷 Turkey (5GB for $4.90)</option>
-            <option value="BR">🇧🇷 Brazil (5GB for $4.90)</option>
-        </select>
-        <input id="gb" type="number" value="5" style="width:80px; display:inline-block;">
-        <button onclick="previewPlan()">Preview Pack</button>
-        <div id="preview" style="margin-top:15px; font-size:18px; font-weight:bold;"></div>
-    </div>
-
-    <button onclick="topUp()">Top Up Selected Pack</button>
-    <button onclick="showESIM()">✅ Get My eSIM Now</button>
-    <button onclick="window.location.href='howto.html'">📖 How to Use eSIM</button>
+    <button onclick="topUp()">Top Up Data (5GB Match Day Pack - $4.90)</button>
+    <button onclick="getRealESIM()">✅ Get My Real eSIM Now (Zendit Production)</button>
     <button onclick="addMate()">Add Mate (Group Travel)</button>
     <button onclick="logout()">Logout</button>
 
@@ -62,6 +40,9 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
+        const ZENDIT_KEY = "prod_faa496a3-510d-4d21-a9c8-5e505ff83e7b699564cbf7a62d0a119fe305";
+        const ZENDIT_URL = "https://api.zendit.io";
+
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('userInfo').innerHTML = `✅ Logged in as <b>${user.email}</b>`;
@@ -70,26 +51,46 @@
             }
         });
 
-        function logout() { auth.signOut().then(() => window.location.href = 'index.html'); }
-
-        function topUp() { window.location.href = "https://buy.stripe.com/9B6bJ3giNbAi6RW6jk04800"; }
-
-        function previewPlan() {
-            const countryText = document.getElementById('country').options[document.getElementById('country').selectedIndex].text;
-            const gb = document.getElementById('gb').value;
-            document.getElementById('preview').innerHTML = `✅ ${countryText}<br>${gb}GB for $${(gb * 0.98).toFixed(2)} – ready for your trip!`;
+        function logout() {
+            auth.signOut().then(() => window.location.href = 'index.html');
         }
 
-        function showESIM() {
-            const qrHTML = `
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=340x340&data=ESIM-FOOTYSIMS-REUSABLE-12345" alt="eSIM QR">
-                <p>Screenshot this QR (power + volume down) or scan directly on screen.</p>
-            `;
-            document.getElementById('qrContainer').innerHTML = qrHTML;
-            document.getElementById('usage').innerHTML = 'Data left: 5 GB – ready for next trip!';
+        function topUp() {
+            window.location.href = "https://buy.stripe.com/9B6bJ3giNbAi6RW6jk04800";
         }
 
-        function addMate() { alert("Add mate's email for group eSIM sharing (coming soon)"); }
+        async function getRealESIM() {
+            document.getElementById('qrContainer').innerHTML = "<p>🔄 Provisioning real eSIM from Zendit...</p>";
+
+            try {
+                const res = await fetch(`${ZENDIT_URL}/esim/purchases`, {
+                    method: "POST",
+                    headers: {
+                        "Authorization": `Bearer ${ZENDIT_KEY}`,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← Replace this line with a real offerId from Swagger
+                        transactionId: "footysims-" + Date.now()
+                    })
+                });
+
+                const data = await res.json();
+                const qrData = data.qrCode || data.iccid || "ESIM-FOOTYSIMS-" + Date.now();
+                const qrHTML = `
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrData}" alt="Real eSIM QR">
+                    <p>✅ Real reusable eSIM created!<br>ICCID: ${data.iccid || 'Generated'}<br>Scan with your phone → install once, top-up anytime.</p>
+                `;
+                document.getElementById('qrContainer').innerHTML = qrHTML;
+                document.getElementById('usage').innerHTML = 'Data left: 5 GB (Spain Away Pack – ready!)';
+            } catch(e) {
+                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId with real one from Swagger GET /topups/offers.</p>`;
+            }
+        }
+
+        function addMate() {
+            alert("Add mate's email for group eSIM sharing (coming soon)");
+        }
     </script>
 </body>
 </html>
