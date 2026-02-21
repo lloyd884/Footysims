@@ -2,22 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>FootySIMs - eSIM for Global Travel</title>
+    <title>FootySIMs - Reusable eSIM for Travel</title>
     <style>
-        body { font-family: Arial; background: linear-gradient(#228B22, #006400); color: white; text-align: center; padding: 20px; margin: 0; }
-        h1 { font-size: 32px; margin: 10px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-        p { font-size: 18px; }
-        .hero { background: rgba(0,0,0,0.3); padding: 30px; border-radius: 16px; margin: 20px auto; max-width: 420px; }
-        button { background: white; color: #228B22; padding: 15px 30px; margin: 10px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
-        input, select { padding: 14px; margin: 10px; width: 85%; font-size: 17px; border-radius: 12px; border: none; }
-        .box { background: rgba(255,255,255,0.15); padding: 25px; margin: 20px auto; max-width: 420px; border-radius: 16px; }
-        .flag { font-size: 28px; margin: 0 4px; }
+        body { font-family: system-ui, Arial; background: #f8f9fa; color: #333; margin: 0; }
+        .header { background: #228B22; color: white; padding: 20px; text-align: center; }
+        h1 { margin: 0; font-size: 28px; }
+        .hero { background: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .trust { display: flex; justify-content: center; gap: 30px; margin: 20px 0; flex-wrap: wrap; }
+        .trust span { font-size: 14px; color: #666; }
+        button { background: #228B22; color: white; padding: 16px 32px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; }
+        .box { background: white; padding: 25px; margin: 20px auto; max-width: 420px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        select, input { padding: 14px; margin: 10px 0; width: 100%; font-size: 17px; border-radius: 12px; border: 1px solid #ddd; }
+        .benefits { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .benefit { background: #f8f9fa; padding: 15px; border-radius: 12px; width: 140px; text-align: center; font-size: 15px; }
+        .footer { background: #228B22; color: white; padding: 20px; font-size: 14px; }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>FootySIMs</h1>
+    </div>
+
     <div class="hero">
-        <h1>🌍 FootySIMs</h1>
-        <p>Install once. Top up $1/GB. Ready for every trip around the world.</p>
+        <h2>Reusable eSIM for Global Travel</h2>
+        <p>Install once. Top up data anywhere. No roaming fees.</p>
+        <button onclick="goToDashboard()">Get Started Free</button>
+    </div>
+
+    <div class="trust">
+        <span>🔒 Secure payments by Stripe</span>
+        <span>💰 24h no-questions refund</span>
+        <span>🌐 190+ countries</span>
     </div>
 
     <div class="box">
@@ -25,91 +40,48 @@
         <input id="email" type="email" placeholder="Your email">
         <input id="password" type="password" placeholder="Password">
         
-        <button onclick="signUp()">Sign Up (New Account)</button>
+        <button onclick="signUp()">Create Account</button>
         <button onclick="login()">Login</button>
 
         <div id="message" style="margin:15px; font-size:16px;"></div>
-        <button id="dashboardBtn" style="display:none;" onclick="goToDashboard()">Go to My Dashboard →</button>
+        <button id="dashboardBtn" style="display:none; background:#006400;" onclick="goToDashboard()">Go to Dashboard →</button>
     </div>
 
     <div class="box">
-        <h2>Choose Your Destination Pack 🌍</h2>
-        <select id="country" style="padding:14px; font-size:18px; width:90%; border-radius:12px;">
-            <option value="AF">🇦🇫 Afghanistan (5GB $4.90)</option>
-            <option value="AL">🇦🇱 Albania (5GB $4.90)</option>
-            <option value="DZ">🇩🇿 Algeria (5GB $4.90)</option>
-            <option value="AR">🇦🇷 Argentina (5GB $4.90)</option>
-            <option value="AU">🇦🇺 Australia (5GB $4.90)</option>
-            <option value="AT">🇦🇹 Austria (5GB $4.90)</option>
-            <option value="BH">🇧🇭 Bahrain (5GB $4.90)</option>
-            <option value="BE">🇧🇪 Belgium (5GB $4.90)</option>
-            <option value="BR">🇧🇷 Brazil (5GB $4.90)</option>
-            <option value="BG">🇧🇬 Bulgaria (5GB $4.90)</option>
-            <option value="CA">🇨🇦 Canada (5GB $4.90)</option>
-            <option value="CL">🇨🇱 Chile (5GB $4.90)</option>
-            <option value="CN">🇨🇳 China (5GB $4.90)</option>
-            <option value="CO">🇨🇴 Colombia (5GB $4.90)</option>
-            <option value="HR">🇭🇷 Croatia (5GB $4.90)</option>
-            <option value="CY">🇨🇾 Cyprus (5GB $4.90)</option>
-            <option value="CZ">🇨🇿 Czech Republic (5GB $4.90)</option>
-            <option value="DK">🇩🇰 Denmark (5GB $4.90)</option>
-            <option value="EG">🇪🇬 Egypt (5GB $4.90)</option>
-            <option value="EE">🇪🇪 Estonia (5GB $4.90)</option>
-            <option value="FI">🇫🇮 Finland (5GB $4.90)</option>
-            <option value="FR">🇫🇷 France (5GB $4.90)</option>
-            <option value="DE">🇩🇪 Germany (5GB $4.90)</option>
-            <option value="GR">🇬🇷 Greece (5GB $4.90)</option>
-            <option value="HK">🇭🇰 Hong Kong (5GB $4.90)</option>
-            <option value="HU">🇭🇺 Hungary (5GB $4.90)</option>
-            <option value="IS">🇮🇸 Iceland (5GB $4.90)</option>
-            <option value="IN">🇮🇳 India (5GB $4.90)</option>
-            <option value="ID">🇮🇩 Indonesia (5GB $4.90)</option>
-            <option value="IE">🇮🇪 Ireland (5GB $4.90)</option>
-            <option value="IL">🇮🇱 Israel (5GB $4.90)</option>
-            <option value="IT">🇮🇹 Italy (5GB $4.90)</option>
-            <option value="JP">🇯🇵 Japan (5GB $4.90)</option>
-            <option value="KR">🇰🇷 Korea (5GB $4.90)</option>
-            <option value="KW">🇰🇼 Kuwait (5GB $4.90)</option>
-            <option value="LV">🇱🇻 Latvia (5GB $4.90)</option>
-            <option value="LB">🇱🇧 Lebanon (5GB $4.90)</option>
-            <option value="LT">🇱🇹 Lithuania (5GB $4.90)</option>
-            <option value="LU">🇱🇺 Luxembourg (5GB $4.90)</option>
-            <option value="MY">🇲🇾 Malaysia (5GB $4.90)</option>
-            <option value="MT">🇲🇹 Malta (5GB $4.90)</option>
-            <option value="MX">🇲🇽 Mexico (5GB $4.90)</option>
-            <option value="NL">🇳🇱 Netherlands (5GB $4.90)</option>
-            <option value="NZ">🇳🇿 New Zealand (5GB $4.90)</option>
-            <option value="NO">🇳🇴 Norway (5GB $4.90)</option>
-            <option value="OM">🇴🇲 Oman (5GB $4.90)</option>
-            <option value="PE">🇵🇪 Peru (5GB $4.90)</option>
-            <option value="PH">🇵🇭 Philippines (5GB $4.90)</option>
-            <option value="PL">🇵🇱 Poland (5GB $4.90)</option>
-            <option value="PT">🇵🇹 Portugal (5GB $4.90)</option>
-            <option value="QA">🇶🇦 Qatar (5GB $4.90)</option>
-            <option value="RO">🇷🇴 Romania (5GB $4.90)</option>
-            <option value="RU">🇷🇺 Russia (5GB $4.90)</option>
-            <option value="SA">🇸🇦 Saudi Arabia (5GB $4.90)</option>
-            <option value="SG">🇸🇬 Singapore (5GB $4.90)</option>
-            <option value="SK">🇸🇰 Slovakia (5GB $4.90)</option>
-            <option value="SI">🇸🇮 Slovenia (5GB $4.90)</option>
-            <option value="ZA">🇿🇦 South Africa (5GB $4.90)</option>
-            <option value="ES">🇪🇸 Spain (5GB $4.90)</option>
-            <option value="SE">🇸🇪 Sweden (5GB $4.90)</option>
-            <option value="CH">🇨🇭 Switzerland (5GB $4.90)</option>
-            <option value="TW">🇹🇼 Taiwan (5GB $4.90)</option>
-            <option value="TH">🇹🇭 Thailand (5GB $4.90)</option>
-            <option value="TR">🇹🇷 Turkey (5GB $4.90)</option>
-            <option value="UA">🇺🇦 Ukraine (5GB $4.90)</option>
-            <option value="AE">🇦🇪 United Arab Emirates (5GB $4.90)</option>
-            <option value="GB">🇬🇧 United Kingdom (5GB $4.90)</option>
-            <option value="US">🇺🇸 United States (5GB $4.90)</option>
-            <option value="UY">🇺🇾 Uruguay (5GB $4.90)</option>
-            <option value="VN">🇻🇳 Vietnam (5GB $4.90)</option>
-            <!-- 80+ countries – all major travel destinations with eSIM coverage -->
+        <h2>Choose Destination</h2>
+        <select id="country" style="font-size:18px;">
+            <option value="TH">🇹🇭 Thailand</option>
+            <option value="US">🇺🇸 USA</option>
+            <option value="ES">🇪🇸 Spain</option>
+            <option value="DE">🇩🇪 Germany</option>
+            <option value="IT">🇮🇹 Italy</option>
+            <option value="FR">🇫🇷 France</option>
+            <option value="GB">🇬🇧 UK</option>
+            <option value="PT">🇵🇹 Portugal</option>
+            <option value="NL">🇳🇱 Netherlands</option>
+            <option value="TR">🇹🇷 Turkey</option>
+            <option value="BR">🇧🇷 Brazil</option>
+            <!-- Full list can be expanded -->
         </select>
-        <input id="gb" type="number" value="5" style="width:80px; display:inline-block;">
-        <button onclick="previewPlan()">Preview Pack</button>
-        <div id="preview" style="margin-top:15px; font-size:19px; font-weight:bold;"></div>
+        <button onclick="previewPlan()">Preview Price</button>
+        <div id="preview" style="margin-top:15px; font-size:19px; font-weight:bold; color:#228B22;"></div>
+    </div>
+
+    <div class="box">
+        <h2>Why FootySIMs?</h2>
+        <div class="benefits">
+            <div class="benefit">Install once</div>
+            <div class="benefit">Top up anytime</div>
+            <div class="benefit">$1/GB</div>
+            <div class="benefit">No app needed</div>
+            <div class="benefit">190+ countries</div>
+            <div class="benefit">Instant QR</div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Secure • Transparent • Real eSIMs</p>
+        <a href="howto.html" style="color:white;">How it works</a> • <a href="terms.html" style="color:white;">Refund policy</a>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
@@ -131,7 +103,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             auth.createUserWithEmailAndPassword(email, password)
-                .then(() => { document.getElementById('message').innerHTML = '✅ Account created! Now login.'; })
+                .then(() => { document.getElementById('message').innerHTML = '✅ Account created!'; })
                 .catch(err => { document.getElementById('message').innerHTML = '❌ ' + err.message; });
         }
 
@@ -152,8 +124,7 @@
 
         function previewPlan() {
             const countryText = document.getElementById('country').options[document.getElementById('country').selectedIndex].text;
-            const gb = document.getElementById('gb').value;
-            document.getElementById('preview').innerHTML = `✅ ${countryText}<br>${gb}GB for $${(gb * 0.98).toFixed(2)} – ready for your trip!`;
+            document.getElementById('preview').innerHTML = `✅ ${countryText} – $4.90 for 5GB`;
         }
     </script>
 </body>
