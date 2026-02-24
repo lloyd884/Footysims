@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <title>FootySIMs - Reusable eSIM for Travel</title>
     <style>
-        body { font-family: system-ui, Arial; background: #f8f9fa; color: #333; margin: 0; }
+        body { font-family: system-ui, Arial; background: #f8f9fa; color: #333; margin: 0; padding: 0; }
         .header { background: #228B22; color: white; padding: 20px; text-align: center; }
         h1 { margin: 0; font-size: 28px; }
-        .hero { background: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .trust { display: flex; justify-content: center; gap: 30px; margin: 20px 0; flex-wrap: wrap; }
-        .trust span { font-size: 14px; color: #666; }
-        button { background: #228B22; color: white; padding: 16px 32px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; }
+        .trust span { font-size: 14px; color: #555; display: flex; align-items: center; gap: 8px; }
         .box { background: white; padding: 25px; margin: 20px auto; max-width: 420px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        select, input { padding: 14px; margin: 10px 0; width: 100%; font-size: 17px; border-radius: 12px; border: 1px solid #ddd; }
-        .benefits { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
-        .benefit { background: #f8f9fa; padding: 15px; border-radius: 12px; width: 140px; text-align: center; font-size: 15px; }
-        .footer { background: #228B22; color: white; padding: 20px; font-size: 14px; }
+        input, select { padding: 14px; margin: 10px 0; width: 100%; font-size: 17px; border-radius: 12px; border: 1px solid #ddd; }
+        button { background: #228B22; color: white; padding: 16px 32px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; }
+        .why { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        .why-item { background: #f8f9fa; padding: 15px; border-radius: 12px; width: 140px; text-align: center; font-size: 15px; }
+        .footer { background: #228B22; color: white; padding: 20px; font-size: 14px; text-align: center; }
     </style>
 </head>
 <body>
@@ -23,16 +22,11 @@
         <h1>FootySIMs</h1>
     </div>
 
-    <div class="hero">
-        <h2>Reusable eSIM for Global Travel</h2>
-        <p>Install once. Top up data anywhere. No roaming fees.</p>
-        <button onclick="goToDashboard()">Get Started Free</button>
-    </div>
-
     <div class="trust">
         <span>🔒 Secure payments by Stripe</span>
         <span>💰 24h no-questions refund</span>
-        <span>🌐 190+ countries</span>
+        <span>🌍 190+ countries</span>
+        <span>🔐 SSL secured</span>
     </div>
 
     <div class="box">
@@ -69,13 +63,13 @@
 
     <div class="box">
         <h2>Why FootySIMs?</h2>
-        <div class="benefits">
-            <div class="benefit">Install once</div>
-            <div class="benefit">Top up anytime</div>
-            <div class="benefit">$1/GB</div>
-            <div class="benefit">No app needed</div>
-            <div class="benefit">190+ countries</div>
-            <div class="benefit">Instant QR</div>
+        <div class="why">
+            <div class="why-item">Install once</div>
+            <div class="why-item">Top up anytime</div>
+            <div class="why-item">$1/GB</div>
+            <div class="why-item">No app needed</div>
+            <div class="why-item">190+ countries</div>
+            <div class="why-item">Instant QR</div>
         </div>
     </div>
 
