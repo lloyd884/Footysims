@@ -62,9 +62,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        const ZENDIT_KEY = "prod_f7aa7207-e485-4727-9e4b-0938912309c0699564cbf7a62d0a119fe305";
-        const ZENDIT_URL = "https://api.zendit.io";
-
         auth.onAuthStateChanged(user => {
             if (user) {
                 document.getElementById('userInfo').innerHTML = `✅ Logged in as <b>${user.email}</b>`;
@@ -86,14 +83,14 @@
             document.getElementById('qrContainer').innerHTML = "<p>🔄 Provisioning real Thailand eSIM from Zendit...</p>";
 
             try {
-                const res = await fetch(`${ZENDIT_URL}/esim/purchases`, {
+                const res = await fetch("https://api.zendit.io/esim/purchases", {
                     method: "POST",
                     headers: {
-                        "Authorization": "Bearer " + ZENDIT_KEY,
+                        "Authorization": "Bearer prod_f7aa7207-e485-4727-9e4b-0938912309c0699564cbf7a62d0a119fe305",   // Hard-coded Bearer + space + key as support said
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← REPLACE THIS LINE with the real offerId from Swagger
+                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",
                         transactionId: "footysims-" + Date.now()
                     })
                 });
@@ -107,7 +104,7 @@
                 document.getElementById('qrContainer').innerHTML = qrHTML;
                 document.getElementById('usage').innerHTML = 'Data left: 5 GB (Thailand – ready for your trip!)';
             } catch(e) {
-                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace the offerId line above with real one from Swagger.</p>`;
+                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId with real one from Swagger GET /topups/offers.</p>`;
             }
         }
 
