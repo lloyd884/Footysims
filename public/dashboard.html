@@ -89,11 +89,11 @@
                 const res = await fetch(`${ZENDIT_URL}/esim/purchases`, {
                     method: "POST",
                     headers: {
-                        "Authorization": "Bearer " + ZENDIT_KEY,  // Explicit "Bearer " with space as per support
+                        "Authorization": "Bearer " + ZENDIT_KEY,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({
-                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE", 
+                        offerId: "PASTE_YOUR_TEST_OFFERID_HERE",   // ← REPLACE THIS LINE with the real offerId from Swagger
                         transactionId: "footysims-" + Date.now()
                     })
                 });
@@ -107,7 +107,7 @@
                 document.getElementById('qrContainer').innerHTML = qrHTML;
                 document.getElementById('usage').innerHTML = 'Data left: 5 GB (Thailand – ready for your trip!)';
             } catch(e) {
-                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace offerId with real one from Swagger GET /topups/offers.</p>`;
+                document.getElementById('qrContainer').innerHTML = `<p>❌ ${e.message}<br>Replace the offerId line above with real one from Swagger.</p>`;
             }
         }
 
