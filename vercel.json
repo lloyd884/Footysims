@@ -1,9 +1,6 @@
 {
   "outputDirectory": "public",
-  "functions": {
-    "api/esim.js": {
-      "memory": 128,
-      "maxDuration": 10
-    }
-  }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" }
+  ]
 }
