@@ -1,4 +1,4 @@
-const functions = require("firebase-functions");
+const const ZENDIT_KEY = functions.config().zendit.key;
 const fetch = require("node-fetch");
 
 const ZENDIT_KEY = functions.config().zendit.key;
