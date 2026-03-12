@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     }
 
     if (action === 'purchase') {
-      const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
+      const offerId = req.body?.offerId || 'ESIM-TH-1D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
       const r = await fetch(`${BASE}/esim/purchases`, {
         method: 'POST', headers,
