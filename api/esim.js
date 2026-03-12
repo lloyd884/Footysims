@@ -18,15 +18,23 @@ export default async function handler(req, res) {
       const r = await fetch(`${BASE}/balance`, { headers });
       return res.status(200).send(await r.text());
     }
-    if (action === 'offers') {
-      const r = await fetch(`${BASE}/topups/offers?_limit=20&_offset=0`, { headers });
-      return res.status(200).send(await r.text());
-    }
     if (action === 'purchase') {
-      const { offerId } = req.body;
+      const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
+      const transactionId = `footysims-${Date.now()}`;
       const r = await fetch(`${BASE}/esims/purchases`, {
         method: 'POST', headers,
-        body: JSON.stringify({ offerId, transactionId: `footysims-${Date.now()}` })
+        body: JSON.stringify({ offerId, transactionId })
+      });
+      return res.status(200).send(await r.text());
+    }
+    if (action === 'test') {
+      const transactionId = `footysims-test-${Date.now()}`;
+      const r = await fetch(`${BASE}/esims/purchases`, {
+        method: 'POST', headers,
+        body: JSON.stringify({
+          offerId: 'ESIM-TH-10D-ULE-NOROAM',
+          transactionId
+        })
       });
       return res.status(200).send(await r.text());
     }
