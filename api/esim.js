@@ -21,15 +21,14 @@ export default async function handler(req, res) {
     }
     if (action === 'offers') {
       const r = await fetch(`${BASE}/esims/offers?_limit=100&_offset=0`, { headers });
-      const data = await r.json();
-      if (country && data.list) {
-        const filtered = data.list.filter(o =>
-          o.country === country ||
-          (o.regions && o.regions.some(reg => reg.includes(country)))
-        );
-        return res.status(200).json({ total: filtered.length, list: filtered });
-      }
-      return res.status(200).json(data);
+      const text = await r.text();
+      if (!country) return res.status(200).send(text);
+      const data = JSON.parse(text);
+      const filtered = data.list.filter(o =>
+        o.country === country ||
+        (o.regions && o.regions.some(reg => reg.includes(country)))
+      );
+      return res.status(200).json({ total: filtered.length, list: filtered });
     }
     if (action === 'purchase') {
       const { offerId } = req.body;
