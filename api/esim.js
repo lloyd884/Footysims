@@ -11,23 +11,16 @@ export default async function handler(req, res) {
     'Content-Type': 'application/json'
   };
 
-  const { action, country } = req.query;
+  const { action } = req.query;
 
   try {
     if (action === 'balance') {
       const r = await fetch(`${BASE}/balance`, { headers });
-      const text = await r.text();
-      return res.status(200).send(text);
+      return res.status(200).send(await r.text());
     }
     if (action === 'offers') {
-      const r = await fetch(`${BASE}/topups/offers?_limit=500&_offset=0`, { headers });
-      const text = await r.text();
-      const data = JSON.parse(text);
-      const filtered = data.list.filter(o =>
-        (o.country === country || !country) &&
-        (o.subTypes && o.subTypes.some(s => s.toLowerCase().includes('esim') || s.toLowerCase().includes('data')))
-      );
-      return res.status(200).json({ total: filtered.length, list: filtered });
+      const r = await fetch(`${BASE}/topups/offers?_limit=20&_offset=0`, { headers });
+      return res.status(200).send(await r.text());
     }
     if (action === 'purchase') {
       const { offerId } = req.body;
@@ -35,8 +28,10 @@ export default async function handler(req, res) {
         method: 'POST', headers,
         body: JSON.stringify({ offerId, transactionId: `footysims-${Date.now()}` })
       });
-      const text = await r.text();
-      return res.status(200).send(text);
+      return res.status(200).send(await r.text());
     }
     return res.status(400).json({ error: 'Unknown action' });
-  } catch (e)
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+}
