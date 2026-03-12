@@ -20,13 +20,12 @@ export default async function handler(req, res) {
       return res.status(200).send(text);
     }
     if (action === 'offers') {
-      const r = await fetch(`${BASE}/esims/offers?_limit=100&_offset=0`, { headers });
+      const r = await fetch(`${BASE}/topups/offers?_limit=500&_offset=0`, { headers });
       const text = await r.text();
-      if (!country) return res.status(200).send(text);
       const data = JSON.parse(text);
       const filtered = data.list.filter(o =>
-        o.country === country ||
-        (o.regions && o.regions.some(reg => reg.includes(country)))
+        (o.country === country || !country) &&
+        (o.subTypes && o.subTypes.some(s => s.toLowerCase().includes('esim') || s.toLowerCase().includes('data')))
       );
       return res.status(200).json({ total: filtered.length, list: filtered });
     }
@@ -40,7 +39,4 @@ export default async function handler(req, res) {
       return res.status(200).send(text);
     }
     return res.status(400).json({ error: 'Unknown action' });
-  } catch (e) {
-    return res.status(500).json({ error: e.message });
-  }
-}
+  } catch (e)
