@@ -22,40 +22,21 @@ export default async function handler(req, res) {
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
-
       const r = await fetch(`${BASE}/esim/purchases`, {
         method: 'POST', headers,
         body: JSON.stringify({ offerId, transactionId })
       });
+      return res.status(200).send(await r.text());
+    }
+
+    if (action === 'status') {
+      const { transactionId } = req.query;
+      const r = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers });
       const data = await r.json();
-
-      if (!data.transactionId) {
-        return res.status(200).json(data);
+      if (data.smdpAddress) {
+        data.qrData = `LPA:1$${data.smdpAddress}$${data.activationCode || ''}`;
       }
-
-      // Poll for completion up to 15 times (30 seconds)
-      for (let i = 0; i < 15; i++) {
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        const poll = await fetch(`${BASE}/esim/purchases/${data.transactionId}`, { headers });
-        const result = await poll.json();
-
-        if (result.status === 'DONE' || result.smdpAddress) {
-          // Build QR from smdpAddress + activationCode
-          const smdp = result.smdpAddress || '';
-          const ac   = result.activationCode || '';
-          const qrData = `LPA:1$${smdp}$${ac}`;
-          return res.status(200).json({
-            success: true,
-            iccid: result.iccid,
-            qrData,
-            smdpAddress: smdp,
-            activationCode: ac,
-            transactionId: result.transactionId
-          });
-        }
-      }
-
-      return res.status(200).json({ ...data, pending: true });
+      return res.status(200).json(data);
     }
 
     return res.status(400).json({ error: 'Unknown action' });
