@@ -5,98 +5,198 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FootySIMs Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --green: #1a7a1a;
+            --green2: #145c14;
+            --lime: #7fff00;
+            --off: #f4f7f4;
+            --text: #1c2a1c;
+            --radius: 14px;
+            --shadow: 0 6px 24px rgba(0,0,0,0.10);
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: Arial, sans-serif; background: #1a6b1a; color: white; text-align: center; padding: 20px; min-height: 100vh; }
-        h1 { font-size: 26px; margin-bottom: 20px; }
-        h2 { font-size: 18px; margin-bottom: 12px; }
-        button {
-            background: white; color: #1a6b1a; padding: 13px 24px;
-            margin: 8px 4px; font-size: 16px; font-weight: bold;
-            border: none; border-radius: 10px; cursor: pointer; transition: opacity 0.2s;
-        }
-        button:hover { opacity: 0.85; }
-        button.danger { background: #ff4444; color: white; }
-        .box {
-            background: rgba(255,255,255,0.12); padding: 22px;
-            margin: 16px auto; max-width: 440px; border-radius: 16px;
-        }
-        img { max-width: 280px; margin: 16px auto; border: 6px solid white; border-radius: 12px; display: block; }
-        select, input {
-            padding: 12px; margin: 8px 0; width: 100%;
-            font-size: 16px; border-radius: 10px; border: none; color: #333;
-        }
-        .status-badge {
-            display: inline-block; padding: 4px 12px; border-radius: 20px;
-            font-size: 13px; font-weight: bold; margin-top: 8px;
-        }
-        .badge-live { background: #00e676; color: #003300; }
-        .badge-demo { background: #ffd600; color: #333; }
-        #preview { margin-top: 14px; font-size: 18px; font-weight: bold; min-height: 24px; }
-        #qrContainer { min-height: 60px; }
-        #usage { margin-top: 10px; font-size: 15px; opacity: 0.9; }
-        .divider { border: none; border-top: 1px solid rgba(255,255,255,0.2); margin: 8px 0; }
-    </style>
+        body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
+
+```
+    header {
+        background: var(--green);
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .logo { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: white; }
+    .logo span { color: var(--lime); }
+    #userEmail { font-size: 13px; color: rgba(255,255,255,0.8); }
+
+    .main { padding: 24px 16px 60px; max-width: 480px; margin: 0 auto; }
+
+    .card {
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 24px;
+        margin-bottom: 18px;
+    }
+    .card h2 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 18px;
+        color: var(--green);
+        margin-bottom: 16px;
+    }
+
+    select {
+        width: 100%;
+        padding: 13px 16px;
+        margin-bottom: 12px;
+        font-size: 15px;
+        font-family: 'Inter', sans-serif;
+        border: 1.5px solid #d8e4d8;
+        border-radius: 10px;
+        background: #fafffe;
+        color: var(--text);
+        outline: none;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        font-family: 'Oswald', sans-serif;
+        letter-spacing: 0.5px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.88; }
+    .btn-primary { background: var(--green); color: white; }
+    .btn-stripe { background: #635bff; color: white; }
+    .btn-secondary { background: #f0f7f0; color: var(--green); border: 2px solid var(--green); }
+    .btn-danger { background: #fff0f0; color: #d32f2f; border: 2px solid #d32f2f; }
+
+    #qrContainer {
+        text-align: center;
+        min-height: 60px;
+        padding: 10px 0;
+    }
+    #qrContainer img {
+        max-width: 260px;
+        border: 6px solid var(--green);
+        border-radius: 12px;
+        margin: 10px auto;
+        display: block;
+    }
+
+    .badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-top: 8px;
+    }
+    .badge-live { background: #00e676; color: #003300; }
+
+    .status-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: #f0faf0;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    #message {
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        min-height: 20px;
+        margin-top: 8px;
+        text-align: center;
+    }
+    .msg-loading { color: #666; }
+    .msg-success { background: #e8f5e9; color: #1a7a1a; }
+    .msg-error { background: #ffebee; color: #d32f2f; }
+
+    .divider { border: none; border-top: 1px solid #e8ede8; margin: 12px 0; }
+</style>
+```
+
 </head>
 <body>
 
+<header>
+    <div class="logo">Footy<span>SIMs</span></div>
+    <div id="userEmail">Loading...</div>
+</header>
+
+<div class="main">
+
 ```
-<h1>⚽ FootySIMs Dashboard</h1>
-
-<!-- User Info -->
-<div id="userInfo" class="box">🔄 Loading...</div>
-
-<!-- eSIM QR Box -->
-<div class="box">
-    <h2>Your Reusable eSIM</h2>
-    <div id="qrContainer">
-        <p style="opacity:0.8;">Select a country and tap <b>Get My eSIM</b> below</p>
+<!-- Status Card -->
+<div class="card">
+    <h2>Account Status</h2>
+    <div class="status-row">
+        <span>💳</span>
+        <span id="balanceDisplay">Checking balance...</span>
     </div>
-    <p id="usage"></p>
+    <div class="status-row">
+        <span>📶</span>
+        <span>Backend: <b style="color:var(--green)">Live ✅</b></span>
+    </div>
 </div>
 
-<!-- Pack Selector -->
-<div class="box">
-    <h2>Choose Your Pack 🌍</h2>
-    <select id="country">
-        <option value="TH" data-price="4.90" data-gb="5">🇹🇭 Thailand – 5GB $4.90</option>
-        <option value="GB" data-price="4.90" data-gb="5">🇬🇧 UK – 5GB $4.90</option>
-        <option value="ES" data-price="4.90" data-gb="5">🇪🇸 Spain – 5GB $4.90</option>
-        <option value="DE" data-price="4.90" data-gb="5">🇩🇪 Germany – 5GB $4.90</option>
-        <option value="IT" data-price="4.90" data-gb="5">🇮🇹 Italy – 5GB $4.90</option>
-        <option value="FR" data-price="4.90" data-gb="5">🇫🇷 France – 5GB $4.90</option>
-        <option value="US" data-price="4.90" data-gb="5">🇺🇸 USA – 5GB $4.90</option>
-        <option value="PT" data-price="3.90" data-gb="4">🇵🇹 Portugal – 4GB $3.90</option>
-        <option value="NL" data-price="3.90" data-gb="4">🇳🇱 Netherlands – 4GB $3.90</option>
-        <option value="TR" data-price="4.90" data-gb="5">🇹🇷 Turkey – 5GB $4.90</option>
-        <option value="BR" data-price="4.90" data-gb="5">🇧🇷 Brazil – 5GB $4.90</option>
-        <option value="JP" data-price="5.90" data-gb="5">🇯🇵 Japan – 5GB $5.90</option>
-        <option value="AU" data-price="5.90" data-gb="5">🇦🇺 Australia – 5GB $5.90</option>
-        <option value="MX" data-price="4.90" data-gb="5">🇲🇽 Mexico – 5GB $4.90</option>
-        <option value="ZA" data-price="4.90" data-gb="5">🇿🇦 South Africa – 5GB $4.90</option>
+<!-- eSIM Card -->
+<div class="card">
+    <h2>Get Your eSIM</h2>
+
+    <select id="offerSelect">
+        <option value="ESIM-TH-10D-ULE-NOROAM" data-price="29.99" data-country="Thailand">🇹🇭 Thailand – Unlimited – 10 Days – £29.99</option>
     </select>
 
-    <button onclick="previewPlan()">👀 Preview Pack</button>
-    <div id="preview"></div>
+    <div id="qrContainer">
+        <p style="color:#888; font-size:14px; padding: 10px 0;">Select a pack and tap below to get your real eSIM</p>
+    </div>
+
+    <div id="message"></div>
+
+    <button class="btn btn-stripe" onclick="getESIM()">
+        ✅ Get My Real eSIM Now
+    </button>
+    <button class="btn btn-secondary" onclick="window.location.href='howto.html'">
+        📖 How to Install eSIM
+    </button>
 </div>
 
-<!-- Action Buttons -->
-<div class="box">
-    <button onclick="getESIM()">✅ Get My eSIM Now</button>
-    <button onclick="topUp()">💳 Top Up Pack</button>
+<!-- More Options -->
+<div class="card">
+    <h2>More</h2>
+    <button class="btn btn-secondary" onclick="addMate()">👥 Add Mate (Group Travel)</button>
     <hr class="divider">
-    <button onclick="window.location.href='howto.html'">📖 How to Use eSIM</button>
-    <button onclick="addMate()">👥 Add Mate</button>
-    <hr class="divider">
-    <button class="danger" onclick="logout()">Logout</button>
+    <button class="btn btn-danger" onclick="logout()">Logout</button>
+</div>
+```
+
 </div>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 
 <script>
-    // ── Firebase Config ──────────────────────────────────────────────
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
         authDomain: "footysims-43be5.firebaseapp.com",
@@ -108,71 +208,91 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
 
-    // ── Auth Check ───────────────────────────────────────────────────
+    const API = '/api/esim';
+
+    // ── Auth ──────────────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
         if (user) {
-            document.getElementById('userInfo').innerHTML =
-                `✅ Logged in as <b>${user.email}</b>`;
+            document.getElementById('userEmail').textContent = user.email;
+            checkBalance();
         } else {
             window.location.href = 'index.html';
         }
     });
 
-    // ── Helpers ──────────────────────────────────────────────────────
-    function getSelectedOption() {
-        const sel = document.getElementById('country');
-        return sel.options[sel.selectedIndex];
+    // ── Balance ───────────────────────────────────────────────────────────
+    async function checkBalance() {
+        try {
+            const r = await fetch(`${API}?action=balance`);
+            const data = await r.json();
+            const bal = (data.availableBalance / 100).toFixed(2);
+            document.getElementById('balanceDisplay').innerHTML =
+                `Zendit Balance: <b style="color:var(--green)">£${bal} ✅</b>`;
+        } catch(e) {
+            document.getElementById('balanceDisplay').textContent = 'Balance check failed';
+        }
     }
 
-    function previewPlan() {
-        const opt = getSelectedOption();
-        const price = opt.dataset.price;
-        const gb    = opt.dataset.gb;
-        const label = opt.text;
-        document.getElementById('preview').innerHTML =
-            `✅ ${label}<br>${gb}GB for <b>$${price}</b> – ready for your trip!`;
+    function setMsg(text, type) {
+        const el = document.getElementById('message');
+        el.textContent = text;
+        el.className = type;
     }
 
-    // ── Get eSIM (Demo QR until Zendit/Airhub live) ──────────────────
-    function getESIM() {
-        const opt     = getSelectedOption();
-        const country = opt.value;
-        const gb      = opt.dataset.gb;
-        const price   = opt.dataset.price;
-        const label   = opt.text;
+    // ── Get Real eSIM ─────────────────────────────────────────────────────
+    async function getESIM() {
+        const sel = document.getElementById('offerSelect');
+        const offerId = sel.value;
+        const country = sel.options[sel.selectedIndex].dataset.country;
 
-        // TODO: Replace this block with real API call when Zendit/Airhub is live
-        const demoData = `FOOTYSIMS-DEMO-${country}-${gb}GB-${Date.now()}`;
-        const qrURL    = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${demoData}`;
+        setMsg('🔄 Creating your real eSIM... please wait', 'msg-loading');
+        document.querySelector('.btn-stripe').disabled = true;
 
-        document.getElementById('qrContainer').innerHTML = `
-            <img src="${qrURL}" alt="eSIM QR Code">
-            <span class="status-badge badge-demo">⚠️ Demo QR — Real eSIM coming soon</span>
-            <p style="margin-top:12px; font-size:14px; opacity:0.85;">
-                ICCID: DEMO-${Date.now()}<br>
-                ${label} | ${gb}GB | $${price}
-            </p>
-        `;
-        document.getElementById('usage').innerHTML = `📶 Data: ${gb}GB — ${label.split('–')[0].trim()}`;
+        try {
+            const r = await fetch(`${API}?action=purchase`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ offerId })
+            });
+
+            const raw = await r.text();
+            let data;
+            try { data = JSON.parse(raw); } catch(e) { data = { error: raw }; }
+
+            if (data.error) {
+                setMsg('❌ ' + JSON.stringify(data.error), 'msg-error');
+                document.querySelector('.btn-stripe').disabled = false;
+                return;
+            }
+
+            const qrData = data.qrCode || data.activationCode || data.iccid;
+            const iccid = data.iccid || 'Pending';
+
+            if (qrData) {
+                document.getElementById('qrContainer').innerHTML = `
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
+                    <span class="badge badge-live">✅ Real eSIM — Ready to Install</span>
+                    <p style="margin-top:12px; font-size:13px; color:#444; line-height:1.6;">
+                        <b>ICCID:</b> ${iccid}<br>
+                        <b>Plan:</b> ${country} · Unlimited · 10 Days<br>
+                        <b>Speed:</b> 2G/3G/4G/5G<br><br>
+                        Scan this QR with your phone camera to install
+                    </p>
+                `;
+                setMsg('✅ eSIM created! Scan the QR above to install.', 'msg-success');
+            } else {
+                setMsg('⚠️ eSIM provisioning — ICCID: ' + iccid + ' (QR coming shortly)', 'msg-loading');
+            }
+
+        } catch(e) {
+            setMsg('❌ Error: ' + e.message, 'msg-error');
+            document.querySelector('.btn-stripe').disabled = false;
+        }
     }
 
-    // ── Top Up ───────────────────────────────────────────────────────
-    function topUp() {
-        // Live Stripe link — opens checkout
-        window.open("https://buy.stripe.com/9B6bJ3giNbAi6RW6jk04800", "_blank");
-    }
-
-    // ── Add Mate ─────────────────────────────────────────────────────
-    function addMate() {
-        alert("Group eSIM sharing coming soon! Your mates will be able to join your plan.");
-    }
-
-    // ── Logout ───────────────────────────────────────────────────────
-    function logout() {
-        auth.signOut().then(() => window.location.href = 'index.html');
-    }
+    function addMate() { alert('Group eSIM sharing coming soon! Your mates will join your plan.'); }
+    function logout() { auth.signOut().then(() => window.location.href = 'index.html'); }
 </script>
-```
 
 </body>
 </html>
