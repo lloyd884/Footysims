@@ -19,6 +19,25 @@ export default async function handler(req, res) {
       return res.status(200).send(await r.text());
     }
 
+    if (action === 'offers') {
+      const endpoints = [
+        `${BASE}/esim/offers?_limit=100&_offset=0`,
+        `${BASE}/esims/offers?_limit=100&_offset=0`,
+        `${BASE}/esim/offers`,
+        `${BASE}/catalog/esim`,
+      ];
+      const results = {};
+      for (const url of endpoints) {
+        try {
+          const r = await fetch(url, { headers });
+          results[url] = { status: r.status, body: (await r.text()).substring(0, 300) };
+        } catch(e) {
+          results[url] = { error: e.message };
+        }
+      }
+      return res.status(200).json(results);
+    }
+
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-1D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
@@ -33,7 +52,6 @@ export default async function handler(req, res) {
       const { transactionId } = req.query;
       const r = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers });
       const data = await r.json();
-      // eSIM details are nested inside confirmation
       const conf = data.confirmation || {};
       if (conf.smdpAddress) {
         data.qrData = `LPA:1$${conf.smdpAddress}$${conf.activationCode || ''}`;
