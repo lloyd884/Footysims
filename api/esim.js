@@ -22,21 +22,26 @@ export default async function handler(req, res) {
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
-      // Log exactly what we're sending back so we can debug
-      const requestBody = JSON.stringify({ offerId, transactionId });
-      const r = await fetch(`${BASE}/esims/purchases`, {
-        method: 'POST',
-        headers,
-        body: requestBody
-      });
-      const statusCode = r.status;
-      const responseText = await r.text();
-      // Return full debug info
-      return res.status(200).json({
-        zenditStatus: statusCode,
-        zenditResponse: responseText,
-        requestSent: requestBody
-      });
+      const body = JSON.stringify({ offerId, transactionId });
+
+      // Try all possible endpoint variations
+      const endpoints = [
+        `${BASE}/esims/purchases`,
+        `${BASE}/esim/purchases`,
+        `${BASE}/esims/purchase`,
+        `${BASE}/eSIMs/purchases`,
+      ];
+
+      const results = {};
+      for (const url of endpoints) {
+        try {
+          const r = await fetch(url, { method: 'POST', headers, body });
+          results[url] = { status: r.status, body: await r.text() };
+        } catch(e) {
+          results[url] = { error: e.message };
+        }
+      }
+      return res.status(200).json(results);
     }
 
     return res.status(400).json({ error: 'Unknown action' });
