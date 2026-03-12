@@ -22,26 +22,19 @@ export default async function handler(req, res) {
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
-      const body = JSON.stringify({ offerId, transactionId });
+      const r = await fetch(`${BASE}/esim/purchases`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ offerId, transactionId })
+      });
+      const text = await r.text();
+      return res.status(200).send(text);
+    }
 
-      // Try all possible endpoint variations
-      const endpoints = [
-        `${BASE}/esims/purchases`,
-        `${BASE}/esim/purchases`,
-        `${BASE}/esims/purchase`,
-        `${BASE}/eSIMs/purchases`,
-      ];
-
-      const results = {};
-      for (const url of endpoints) {
-        try {
-          const r = await fetch(url, { method: 'POST', headers, body });
-          results[url] = { status: r.status, body: await r.text() };
-        } catch(e) {
-          results[url] = { error: e.message };
-        }
-      }
-      return res.status(200).json(results);
+    if (action === 'getesim') {
+      const { transactionId } = req.query;
+      const r = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers });
+      return res.status(200).send(await r.text());
     }
 
     return res.status(400).json({ error: 'Unknown action' });
