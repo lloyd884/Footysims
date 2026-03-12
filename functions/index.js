@@ -1,4 +1,4 @@
-const const ZENDIT_KEY = functions.config().zendit.key;
+const ZENDIT_KEY = process.env.ZENDIT_KEY;
 const fetch = require("node-fetch");
 
 const ZENDIT_KEY = functions.config().zendit.key;
