@@ -11,33 +11,25 @@ export default async function handler(req, res) {
     'Content-Type': 'application/json'
   };
 
-  const { action } = req.query;
+  const action = req.query.action || req.body?.action;
 
   try {
     if (action === 'balance') {
       const r = await fetch(`${BASE}/balance`, { headers });
       return res.status(200).send(await r.text());
     }
+
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
       const r = await fetch(`${BASE}/esims/purchases`, {
-        method: 'POST', headers,
+        method: 'POST',
+        headers,
         body: JSON.stringify({ offerId, transactionId })
       });
       return res.status(200).send(await r.text());
     }
-    if (action === 'test') {
-      const transactionId = `footysims-test-${Date.now()}`;
-      const r = await fetch(`${BASE}/esims/purchases`, {
-        method: 'POST', headers,
-        body: JSON.stringify({
-          offerId: 'ESIM-TH-10D-ULE-NOROAM',
-          transactionId
-        })
-      });
-      return res.status(200).send(await r.text());
-    }
+
     return res.status(400).json({ error: 'Unknown action' });
   } catch (e) {
     return res.status(500).json({ error: e.message });
