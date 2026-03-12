@@ -20,7 +20,7 @@ export default async function handler(req, res) {
       return res.status(200).send(text);
     }
     if (action === 'offers') {
-      const r = await fetch(`${BASE}/topups/offers?limit=100&offset=0`, { headers });
+      const r = await fetch(`${BASE}/topups/offers?limit=100`, { headers });
       const text = await r.text();
       return res.status(200).send(text);
     }
