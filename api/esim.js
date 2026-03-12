@@ -33,8 +33,13 @@ export default async function handler(req, res) {
       const { transactionId } = req.query;
       const r = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers });
       const data = await r.json();
-      if (data.smdpAddress) {
-        data.qrData = `LPA:1$${data.smdpAddress}$${data.activationCode || ''}`;
+      // eSIM details are nested inside confirmation
+      const conf = data.confirmation || {};
+      if (conf.smdpAddress) {
+        data.qrData = `LPA:1$${conf.smdpAddress}$${conf.activationCode || ''}`;
+        data.smdpAddress = conf.smdpAddress;
+        data.iccid = conf.iccid;
+        data.activationCode = conf.activationCode;
       }
       return res.status(200).json(data);
     }
