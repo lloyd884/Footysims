@@ -8,133 +8,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --green: #1a7a1a;
-            --green2: #145c14;
-            --lime: #7fff00;
-            --off: #f4f7f4;
-            --text: #1c2a1c;
-            --radius: 14px;
-            --shadow: 0 6px 24px rgba(0,0,0,0.10);
+            --green: #1a7a1a; --green2: #145c14; --lime: #7fff00;
+            --off: #f4f7f4; --text: #1c2a1c;
+            --radius: 14px; --shadow: 0 6px 24px rgba(0,0,0,0.10);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
-
-```
-    header {
-        background: var(--green);
-        padding: 0 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 64px;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    .logo { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: white; }
-    .logo span { color: var(--lime); }
-    #userEmail { font-size: 13px; color: rgba(255,255,255,0.8); }
-
-    .main { padding: 24px 16px 60px; max-width: 480px; margin: 0 auto; }
-
-    .card {
-        background: white;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 24px;
-        margin-bottom: 18px;
-    }
-    .card h2 {
-        font-family: 'Oswald', sans-serif;
-        font-size: 18px;
-        color: var(--green);
-        margin-bottom: 16px;
-    }
-
-    select {
-        width: 100%;
-        padding: 13px 16px;
-        margin-bottom: 12px;
-        font-size: 15px;
-        font-family: 'Inter', sans-serif;
-        border: 1.5px solid #d8e4d8;
-        border-radius: 10px;
-        background: #fafffe;
-        color: var(--text);
-        outline: none;
-    }
-
-    .btn {
-        width: 100%;
-        padding: 15px;
-        font-size: 15px;
-        font-weight: 700;
-        font-family: 'Oswald', sans-serif;
-        letter-spacing: 0.5px;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        margin-bottom: 10px;
-        transition: opacity 0.2s;
-    }
-    .btn:hover { opacity: 0.88; }
-    .btn-primary { background: var(--green); color: white; }
-    .btn-stripe { background: #635bff; color: white; }
-    .btn-secondary { background: #f0f7f0; color: var(--green); border: 2px solid var(--green); }
-    .btn-danger { background: #fff0f0; color: #d32f2f; border: 2px solid #d32f2f; }
-
-    #qrContainer {
-        text-align: center;
-        min-height: 60px;
-        padding: 10px 0;
-    }
-    #qrContainer img {
-        max-width: 260px;
-        border: 6px solid var(--green);
-        border-radius: 12px;
-        margin: 10px auto;
-        display: block;
-    }
-
-    .badge {
-        display: inline-block;
-        padding: 4px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        margin-top: 8px;
-    }
-    .badge-live { background: #00e676; color: #003300; }
-
-    .status-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 12px;
-        background: #f0faf0;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        font-size: 14px;
-    }
-
-    #message {
-        padding: 10px;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: 500;
-        min-height: 20px;
-        margin-top: 8px;
-        text-align: center;
-    }
-    .msg-loading { color: #666; }
-    .msg-success { background: #e8f5e9; color: #1a7a1a; }
-    .msg-error { background: #ffebee; color: #d32f2f; }
-
-    .divider { border: none; border-top: 1px solid #e8ede8; margin: 12px 0; }
-</style>
-```
-
+        header {
+            background: var(--green); padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .logo { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: white; }
+        .logo span { color: var(--lime); }
+        #userEmail { font-size: 13px; color: rgba(255,255,255,0.8); }
+        .main { padding: 24px 16px 60px; max-width: 480px; margin: 0 auto; }
+        .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 18px; }
+        .card h2 { font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--green); margin-bottom: 16px; }
+        select {
+            width: 100%; padding: 13px 16px; margin-bottom: 12px;
+            font-size: 15px; font-family: 'Inter', sans-serif;
+            border: 1.5px solid #d8e4d8; border-radius: 10px;
+            background: #fafffe; color: var(--text); outline: none;
+        }
+        .btn {
+            width: 100%; padding: 15px; font-size: 15px; font-weight: 700;
+            font-family: 'Oswald', sans-serif; letter-spacing: 0.5px;
+            border: none; border-radius: 10px; cursor: pointer;
+            margin-bottom: 10px; transition: opacity 0.2s;
+        }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn:hover:not(:disabled) { opacity: 0.88; }
+        .btn-stripe { background: #635bff; color: white; }
+        .btn-secondary { background: #f0f7f0; color: var(--green); border: 2px solid var(--green); }
+        .btn-danger { background: #fff0f0; color: #d32f2f; border: 2px solid #d32f2f; }
+        #qrContainer { text-align: center; min-height: 60px; padding: 10px 0; }
+        #qrContainer img { max-width: 260px; border: 6px solid var(--green); border-radius: 12px; margin: 10px auto; display: block; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
+        .badge-live { background: #00e676; color: #003300; }
+        .status-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f0faf0; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
+        #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; }
+        .msg-loading { color: #666; }
+        .msg-success { background: #e8f5e9; color: #1a7a1a; }
+        .msg-error { background: #ffebee; color: #d32f2f; }
+        .divider { border: none; border-top: 1px solid #e8ede8; margin: 12px 0; }
+        .spinner { display: inline-block; animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
 
@@ -144,44 +65,26 @@
 </header>
 
 <div class="main">
+    <div class="card">
+        <h2>Account Status</h2>
+        <div class="status-row"><span>💳</span><span id="balanceDisplay">Checking...</span></div>
+        <div class="status-row"><span>📶</span><span>Backend: <b style="color:var(--green)">Live ✅</b></span></div>
+    </div>
 
 ```
-<!-- Status Card -->
-<div class="card">
-    <h2>Account Status</h2>
-    <div class="status-row">
-        <span>💳</span>
-        <span id="balanceDisplay">Checking balance...</span>
-    </div>
-    <div class="status-row">
-        <span>📶</span>
-        <span>Backend: <b style="color:var(--green)">Live ✅</b></span>
-    </div>
-</div>
-
-<!-- eSIM Card -->
 <div class="card">
     <h2>Get Your eSIM</h2>
-
     <select id="offerSelect">
-        <option value="ESIM-TH-10D-ULE-NOROAM" data-price="29.99" data-country="Thailand">🇹🇭 Thailand – Unlimited – 10 Days – £29.99</option>
+        <option value="ESIM-TH-10D-ULE-NOROAM" data-country="Thailand">🇹🇭 Thailand – Unlimited – 10 Days – £29.99</option>
     </select>
-
     <div id="qrContainer">
-        <p style="color:#888; font-size:14px; padding: 10px 0;">Select a pack and tap below to get your real eSIM</p>
+        <p style="color:#888; font-size:14px; padding:10px 0;">Tap below to get your real eSIM QR code</p>
     </div>
-
     <div id="message"></div>
-
-    <button class="btn btn-stripe" onclick="getESIM()">
-        ✅ Get My Real eSIM Now
-    </button>
-    <button class="btn btn-secondary" onclick="window.location.href='howto.html'">
-        📖 How to Install eSIM
-    </button>
+    <button class="btn btn-stripe" id="getBtn" onclick="getESIM()">✅ Get My Real eSIM Now</button>
+    <button class="btn btn-secondary" onclick="window.location.href='howto.html'">📖 How to Install eSIM</button>
 </div>
 
-<!-- More Options -->
 <div class="card">
     <h2>More</h2>
     <button class="btn btn-secondary" onclick="addMate()">👥 Add Mate (Group Travel)</button>
@@ -207,10 +110,8 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-
     const API = '/api/esim';
 
-    // ── Auth ──────────────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
         if (user) {
             document.getElementById('userEmail').textContent = user.email;
@@ -220,7 +121,6 @@
         }
     });
 
-    // ── Balance ───────────────────────────────────────────────────────────
     async function checkBalance() {
         try {
             const r = await fetch(`${API}?action=balance`);
@@ -229,7 +129,7 @@
             document.getElementById('balanceDisplay').innerHTML =
                 `Zendit Balance: <b style="color:var(--green)">£${bal} ✅</b>`;
         } catch(e) {
-            document.getElementById('balanceDisplay').textContent = 'Balance check failed';
+            document.getElementById('balanceDisplay').textContent = 'Balance unavailable';
         }
     }
 
@@ -239,58 +139,82 @@
         el.className = type;
     }
 
-    // ── Get Real eSIM ─────────────────────────────────────────────────────
     async function getESIM() {
         const sel = document.getElementById('offerSelect');
         const offerId = sel.value;
         const country = sel.options[sel.selectedIndex].dataset.country;
+        const btn = document.getElementById('getBtn');
 
-        setMsg('🔄 Creating your real eSIM... please wait', 'msg-loading');
-        document.querySelector('.btn-stripe').disabled = true;
+        btn.disabled = true;
+        setMsg('⏳ Creating your eSIM...', 'msg-loading');
+        document.getElementById('qrContainer').innerHTML =
+            '<p style="font-size:24px;"><span class="spinner">⚙️</span></p><p style="color:#666;font-size:14px;margin-top:8px;">Contacting Zendit...</p>';
 
         try {
+            // Step 1 — purchase
             const r = await fetch(`${API}?action=purchase`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ offerId })
             });
+            const purchase = await r.json();
 
-            const raw = await r.text();
-            let data;
-            try { data = JSON.parse(raw); } catch(e) { data = { error: raw }; }
-
-            if (data.error) {
-                setMsg('❌ ' + JSON.stringify(data.error), 'msg-error');
-                document.querySelector('.btn-stripe').disabled = false;
+            if (!purchase.transactionId) {
+                setMsg('❌ Purchase failed: ' + JSON.stringify(purchase), 'msg-error');
+                btn.disabled = false;
                 return;
             }
 
-            const qrData = data.qrCode || data.activationCode || data.iccid;
-            const iccid = data.iccid || 'Pending';
+            const txId = purchase.transactionId;
+            setMsg('⏳ eSIM provisioning... please wait', 'msg-loading');
 
-            if (qrData) {
-                document.getElementById('qrContainer').innerHTML = `
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
-                    <span class="badge badge-live">✅ Real eSIM — Ready to Install</span>
-                    <p style="margin-top:12px; font-size:13px; color:#444; line-height:1.6;">
-                        <b>ICCID:</b> ${iccid}<br>
-                        <b>Plan:</b> ${country} · Unlimited · 10 Days<br>
-                        <b>Speed:</b> 2G/3G/4G/5G<br><br>
-                        Scan this QR with your phone camera to install
-                    </p>
-                `;
-                setMsg('✅ eSIM created! Scan the QR above to install.', 'msg-success');
-            } else {
-                setMsg('⚠️ eSIM provisioning — ICCID: ' + iccid + ' (QR coming shortly)', 'msg-loading');
-            }
+            // Step 2 — poll status every 3 seconds up to 20 times
+            let attempts = 0;
+            const interval = setInterval(async () => {
+                attempts++;
+                try {
+                    const sr = await fetch(`${API}?action=status&transactionId=${txId}`);
+                    const result = await sr.json();
+
+                    if (result.smdpAddress || result.status === 'DONE') {
+                        clearInterval(interval);
+                        const qrData = result.qrData || `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
+                        const iccid  = result.iccid || 'N/A';
+
+                        document.getElementById('qrContainer').innerHTML = `
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
+                            <span class="badge badge-live">✅ Real eSIM — Ready!</span>
+                            <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
+                                <b>ICCID:</b> ${iccid}<br>
+                                <b>Plan:</b> ${country} · Unlimited · 10 Days<br>
+                                <b>Speed:</b> 2G/3G/4G/5G<br><br>
+                                📱 <b>Open Camera app → scan this QR → install eSIM</b>
+                            </p>
+                        `;
+                        setMsg('✅ eSIM ready! Scan the QR above to install.', 'msg-success');
+                        checkBalance();
+                        btn.disabled = false;
+                    } else if (attempts >= 20) {
+                        clearInterval(interval);
+                        setMsg('⚠️ Taking longer than expected. Check Zendit console or try again.', 'msg-error');
+                        btn.disabled = false;
+                    } else {
+                        setMsg(`⏳ Provisioning... (${attempts * 3}s)`, 'msg-loading');
+                    }
+                } catch(e) {
+                    clearInterval(interval);
+                    setMsg('❌ Status check failed: ' + e.message, 'msg-error');
+                    btn.disabled = false;
+                }
+            }, 3000);
 
         } catch(e) {
-            setMsg('❌ Error: ' + e.message, 'msg-error');
-            document.querySelector('.btn-stripe').disabled = false;
+            setMsg('❌ ' + e.message, 'msg-error');
+            btn.disabled = false;
         }
     }
 
-    function addMate() { alert('Group eSIM sharing coming soon! Your mates will join your plan.'); }
+    function addMate() { alert('Group eSIM sharing coming soon!'); }
     function logout() { auth.signOut().then(() => window.location.href = 'index.html'); }
 </script>
 
