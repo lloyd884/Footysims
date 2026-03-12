@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --green: #1a7a1a; --green2: #145c14; --lime: #7fff00;
+            --green: #1a7a1a; --lime: #7fff00;
             --off: #f4f7f4; --text: #1c2a1c;
             --radius: 14px; --shadow: 0 6px 24px rgba(0,0,0,0.10);
         }
@@ -48,7 +48,7 @@
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
         .badge-live { background: #00e676; color: #003300; }
         .status-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f0faf0; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
-        #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; }
+        #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; word-break: break-all; }
         .msg-loading { color: #666; }
         .msg-success { background: #e8f5e9; color: #1a7a1a; }
         .msg-error { background: #ffebee; color: #d32f2f; }
@@ -75,6 +75,7 @@
 <div class="card">
     <h2>Get Your eSIM</h2>
     <select id="offerSelect">
+        <option value="ESIM-TH-1D-ULE-NOROAM" data-country="Thailand">🇹🇭 Thailand – Unlimited – 1 Day – £4.99</option>
         <option value="ESIM-TH-10D-ULE-NOROAM" data-country="Thailand">🇹🇭 Thailand – Unlimited – 10 Days – £29.99</option>
     </select>
     <div id="qrContainer">
@@ -148,7 +149,7 @@
         btn.disabled = true;
         setMsg('⏳ Creating your eSIM...', 'msg-loading');
         document.getElementById('qrContainer').innerHTML =
-            '<p style="font-size:24px;"><span class="spinner">⚙️</span></p><p style="color:#666;font-size:14px;margin-top:8px;">Contacting Zendit...</p>';
+            '<p style="font-size:28px;margin-bottom:8px;"><span class="spinner">⚙️</span></p><p style="color:#666;font-size:14px;">Contacting Zendit...</p>';
 
         try {
             // Step 1 — purchase
@@ -159,51 +160,55 @@
             });
             const purchase = await r.json();
 
-            if (!purchase.transactionId) {
-                setMsg('❌ Purchase failed: ' + JSON.stringify(purchase), 'msg-error');
+            if (purchase.error || !purchase.transactionId) {
+                setMsg('❌ ' + (purchase.error?.message || purchase.error || JSON.stringify(purchase)), 'msg-error');
                 btn.disabled = false;
                 return;
             }
 
             const txId = purchase.transactionId;
-            setMsg('⏳ eSIM provisioning... please wait', 'msg-loading');
+            setMsg('⏳ Provisioning eSIM... (0s)', 'msg-loading');
 
-            // Step 2 — poll status every 3 seconds up to 20 times
+            // Step 2 — poll every 3s up to 40 times (2 mins)
             let attempts = 0;
             const interval = setInterval(async () => {
                 attempts++;
                 try {
                     const sr = await fetch(`${API}?action=status&transactionId=${txId}`);
                     const result = await sr.json();
+                    const status = result.status || '';
 
-                    if (result.smdpAddress || result.status === 'DONE') {
+                    if (result.smdpAddress) {
                         clearInterval(interval);
-                        const qrData = result.qrData || `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
-                        const iccid  = result.iccid || 'N/A';
-
+                        const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
+                        const iccid = result.iccid || 'N/A';
                         document.getElementById('qrContainer').innerHTML = `
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
                             <span class="badge badge-live">✅ Real eSIM — Ready!</span>
                             <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
                                 <b>ICCID:</b> ${iccid}<br>
-                                <b>Plan:</b> ${country} · Unlimited · 10 Days<br>
+                                <b>Plan:</b> ${country} · Unlimited · 1 Day<br>
                                 <b>Speed:</b> 2G/3G/4G/5G<br><br>
-                                📱 <b>Open Camera app → scan this QR → install eSIM</b>
-                            </p>
-                        `;
-                        setMsg('✅ eSIM ready! Scan the QR above to install.', 'msg-success');
+                                📱 <b>Open Camera → scan QR → install eSIM</b>
+                            </p>`;
+                        setMsg('✅ eSIM ready! Scan the QR above.', 'msg-success');
                         checkBalance();
                         btn.disabled = false;
-                    } else if (attempts >= 20) {
+                    } else if (status === 'FAILED') {
                         clearInterval(interval);
-                        setMsg('⚠️ Taking longer than expected. Check Zendit console or try again.', 'msg-error');
+                        const errMsg = result.error?.message || result.error?.description || 'Transaction failed';
+                        setMsg('❌ ' + errMsg, 'msg-error');
+                        btn.disabled = false;
+                    } else if (attempts >= 40) {
+                        clearInterval(interval);
+                        setMsg('⚠️ Timed out. Last status: ' + status + ' | TX: ' + txId, 'msg-error');
                         btn.disabled = false;
                     } else {
-                        setMsg(`⏳ Provisioning... (${attempts * 3}s)`, 'msg-loading');
+                        setMsg(`⏳ Provisioning... ${attempts * 3}s | status: ${status}`, 'msg-loading');
                     }
                 } catch(e) {
                     clearInterval(interval);
-                    setMsg('❌ Status check failed: ' + e.message, 'msg-error');
+                    setMsg('❌ Poll error: ' + e.message, 'msg-error');
                     btn.disabled = false;
                 }
             }, 3000);
