@@ -16,11 +16,13 @@ export default async function handler(req, res) {
   try {
     if (action === 'balance') {
       const r = await fetch(`${BASE}/balance`, { headers });
-      return res.status(200).json(await r.json());
+      const text = await r.text();
+      return res.status(200).send(text);
     }
     if (action === 'offers') {
       const r = await fetch(`${BASE}/esims/offers?limit=100&offset=0`, { headers });
-      return res.status(200).json(await r.json());
+      const text = await r.text();
+      return res.status(200).send(text);
     }
     if (action === 'purchase') {
       const { offerId } = req.body;
@@ -28,7 +30,8 @@ export default async function handler(req, res) {
         method: 'POST', headers,
         body: JSON.stringify({ offerId, transactionId: `footysims-${Date.now()}` })
       });
-      return res.status(200).json(await r.json());
+      const text = await r.text();
+      return res.status(200).send(text);
     }
     return res.status(400).json({ error: 'Unknown action' });
   } catch (e) {
