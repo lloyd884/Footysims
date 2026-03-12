@@ -11,7 +11,7 @@ export default async function handler(req, res) {
     'Content-Type': 'application/json'
   };
 
-  const action = req.query.action || req.body?.action;
+  const action = req.query.action;
 
   try {
     if (action === 'balance') {
@@ -22,12 +22,21 @@ export default async function handler(req, res) {
     if (action === 'purchase') {
       const offerId = req.body?.offerId || 'ESIM-TH-10D-ULE-NOROAM';
       const transactionId = `footysims-${Date.now()}`;
+      // Log exactly what we're sending back so we can debug
+      const requestBody = JSON.stringify({ offerId, transactionId });
       const r = await fetch(`${BASE}/esims/purchases`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ offerId, transactionId })
+        body: requestBody
       });
-      return res.status(200).send(await r.text());
+      const statusCode = r.status;
+      const responseText = await r.text();
+      // Return full debug info
+      return res.status(200).json({
+        zenditStatus: statusCode,
+        zenditResponse: responseText,
+        requestSent: requestBody
+      });
     }
 
     return res.status(400).json({ error: 'Unknown action' });
