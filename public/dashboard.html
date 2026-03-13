@@ -506,16 +506,19 @@
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
 
         // Deduplicate: for Unlimited plans keep only the cheapest, show all GB options
+        // Treat dataUnlimited=true OR dataGB=0/null as unlimited
+        const isUnlimited = o => o.dataUnlimited || !o.dataGB || o.dataGB === 0;
         const cheapestUnlimited = filtered
-            .filter(o => o.dataUnlimited)
+            .filter(o => isUnlimited(o))
+            .filter(o => getSellPrice(o) !== null)
             .sort((a, b) => getSellPrice(a) - getSellPrice(b))[0];
-        const gbOptions = filtered.filter(o => !o.dataUnlimited);
+        const gbOptions = filtered.filter(o => !isUnlimited(o));
         const deduped = cheapestUnlimited ? [cheapestUnlimited, ...gbOptions] : gbOptions;
 
         deduped.forEach(o => {
             const sellPrice = getSellPrice(o);
             const priceStr = sellPrice ? `£${sellPrice.toFixed(2)}` : 'Price TBC';
-            const dataLabel = o.dataUnlimited ? 'Unlimited' : `${o.dataGB}GB`;
+            const dataLabel = isUnlimited(o) ? 'Unlimited' : `${o.dataGB}GB`;
             const opt = document.createElement('option');
             opt.value = o.offerId;
             opt.textContent = `${dataLabel} — ${priceStr}`;
