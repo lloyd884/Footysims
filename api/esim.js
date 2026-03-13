@@ -20,20 +20,16 @@ export default async function handler(req, res) {
     }
 
     if (action === 'offers') {
-      // Fetch all offers in batches of 100
       let all = [];
       let offset = 0;
-      const limit = 100;
       while (true) {
-        const r = await fetch(`${BASE}/esim/offers?_limit=${limit}&_offset=${offset}`, { headers });
+        const r = await fetch(`${BASE}/esim/offers?_limit=100&_offset=${offset}`, { headers });
         const data = await r.json();
         const list = data.list || [];
         all = all.concat(list);
-        if (all.length >= data.total || list.length === 0) break;
-        offset += limit;
-        if (offset > 5500) break; // safety
+        if (all.length >= data.total || list.length === 0 || offset > 5500) break;
+        offset += 100;
       }
-      // Return simplified list
       const simplified = all
         .filter(o => o.enabled)
         .map(o => ({
@@ -43,10 +39,10 @@ export default async function handler(req, res) {
           durationDays: o.durationDays,
           dataGB: o.dataGB,
           dataUnlimited: o.dataUnlimited,
-          cost: o.cost,
-          price: o.price,
-          priceCurrencyDivisor: o.priceCurrencyDivisor || 100,
-          dataSpeeds: o.dataSpeeds
+          cost: o.cost || 0,
+          price: o.price || 0,
+          divisor: o.priceCurrencyDivisor || o.costCurrencyDivisor || 100,
+          dataSpeeds: o.dataSpeeds || []
         }));
       return res.status(200).json({ total: simplified.length, offers: simplified });
     }
