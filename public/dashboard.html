@@ -45,6 +45,14 @@
         .btn-stripe { background: #635bff; color: white; }
         .btn-secondary { background: #f0f7f0; color: var(--green); border: 2px solid var(--green); }
         .btn-danger { background: #fff0f0; color: #d32f2f; border: 2px solid #d32f2f; }
+        .btn-sm {
+            width: auto; padding: 8px 16px; font-size: 13px;
+            font-family: 'Oswald', sans-serif; font-weight: 700;
+            border: none; border-radius: 8px; cursor: pointer;
+            transition: opacity 0.2s; display: inline-block;
+        }
+        .btn-sm:hover { opacity: 0.85; }
+        .btn-sm-green { background: var(--green); color: white; }
         #qrContainer { text-align: center; min-height: 60px; padding: 10px 0; }
         #qrContainer img { max-width: 260px; border: 6px solid var(--green); border-radius: 12px; margin: 10px auto; display: block; }
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
@@ -73,7 +81,24 @@
         }
         .welcome h1 { font-family: 'Oswald', sans-serif; font-size: 22px; margin-bottom: 4px; }
         .welcome p { font-size: 13px; opacity: 0.85; }
-    </style>
+
+```
+    /* Purchase history */
+    .purchase-item {
+        background: #f8fdf8; border: 1.5px solid #d0ecd0;
+        border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;
+    }
+    .purchase-item:last-child { margin-bottom: 0; }
+    .purchase-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+    .purchase-name { font-weight: 700; font-size: 14px; }
+    .purchase-date { font-size: 12px; color: #888; }
+    .purchase-detail { font-size: 12px; color: #555; margin-bottom: 10px; }
+    .purchase-qr { text-align: center; margin-top: 10px; }
+    .purchase-qr img { max-width: 200px; border: 4px solid var(--green); border-radius: 10px; display: block; margin: 8px auto; }
+    .no-purchases { text-align: center; color: #888; font-size: 14px; padding: 12px 0; }
+</style>
+```
+
 </head>
 <body>
 
@@ -90,6 +115,13 @@
     <p>Select a country below to get your travel eSIM</p>
 </div>
 
+<!-- Purchase History -->
+<div class="card" id="historyCard" style="display:none;">
+    <h2>Your eSIMs</h2>
+    <div id="historyList"></div>
+</div>
+
+<!-- New Purchase -->
 <div class="card">
     <h2>Get Your eSIM</h2>
 
@@ -149,6 +181,8 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 
+<script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
+
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
@@ -160,6 +194,7 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    const db = firebase.firestore();
     const API = '/api/esim';
     const STRIPE_API = '/api/stripe';
     const MARKUP = 1.35;
@@ -198,6 +233,7 @@
 
     let allOffers = [];
     let selectedOffer = null;
+    let currentUser = null;
 
     function getSellPrice(offer) {
         const cost = (offer.costFixed || 0) / (offer.costDivisor || 100);
@@ -209,14 +245,95 @@
 
     auth.onAuthStateChanged(async user => {
         if (user) {
+            currentUser = user;
             document.getElementById('userEmail').textContent = user.email;
             await loadOffers();
+            loadPurchaseHistory();
             checkReturnFromStripe();
         } else {
             window.location.href = 'index.html';
         }
     });
 
+    // ── Purchase History ──────────────────────────────────────────────────
+    async function loadPurchaseHistory() {
+        try {
+            const snap = await db.collection('purchases')
+                .where('uid', '==', currentUser.uid)
+                .orderBy('createdAt', 'desc')
+                .limit(10)
+                .get();
+
+            if (snap.empty) return;
+
+            document.getElementById('historyCard').style.display = 'block';
+            const list = document.getElementById('historyList');
+            list.innerHTML = '';
+
+            snap.forEach(doc => {
+                const p = doc.data();
+                const country = COUNTRY_NAMES[p.country] || p.country || '';
+                const flag = FLAG_EMOJIS[p.country] || '🌍';
+                const date = p.createdAt?.toDate ? p.createdAt.toDate().toLocaleDateString('en-GB') : 'Unknown date';
+                const div = document.createElement('div');
+                div.className = 'purchase-item';
+                div.id = `purchase-${doc.id}`;
+                div.innerHTML = `
+                    <div class="purchase-top">
+                        <div class="purchase-name">${flag} ${country}</div>
+                        <div class="purchase-date">${date}</div>
+                    </div>
+                    <div class="purchase-detail">${p.dataStr || ''} · ${p.days || ''} · ${p.offerId || ''}</div>
+                    <button class="btn-sm btn-sm-green" onclick="showPurchaseQR('${doc.id}', '${p.transactionId}')">📱 Show QR Code</button>
+                    <div id="qr-${doc.id}"></div>
+                `;
+                list.appendChild(div);
+            });
+        } catch(e) {
+            console.log('History load error:', e);
+        }
+    }
+
+    async function showPurchaseQR(docId, transactionId) {
+        const container = document.getElementById(`qr-${docId}`);
+        container.innerHTML = '<p style="font-size:13px;color:#666;padding:8px 0;">Loading QR...</p>';
+        try {
+            const r = await fetch(`${API}?action=status&transactionId=${transactionId}`);
+            const result = await r.json();
+            if (result.smdpAddress) {
+                const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
+                container.innerHTML = `
+                    <div class="purchase-qr">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}" alt="QR">
+                        <p style="font-size:11px;color:#555;margin-top:6px;">ICCID: ${result.iccid || 'N/A'}</p>
+                        <p style="font-size:11px;color:#1a7a1a;font-weight:600;">📱 Open Camera → scan to install</p>
+                    </div>`;
+            } else {
+                container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ Could not load QR: ${result.status}</p>`;
+            }
+        } catch(e) {
+            container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ Error: ${e.message}</p>`;
+        }
+    }
+
+    async function savePurchase(transactionId, offerId, offer) {
+        try {
+            await db.collection('purchases').add({
+                uid: currentUser.uid,
+                email: currentUser.email,
+                transactionId,
+                offerId,
+                country: offer?.country || '',
+                dataStr: offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '',
+                days: offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch(e) {
+            console.log('Save purchase error:', e);
+        }
+    }
+
+    // ── Stripe return ─────────────────────────────────────────────────────
     async function checkReturnFromStripe() {
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get('session_id');
@@ -403,6 +520,9 @@
                     const status = result.status || '';
                     if (result.smdpAddress) {
                         clearInterval(interval);
+                        // Save to Firestore
+                        await savePurchase(txId, offerId, offer);
+                        loadPurchaseHistory();
                         const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
                         const iccid = result.iccid || 'N/A';
                         const days = offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '';
