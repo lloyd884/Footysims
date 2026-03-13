@@ -13,7 +13,9 @@ const action = req.query.action;
 try {
     if (action === 'create-checkout') {
         const { offerId, offerName, price, uid, email } = req.body;
+        console.log("Checkout:", { offerId, offerName, price, uid, email });
         const amountPence = Math.round(price * 100);
+        if (!amountPence || amountPence < 30) return res.status(400).json({ error: "Invalid price: " + price });
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -26,13 +28,13 @@ try {
                 quantity: 1,
             }],
             mode: 'payment',
-            success_url: `https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=${offerId}`,
+            success_url: `https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=${encodeURIComponent(offerId)}`,
             cancel_url: `https://footysims.com/dashboard.html`,
             customer_email: email || undefined,
             metadata: {
-                offerId,
-                uid: uid || '',
-                email: email || ''
+                offerId: String(offerId).substring(0, 500),
+                uid: String(uid || '').substring(0, 500),
+                email: String(email || '').substring(0, 500)
             }
         });
 
