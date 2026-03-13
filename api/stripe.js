@@ -1,6 +1,6 @@
-const Stripe = require(‘stripe’);
+import Stripe from ‘stripe’;
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
 res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
 res.setHeader(‘Access-Control-Allow-Methods’, ‘GET, POST, OPTIONS’);
 res.setHeader(‘Access-Control-Allow-Headers’, ‘Content-Type’);
@@ -20,8 +20,11 @@ try {
             return res.status(400).json({ error: 'Invalid price: ' + price });
         }
 
-        const safeOfferName = String(offerName || 'eSIM Plan').replace(/[^a-zA-Z0-9 .,_-]/g, '').substring(0, 100) || 'eSIM Plan';
-        const successUrl = 'https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=' + encodeURIComponent(offerId);
+        const safeOfferName = String(offerName || 'eSIM Plan')
+            .replace(/[^\w\s.,()\-]/g, '')
+            .substring(0, 100) || 'eSIM Plan';
+
+        const successUrl = 'https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=' + encodeURIComponent(String(offerId));
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -64,4 +67,4 @@ try {
 }
 ```
 
-};
+}
