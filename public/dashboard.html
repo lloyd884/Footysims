@@ -504,7 +504,15 @@
         if (!duration) { dataSelect.innerHTML = '<option value="">Select data pack...</option>'; dataSelect.disabled = true; return; }
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
-        filtered.forEach(o => {
+
+        // Deduplicate: for Unlimited plans keep only the cheapest, show all GB options
+        const cheapestUnlimited = filtered
+            .filter(o => o.dataUnlimited)
+            .sort((a, b) => getSellPrice(a) - getSellPrice(b))[0];
+        const gbOptions = filtered.filter(o => !o.dataUnlimited);
+        const deduped = cheapestUnlimited ? [cheapestUnlimited, ...gbOptions] : gbOptions;
+
+        deduped.forEach(o => {
             const sellPrice = getSellPrice(o);
             const priceStr = sellPrice ? `£${sellPrice.toFixed(2)}` : 'Price TBC';
             const dataLabel = o.dataUnlimited ? 'Unlimited' : `${o.dataGB}GB`;
