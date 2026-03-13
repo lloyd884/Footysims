@@ -32,6 +32,8 @@
             border: 1.5px solid #d8e4d8; border-radius: 10px;
             background: #fafffe; color: var(--text); outline: none;
         }
+        select:disabled { opacity: 0.5; }
+        label { font-size: 13px; font-weight: 600; color: #555; display: block; margin-bottom: 5px; margin-top: 4px; }
         .btn {
             width: 100%; padding: 15px; font-size: 15px; font-weight: 700;
             font-family: 'Oswald', sans-serif; letter-spacing: 0.5px;
@@ -48,13 +50,19 @@
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
         .badge-live { background: #00e676; color: #003300; }
         .status-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f0faf0; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
-        #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; word-break: break-all; }
+        #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; }
         .msg-loading { color: #666; }
         .msg-success { background: #e8f5e9; color: #1a7a1a; }
         .msg-error { background: #ffebee; color: #d32f2f; }
         .divider { border: none; border-top: 1px solid #e8ede8; margin: 12px 0; }
+        .price-preview {
+            background: #f0faf0; border-radius: 10px; padding: 12px 16px;
+            margin-bottom: 12px; font-size: 14px; display: none;
+        }
+        .price-preview .price { font-family: 'Oswald', sans-serif; font-size: 22px; color: var(--green); font-weight: 700; }
         .spinner { display: inline-block; animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .loading-offers { text-align: center; padding: 20px; color: #888; font-size: 14px; }
     </style>
 </head>
 <body>
@@ -74,15 +82,44 @@
 ```
 <div class="card">
     <h2>Get Your eSIM</h2>
-    <select id="offerSelect">
-        <option value="ESIM-TH-1D-ULE-NOROAM" data-country="Thailand">🇹🇭 Thailand – Unlimited – 1 Day – £4.99</option>
-        <option value="ESIM-TH-10D-ULE-NOROAM" data-country="Thailand">🇹🇭 Thailand – Unlimited – 10 Days – £29.99</option>
-    </select>
+
+    <div id="offersLoading" class="loading-offers">
+        <span class="spinner">⚙️</span> Loading countries...
+    </div>
+
+    <div id="offersUI" style="display:none;">
+        <label>🌍 Country</label>
+        <select id="countrySelect" onchange="onCountryChange()">
+            <option value="">Select a country...</option>
+        </select>
+
+        <label>📅 Duration</label>
+        <select id="durationSelect" onchange="onDurationChange()" disabled>
+            <option value="">Select duration...</option>
+        </select>
+
+        <label>📶 Data</label>
+        <select id="dataSelect" onchange="onDataChange()" disabled>
+            <option value="">Select data pack...</option>
+        </select>
+
+        <div class="price-preview" id="pricePreview">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                    <div id="previewName" style="font-weight:600; margin-bottom:2px;"></div>
+                    <div id="previewDetails" style="font-size:12px; color:#666;"></div>
+                </div>
+                <div class="price" id="previewPrice"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="qrContainer">
-        <p style="color:#888; font-size:14px; padding:10px 0;">Tap below to get your real eSIM QR code</p>
+        <p style="color:#888; font-size:14px; padding:10px 0;">Select a country and plan above</p>
     </div>
     <div id="message"></div>
-    <button class="btn btn-stripe" id="getBtn" onclick="getESIM()">✅ Get My Real eSIM Now</button>
+
+    <button class="btn btn-stripe" id="getBtn" onclick="getESIM()" disabled>✅ Get My Real eSIM Now</button>
     <button class="btn btn-secondary" onclick="window.location.href='howto.html'">📖 How to Install eSIM</button>
 </div>
 
@@ -113,10 +150,47 @@
     const auth = firebase.auth();
     const API = '/api/esim';
 
+    // Country name map
+    const COUNTRY_NAMES = {
+        AF:'Afghanistan',AL:'Albania',DZ:'Algeria',AD:'Andorra',AO:'Angola',AR:'Argentina',AM:'Armenia',
+        AU:'Australia',AT:'Austria',AZ:'Azerbaijan',BH:'Bahrain',BD:'Bangladesh',BY:'Belarus',BE:'Belgium',
+        BZ:'Belize',BJ:'Benin',BT:'Bhutan',BO:'Bolivia',BA:'Bosnia',BW:'Botswana',BR:'Brazil',
+        BN:'Brunei',BG:'Bulgaria',BF:'Burkina Faso',BI:'Burundi',KH:'Cambodia',CM:'Cameroon',CA:'Canada',
+        CF:'Central African Republic',TD:'Chad',CL:'Chile',CN:'China',CO:'Colombia',CG:'Congo',CR:'Costa Rica',
+        HR:'Croatia',CY:'Cyprus',CZ:'Czech Republic',DK:'Denmark',DJ:'Djibouti',DO:'Dominican Republic',
+        EC:'Ecuador',EG:'Egypt',SV:'El Salvador',GQ:'Equatorial Guinea',EE:'Estonia',ET:'Ethiopia',
+        FI:'Finland',FR:'France',GA:'Gabon',GE:'Georgia',DE:'Germany',GH:'Ghana',GR:'Greece',
+        GT:'Guatemala',GN:'Guinea',HN:'Honduras',HK:'Hong Kong',HU:'Hungary',IS:'Iceland',IN:'India',
+        ID:'Indonesia',IQ:'Iraq',IE:'Ireland',IL:'Israel',IT:'Italy',JM:'Jamaica',JP:'Japan',JO:'Jordan',
+        KZ:'Kazakhstan',KE:'Kenya',KW:'Kuwait',KG:'Kyrgyzstan',LA:'Laos',LV:'Latvia',LB:'Lebanon',
+        LS:'Lesotho',LY:'Libya',LI:'Liechtenstein',LT:'Lithuania',LU:'Luxembourg',MO:'Macau',MG:'Madagascar',
+        MW:'Malawi',MY:'Malaysia',MV:'Maldives',ML:'Mali',MT:'Malta',MR:'Mauritania',MU:'Mauritius',
+        MX:'Mexico',MD:'Moldova',MC:'Monaco',MN:'Mongolia',ME:'Montenegro',MA:'Morocco',MZ:'Mozambique',
+        MM:'Myanmar',NA:'Namibia',NP:'Nepal',NL:'Netherlands',NZ:'New Zealand',NI:'Nicaragua',NE:'Niger',
+        NG:'Nigeria',MK:'North Macedonia',NO:'Norway',OM:'Oman',PK:'Pakistan',PS:'Palestine',PA:'Panama',
+        PY:'Paraguay',PE:'Peru',PH:'Philippines',PL:'Poland',PT:'Portugal',QA:'Qatar',RO:'Romania',
+        RU:'Russia',RW:'Rwanda',SA:'Saudi Arabia',SN:'Senegal',RS:'Serbia',SL:'Sierra Leone',SG:'Singapore',
+        SK:'Slovakia',SI:'Slovenia',SO:'Somalia',ZA:'South Africa',KR:'South Korea',SS:'South Sudan',
+        ES:'Spain',LK:'Sri Lanka',SD:'Sudan',SE:'Sweden',CH:'Switzerland',TW:'Taiwan',TJ:'Tajikistan',
+        TZ:'Tanzania',TH:'Thailand',TG:'Togo',TN:'Tunisia',TR:'Turkey',TM:'Turkmenistan',UG:'Uganda',
+        UA:'Ukraine',AE:'United Arab Emirates',GB:'United Kingdom',US:'United States',UY:'Uruguay',
+        UZ:'Uzbekistan',VE:'Venezuela',VN:'Vietnam',YE:'Yemen',ZM:'Zambia',ZW:'Zimbabwe'
+    };
+
+    const FLAG_EMOJIS = {};
+    for (const [code] of Object.entries(COUNTRY_NAMES)) {
+        FLAG_EMOJIS[code] = code.toUpperCase().replace(/./g, c =>
+            String.fromCodePoint(c.charCodeAt(0) + 127397));
+    }
+
+    let allOffers = [];
+    let selectedOfferId = null;
+
     auth.onAuthStateChanged(user => {
         if (user) {
             document.getElementById('userEmail').textContent = user.email;
             checkBalance();
+            loadOffers();
         } else {
             window.location.href = 'index.html';
         }
@@ -134,6 +208,127 @@
         }
     }
 
+    async function loadOffers() {
+        try {
+            const r = await fetch(`${API}?action=offers`);
+            const data = await r.json();
+            allOffers = data.offers || [];
+
+            // Get unique countries sorted by name
+            const countrySet = {};
+            allOffers.forEach(o => {
+                if (o.country && !countrySet[o.country]) {
+                    countrySet[o.country] = COUNTRY_NAMES[o.country] || o.country;
+                }
+            });
+            const sorted = Object.entries(countrySet).sort((a, b) => a[1].localeCompare(b[1]));
+
+            const countrySelect = document.getElementById('countrySelect');
+            countrySelect.innerHTML = '<option value="">Select a country...</option>';
+            sorted.forEach(([code, name]) => {
+                const flag = FLAG_EMOJIS[code] || '';
+                const opt = document.createElement('option');
+                opt.value = code;
+                opt.textContent = `${flag} ${name}`;
+                countrySelect.appendChild(opt);
+            });
+
+            document.getElementById('offersLoading').style.display = 'none';
+            document.getElementById('offersUI').style.display = 'block';
+        } catch(e) {
+            document.getElementById('offersLoading').textContent = '❌ Failed to load offers';
+        }
+    }
+
+    function onCountryChange() {
+        const country = document.getElementById('countrySelect').value;
+        const durationSelect = document.getElementById('durationSelect');
+        const dataSelect = document.getElementById('dataSelect');
+
+        selectedOfferId = null;
+        document.getElementById('getBtn').disabled = true;
+        document.getElementById('pricePreview').style.display = 'none';
+        dataSelect.innerHTML = '<option value="">Select data pack...</option>';
+        dataSelect.disabled = true;
+
+        if (!country) {
+            durationSelect.innerHTML = '<option value="">Select duration...</option>';
+            durationSelect.disabled = true;
+            return;
+        }
+
+        const countryOffers = allOffers.filter(o => o.country === country);
+        const durations = [...new Set(countryOffers.map(o => o.durationDays))].sort((a, b) => a - b);
+
+        durationSelect.innerHTML = '<option value="">Select duration...</option>';
+        durations.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d;
+            opt.textContent = d === 1 ? '1 Day' : `${d} Days`;
+            durationSelect.appendChild(opt);
+        });
+        durationSelect.disabled = false;
+    }
+
+    function onDurationChange() {
+        const country = document.getElementById('countrySelect').value;
+        const duration = parseInt(document.getElementById('durationSelect').value);
+        const dataSelect = document.getElementById('dataSelect');
+
+        selectedOfferId = null;
+        document.getElementById('getBtn').disabled = true;
+        document.getElementById('pricePreview').style.display = 'none';
+
+        if (!duration) {
+            dataSelect.innerHTML = '<option value="">Select data pack...</option>';
+            dataSelect.disabled = true;
+            return;
+        }
+
+        const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
+
+        dataSelect.innerHTML = '<option value="">Select data pack...</option>';
+        filtered.forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.offerId;
+            const data = o.dataUnlimited ? 'Unlimited' : `${o.dataGB}GB`;
+            const price = (o.price / (o.priceCurrencyDivisor || 100)).toFixed(2);
+            opt.textContent = `${data} — £${price}`;
+            dataSelect.appendChild(opt);
+        });
+        dataSelect.disabled = false;
+    }
+
+    function onDataChange() {
+        const offerId = document.getElementById('dataSelect').value;
+        selectedOfferId = offerId;
+
+        if (!offerId) {
+            document.getElementById('getBtn').disabled = true;
+            document.getElementById('pricePreview').style.display = 'none';
+            return;
+        }
+
+        const offer = allOffers.find(o => o.offerId === offerId);
+        if (offer) {
+            const price = (offer.price / (offer.priceCurrencyDivisor || 100)).toFixed(2);
+            const data = offer.dataUnlimited ? 'Unlimited data' : `${offer.dataGB}GB data`;
+            const days = offer.durationDays === 1 ? '1 day' : `${offer.durationDays} days`;
+            const country = COUNTRY_NAMES[offer.country] || offer.country;
+            const flag = FLAG_EMOJIS[offer.country] || '';
+
+            document.getElementById('previewName').textContent = `${flag} ${country}`;
+            document.getElementById('previewDetails').textContent = `${data} · ${days} · ${(offer.dataSpeeds||[]).join('/')}`;
+            document.getElementById('previewPrice').textContent = `£${price}`;
+            document.getElementById('pricePreview').style.display = 'block';
+        }
+
+        document.getElementById('getBtn').disabled = false;
+        document.getElementById('qrContainer').innerHTML =
+            '<p style="color:#888; font-size:14px; padding:10px 0;">Tap below to get your real eSIM</p>';
+        setMsg('', '');
+    }
+
     function setMsg(text, type) {
         const el = document.getElementById('message');
         el.textContent = text;
@@ -141,9 +336,9 @@
     }
 
     async function getESIM() {
-        const sel = document.getElementById('offerSelect');
-        const offerId = sel.value;
-        const country = sel.options[sel.selectedIndex].dataset.country;
+        if (!selectedOfferId) return;
+        const offer = allOffers.find(o => o.offerId === selectedOfferId);
+        const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
         const btn = document.getElementById('getBtn');
 
         btn.disabled = true;
@@ -152,16 +347,15 @@
             '<p style="font-size:28px;margin-bottom:8px;"><span class="spinner">⚙️</span></p><p style="color:#666;font-size:14px;">Contacting Zendit...</p>';
 
         try {
-            // Step 1 — purchase
             const r = await fetch(`${API}?action=purchase`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ offerId })
+                body: JSON.stringify({ offerId: selectedOfferId })
             });
             const purchase = await r.json();
 
             if (purchase.error || !purchase.transactionId) {
-                setMsg('❌ ' + (purchase.error?.message || purchase.error || JSON.stringify(purchase)), 'msg-error');
+                setMsg('❌ ' + (purchase.error?.message || purchase.error?.description || JSON.stringify(purchase)), 'msg-error');
                 btn.disabled = false;
                 return;
             }
@@ -169,7 +363,6 @@
             const txId = purchase.transactionId;
             setMsg('⏳ Provisioning eSIM... (0s)', 'msg-loading');
 
-            // Step 2 — poll every 3s up to 40 times (2 mins)
             let attempts = 0;
             const interval = setInterval(async () => {
                 attempts++;
@@ -182,13 +375,15 @@
                         clearInterval(interval);
                         const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
                         const iccid = result.iccid || 'N/A';
+                        const days = offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '';
+                        const data = offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '';
                         document.getElementById('qrContainer').innerHTML = `
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
                             <span class="badge badge-live">✅ Real eSIM — Ready!</span>
                             <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
                                 <b>ICCID:</b> ${iccid}<br>
-                                <b>Plan:</b> ${country} · Unlimited · 1 Day<br>
-                                <b>Speed:</b> 2G/3G/4G/5G<br><br>
+                                <b>Plan:</b> ${country} · ${data} · ${days}<br>
+                                <b>Speed:</b> ${(offer?.dataSpeeds||['4G']).join('/')}<br><br>
                                 📱 <b>Open Camera → scan QR → install eSIM</b>
                             </p>`;
                         setMsg('✅ eSIM ready! Scan the QR above.', 'msg-success');
@@ -201,14 +396,14 @@
                         btn.disabled = false;
                     } else if (attempts >= 40) {
                         clearInterval(interval);
-                        setMsg('⚠️ Timed out. Last status: ' + status + ' | TX: ' + txId, 'msg-error');
+                        setMsg('⚠️ Timed out. Status: ' + status + ' | TX: ' + txId, 'msg-error');
                         btn.disabled = false;
                     } else {
-                        setMsg(`⏳ Provisioning... ${attempts * 3}s | status: ${status}`, 'msg-loading');
+                        setMsg(`⏳ Provisioning... ${attempts * 3}s`, 'msg-loading');
                     }
                 } catch(e) {
                     clearInterval(interval);
-                    setMsg('❌ Poll error: ' + e.message, 'msg-error');
+                    setMsg('❌ ' + e.message, 'msg-error');
                     btn.disabled = false;
                 }
             }, 3000);
