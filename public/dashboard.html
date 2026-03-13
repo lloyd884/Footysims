@@ -334,7 +334,6 @@
         try {
             const snap = await db.collection('purchases')
                 .where('uid', '==', currentUser.uid)
-                .orderBy('createdAt', 'desc')
                 .limit(10)
                 .get();
 
