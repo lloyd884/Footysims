@@ -13,9 +13,14 @@ const action = req.query.action;
 try {
     if (action === 'create-checkout') {
         const { offerId, offerName, price, uid, email } = req.body;
-        console.log("Checkout:", { offerId, offerName, price, uid, email });
-        const amountPence = Math.round(price * 100);
-        if (!amountPence || amountPence < 30) return res.status(400).json({ error: "Invalid price: " + price });
+        console.log('Checkout:', JSON.stringify({ offerId, offerName, price, uid, email }));
+
+        const amountPence = Math.round(Number(price) * 100);
+        if (!amountPence || amountPence < 30) {
+            return res.status(400).json({ error: 'Invalid price: ' + price });
+        }
+
+        const successUrl = 'https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=' + encodeURIComponent(offerId);
 
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -28,11 +33,11 @@ try {
                 quantity: 1,
             }],
             mode: 'payment',
-            success_url: `https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=${encodeURIComponent(offerId)}`,
-            cancel_url: `https://footysims.com/dashboard.html`,
+            success_url: successUrl,
+            cancel_url: 'https://footysims.com/dashboard.html',
             customer_email: email || undefined,
             metadata: {
-                offerId: String(offerId).substring(0, 500),
+                offerId: String(offerId || '').substring(0, 500),
                 uid: String(uid || '').substring(0, 500),
                 email: String(email || '').substring(0, 500)
             }
@@ -46,13 +51,14 @@ try {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         return res.status(200).json({
             paid: session.payment_status === 'paid',
-            offerId: session.metadata?.offerId
+            offerId: session.metadata ? session.metadata.offerId : null
         });
     }
 
     return res.status(400).json({ error: 'Unknown action' });
 
 } catch (e) {
+    console.error('Stripe error:', e.message);
     return res.status(500).json({ error: e.message });
 }
 ```
