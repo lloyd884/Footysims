@@ -39,9 +39,10 @@ export default async function handler(req, res) {
           durationDays: o.durationDays,
           dataGB: o.dataGB,
           dataUnlimited: o.dataUnlimited,
-          cost: o.cost || 0,
-          price: o.price || 0,
-          divisor: o.priceCurrencyDivisor || o.costCurrencyDivisor || 100,
+          costFixed: o.cost?.fixed || 0,
+          costDivisor: o.cost?.currencyDivisor || 100,
+          priceFixed: o.price?.fixed || 0,
+          priceDivisor: o.price?.currencyDivisor || 100,
           dataSpeeds: o.dataSpeeds || []
         }));
       return res.status(200).json({ total: simplified.length, offers: simplified });
