@@ -1,29 +1,265 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>How to Use FootySIMs eSIM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Install Your eSIM – FootySIMs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial; background: #228B22; color: white; padding: 20px; line-height: 1.6; }
-        h1, h2 { text-align: center; }
-        button { background: white; color: #228B22; padding: 15px; margin: 10px; border: none; border-radius: 12px; font-size: 18px; }
+        :root {
+            --green: #1a7a1a; --lime: #7fff00;
+            --off: #f4f7f4; --text: #1c2a1c;
+            --radius: 14px; --shadow: 0 6px 24px rgba(0,0,0,0.10);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
+        header {
+            background: var(--green); padding: 0 24px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px; position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .logo { font-family: 'Oswald', sans-serif; font-size: 24px; font-weight: 700; color: white; text-decoration: none; }
+        .logo span { color: var(--lime); }
+        .back-btn {
+            color: white; font-size: 14px; font-weight: 600;
+            text-decoration: none; opacity: 0.85;
+        }
+        .main { padding: 24px 16px 60px; max-width: 480px; margin: 0 auto; }
+        .hero {
+            background: var(--green); border-radius: var(--radius);
+            padding: 28px 24px; margin-bottom: 20px; text-align: center; color: white;
+        }
+        .hero h1 { font-family: 'Oswald', sans-serif; font-size: 26px; margin-bottom: 8px; }
+        .hero p { font-size: 14px; opacity: 0.85; line-height: 1.5; }
+        .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; }
+        .card h2 { font-family: 'Oswald', sans-serif; font-size: 18px; color: var(--green); margin-bottom: 16px; }
+        .step {
+            display: flex; gap: 16px; align-items: flex-start;
+            padding: 14px 0; border-bottom: 1px solid #f0f0f0;
+        }
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+        .step-num {
+            background: var(--green); color: white;
+            font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700;
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-content h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+        .step-content p { font-size: 13px; color: #555; line-height: 1.5; }
+        .step-content .note {
+            background: #f0faf0; border-left: 3px solid var(--green);
+            padding: 8px 10px; border-radius: 0 6px 6px 0;
+            font-size: 12px; color: #1a7a1a; margin-top: 8px; line-height: 1.5;
+        }
+        .tab-bar {
+            display: flex; gap: 0; margin-bottom: 16px;
+            border: 2px solid var(--green); border-radius: 10px; overflow: hidden;
+        }
+        .tab {
+            flex: 1; padding: 10px; text-align: center; font-size: 14px;
+            font-weight: 700; font-family: 'Oswald', sans-serif;
+            background: white; color: var(--green); cursor: pointer;
+            border: none; transition: all 0.2s;
+        }
+        .tab.active { background: var(--green); color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .faq-item { padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+        .faq-item:last-child { border-bottom: none; }
+        .faq-q { font-weight: 700; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+        .faq-a { font-size: 13px; color: #555; line-height: 1.5; }
+        .compatible-grid {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 8px; margin-top: 4px;
+        }
+        .compatible-item {
+            background: #f0faf0; border-radius: 8px; padding: 8px 10px;
+            font-size: 12px; font-weight: 600; color: var(--green);
+        }
+        .btn {
+            width: 100%; padding: 15px; font-size: 15px; font-weight: 700;
+            font-family: 'Oswald', sans-serif; letter-spacing: 0.5px;
+            border: none; border-radius: 10px; cursor: pointer;
+            margin-bottom: 10px; transition: opacity 0.2s; text-align: center;
+            display: block; text-decoration: none;
+        }
+        .btn-primary { background: var(--green); color: white; }
+        .btn:hover { opacity: 0.88; }
     </style>
 </head>
 <body>
-    <h1>⚽ How to Use Your FootySIMs eSIM</h1>
 
-    <h2>1. Install the eSIM</h2>
-    <p>1. Open your phone camera and scan the QR code in your dashboard.<br>
-    2. Tap the popup "Add eSIM" or "Cellular Plan".<br>
-    3. Follow the on-screen instructions (takes 30 seconds).</p>
+<header>
+    <a class="logo" href="index.html">Footy<span>SIMs</span></a>
+    <a class="back-btn" href="dashboard.html">← Back</a>
+</header>
 
-    <h2>2. Top Up Data</h2>
-    <p>Go to Dashboard → Top Up button → pay → eSIM updates automatically.</p>
+<div class="main">
 
-    <h2>3. Refund Policy</h2>
-    <p>No-questions refunds within 24 hours – just email footysims@proton.me with your order number.</p>
+```
+<div class="hero">
+    <h1>📱 How to Install Your eSIM</h1>
+    <p>Follow these simple steps to get connected in minutes. No physical SIM needed!</p>
+</div>
 
-    <button onclick="window.location.href='dashboard.html'">Back to Dashboard</button>
-    <button onclick="window.location.href='index.html'">Back to Home</button>
+<div class="card">
+    <div class="tab-bar">
+        <button class="tab active" onclick="switchTab('iphone')">📱 iPhone</button>
+        <button class="tab" onclick="switchTab('android')">🤖 Android</button>
+    </div>
+
+    <!-- iPhone Steps -->
+    <div id="tab-iphone" class="tab-content active">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>Open your Camera app</h3>
+                <p>Point your camera at the QR code shown on your FootySIMs dashboard.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>Tap the notification</h3>
+                <p>A banner will appear at the top of your screen saying "eSIM Activation". Tap it.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>Tap "Continue" then "Add Mobile Plan"</h3>
+                <p>Your iPhone will download the eSIM profile. This takes about 30 seconds.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h3>Label your eSIM</h3>
+                <p>Choose a label like "Travel" or "FootySIMs" to tell it apart from your main SIM.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+                <h3>Set Default Line</h3>
+                <p>Keep your main SIM as default for calls/texts. Use FootySIMs eSIM for mobile data only.</p>
+                <div class="note">💡 Go to Settings → Mobile Data → select FootySIMs eSIM for data</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+                <h3>Enable Data Roaming</h3>
+                <p>Go to Settings → Mobile Data → tap your FootySIMs eSIM → turn on Data Roaming.</p>
+                <div class="note">✅ You're connected! Your eSIM activates when you land.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Android Steps -->
+    <div id="tab-android" class="tab-content">
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>Open Settings</h3>
+                <p>Go to Settings → Connections → SIM Manager (may vary by brand).</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>Add eSIM</h3>
+                <p>Tap "Add mobile plan" or "Add eSIM" then choose "Scan QR code".</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>Scan the QR Code</h3>
+                <p>Point your camera at the QR code on your FootySIMs dashboard.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+                <h3>Confirm and Download</h3>
+                <p>Follow the prompts to download and activate your eSIM profile.</p>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+                <h3>Set as Data SIM</h3>
+                <p>In SIM Manager, set FootySIMs as your preferred data SIM.</p>
+                <div class="note">💡 Keep your main SIM active for calls — only use FootySIMs for data abroad.</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="step-num">6</div>
+            <div class="step-content">
+                <h3>Enable Roaming</h3>
+                <p>Make sure Data Roaming is enabled for your FootySIMs eSIM.</p>
+                <div class="note">✅ You're all set! Your eSIM activates when you arrive at your destination.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Compatible Devices -->
+<div class="card">
+    <h2>Compatible Devices</h2>
+    <div class="compatible-grid">
+        <div class="compatible-item">📱 iPhone XS and newer</div>
+        <div class="compatible-item">📱 iPhone SE (2020+)</div>
+        <div class="compatible-item">🤖 Samsung S20+</div>
+        <div class="compatible-item">🤖 Google Pixel 3+</div>
+        <div class="compatible-item">🤖 Samsung Z Fold/Flip</div>
+        <div class="compatible-item">🤖 OnePlus 12+</div>
+    </div>
+    <p style="font-size:12px; color:#888; margin-top:12px;">⚠️ Make sure your phone is unlocked and eSIM-capable. Check Settings → General → About → look for "Digital SIM" (iPhone) or "EID" (Android).</p>
+</div>
+
+<!-- FAQ -->
+<div class="card">
+    <h2>FAQ</h2>
+    <div class="faq-item">
+        <div class="faq-q">When does my eSIM start?</div>
+        <div class="faq-a">Your data plan starts the moment you first use data in the destination country — not when you install it.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q">Can I keep my normal number?</div>
+        <div class="faq-a">Yes! Your FootySIMs eSIM is data-only. Your normal SIM stays active for calls and texts.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q">Can I install it before I travel?</div>
+        <div class="faq-a">Yes — install it at home and it will activate automatically when you arrive at your destination.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q">What if I lose my QR code?</div>
+        <div class="faq-a">Log back into your FootySIMs dashboard — your QR code is always available there.</div>
+    </div>
+    <div class="faq-item">
+        <div class="faq-q">Does it work for calls?</div>
+        <div class="faq-a">FootySIMs eSIMs are data-only. Use WhatsApp, FaceTime or any internet calling app for free calls abroad.</div>
+    </div>
+</div>
+
+<a class="btn btn-primary" href="dashboard.html">← Back to Dashboard</a>
+```
+
+</div>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelector(`#tab-${tab}`).classList.add('active');
+        event.target.classList.add('active');
+    }
+</script>
+
 </body>
 </html>
