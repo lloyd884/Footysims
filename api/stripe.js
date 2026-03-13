@@ -1,27 +1,19 @@
+import Stripe from ‘stripe’;
+
 export default async function handler(req, res) {
 res.setHeader(‘Access-Control-Allow-Origin’, ‘*’);
 res.setHeader(‘Access-Control-Allow-Methods’, ‘GET, POST, OPTIONS’);
 res.setHeader(‘Access-Control-Allow-Headers’, ‘Content-Type’);
 if (req.method === ‘OPTIONS’) return res.status(204).end();
 
-```
-const { default: Stripe } = await import('stripe');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const action = req.query.action;
 
 try {
     if (action === 'create-checkout') {
         const { offerId, offerName, price, uid, email } = req.body;
-        console.log('Checkout:', JSON.stringify({ offerId, offerName, price, uid, email }));
 
         const amountPence = Math.round(Number(price) * 100);
-        if (!amountPence || amountPence < 30) {
-            return res.status(400).json({ error: 'Invalid price: ' + price });
-        }
-
-        const safeOfferName = String(offerName || 'eSIM Plan')
-            .replace(/[^\w\s.,()-]/g, '')
-            .substring(0, 100) || 'eSIM Plan';
 
         const successUrl = 'https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=' + encodeURIComponent(String(offerId));
 
@@ -30,7 +22,7 @@ try {
             line_items: [{
                 price_data: {
                     currency: 'gbp',
-                    product_data: { name: safeOfferName },
+                    product_data: { name: String(offerName || 'eSIM Plan').substring(0, 100) },
                     unit_amount: amountPence,
                 },
                 quantity: 1,
@@ -61,9 +53,7 @@ try {
     return res.status(400).json({ error: 'Unknown action' });
 
 } catch (e) {
-    console.error('Stripe error:', e.message);
     return res.status(500).json({ error: e.message });
 }
-```
 
 }
