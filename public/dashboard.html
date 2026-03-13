@@ -176,6 +176,7 @@
         <select id="dataSelect" onchange="onDataChange()" disabled>
             <option value="">Select data pack...</option>
         </select>
+        <div id="dataHint" style="display:none;font-size:12px;color:#888;margin-top:5px;line-height:1.5;">💡 Multiple Unlimited options available — these are different speed tiers. Cheapest = standard speeds, most expensive = fastest.</div>
 
         <div class="price-preview" id="pricePreview">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -529,6 +530,8 @@
             dataSelect.appendChild(opt);
         });
         dataSelect.disabled = false;
+        const unlimCount = filtered.filter(o => isUnlimited(o) && getSellPrice(o) !== null).length;
+        document.getElementById("dataHint").style.display = unlimCount > 1 ? "block" : "none";
     }
 
     function onDataChange() {
