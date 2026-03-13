@@ -20,6 +20,7 @@ try {
             return res.status(400).json({ error: 'Invalid price: ' + price });
         }
 
+        const safeOfferName = String(offerName || 'eSIM Plan').replace(/[^a-zA-Z0-9 .,_-]/g, '').substring(0, 100) || 'eSIM Plan';
         const successUrl = 'https://footysims.com/dashboard.html?session_id={CHECKOUT_SESSION_ID}&offer=' + encodeURIComponent(offerId);
 
         const session = await stripe.checkout.sessions.create({
@@ -27,7 +28,7 @@ try {
             line_items: [{
                 price_data: {
                     currency: 'gbp',
-                    product_data: { name: offerName },
+                    product_data: { name: safeOfferName },
                     unit_amount: amountPence,
                 },
                 quantity: 1,
