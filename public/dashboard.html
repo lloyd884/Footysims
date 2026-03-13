@@ -49,7 +49,6 @@
         #qrContainer img { max-width: 260px; border: 6px solid var(--green); border-radius: 12px; margin: 10px auto; display: block; }
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 8px; }
         .badge-live { background: #00e676; color: #003300; }
-        .status-row { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f0faf0; border-radius: 10px; margin-bottom: 10px; font-size: 14px; }
         #message { padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 500; min-height: 20px; margin-top: 8px; text-align: center; }
         .msg-loading { color: #666; }
         .msg-success { background: #e8f5e9; color: #1a7a1a; }
@@ -68,23 +67,29 @@
             padding: 14px; text-align: center; margin-bottom: 14px;
             font-weight: 600; color: #1a7a1a; font-size: 15px; display: none;
         }
+        .welcome {
+            background: var(--green); border-radius: var(--radius);
+            padding: 20px 24px; margin-bottom: 18px; color: white;
+        }
+        .welcome h1 { font-family: 'Oswald', sans-serif; font-size: 22px; margin-bottom: 4px; }
+        .welcome p { font-size: 13px; opacity: 0.85; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">Footy<span>SIMs</span></div>
-    <div id="userEmail">Loading...</div>
+    <div id="userEmail"></div>
 </header>
 
 <div class="main">
-    <div class="card">
-        <h2>Account Status</h2>
-        <div class="status-row"><span>💳</span><span id="balanceDisplay">Checking...</span></div>
-        <div class="status-row"><span>📶</span><span>Backend: <b style="color:var(--green)">Live ✅</b></span></div>
-    </div>
 
 ```
+<div class="welcome">
+    <h1>Welcome back! ⚽</h1>
+    <p>Select a country below to get your travel eSIM</p>
+</div>
+
 <div class="card">
     <h2>Get Your eSIM</h2>
 
@@ -194,7 +199,6 @@
     let allOffers = [];
     let selectedOffer = null;
 
-    // cost and price are now pre-extracted as costFixed/costDivisor/priceFixed/priceDivisor
     function getSellPrice(offer) {
         const cost = (offer.costFixed || 0) / (offer.costDivisor || 100);
         const price = (offer.priceFixed || 0) / (offer.priceDivisor || 100);
@@ -206,7 +210,6 @@
     auth.onAuthStateChanged(async user => {
         if (user) {
             document.getElementById('userEmail').textContent = user.email;
-            checkBalance();
             await loadOffers();
             checkReturnFromStripe();
         } else {
@@ -234,18 +237,6 @@
             }
         } catch(e) {
             setMsg('❌ Verification error: ' + e.message, 'msg-error');
-        }
-    }
-
-    async function checkBalance() {
-        try {
-            const r = await fetch(`${API}?action=balance`);
-            const data = await r.json();
-            const bal = (data.availableBalance / 100).toFixed(2);
-            document.getElementById('balanceDisplay').innerHTML =
-                `Zendit Balance: <b style="color:var(--green)">£${bal} ✅</b>`;
-        } catch(e) {
-            document.getElementById('balanceDisplay').textContent = 'Balance unavailable';
         }
     }
 
@@ -427,7 +418,6 @@
                                 📱 <b>Open Camera → scan QR → install eSIM</b>
                             </p>`;
                         setMsg('✅ eSIM ready! Scan the QR above.', 'msg-success');
-                        checkBalance();
                     } else if (status === 'FAILED') {
                         clearInterval(interval);
                         setMsg('❌ ' + (result.error?.message || 'eSIM provisioning failed'), 'msg-error');
