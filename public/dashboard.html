@@ -63,6 +63,11 @@
         .spinner { display: inline-block; animation: spin 1s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .loading-offers { text-align: center; padding: 20px; color: #888; font-size: 14px; }
+        .paid-banner {
+            background: #e8f5e9; border: 2px solid #00e676; border-radius: 10px;
+            padding: 14px; text-align: center; margin-bottom: 14px;
+            font-weight: 600; color: #1a7a1a; font-size: 15px;
+        }
     </style>
 </head>
 <body>
@@ -82,6 +87,10 @@
 ```
 <div class="card">
     <h2>Get Your eSIM</h2>
+
+    <div id="paidBanner" class="paid-banner" style="display:none;">
+        ✅ Payment confirmed! Issuing your eSIM now...
+    </div>
 
     <div id="offersLoading" class="loading-offers">
         <span class="spinner">⚙️</span> Loading countries...
@@ -119,7 +128,7 @@
     </div>
     <div id="message"></div>
 
-    <button class="btn btn-stripe" id="getBtn" onclick="getESIM()" disabled>✅ Get My Real eSIM Now</button>
+    <button class="btn btn-stripe" id="buyBtn" onclick="buyNow()" disabled>💳 Buy Now</button>
     <button class="btn btn-secondary" onclick="window.location.href='howto.html'">📖 How to Install eSIM</button>
 </div>
 
@@ -149,8 +158,8 @@
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const API = '/api/esim';
+    const STRIPE_API = '/api/stripe';
 
-    // Country name map
     const COUNTRY_NAMES = {
         AF:'Afghanistan',AL:'Albania',DZ:'Algeria',AD:'Andorra',AO:'Angola',AR:'Argentina',AM:'Armenia',
         AU:'Australia',AT:'Austria',AZ:'Azerbaijan',BH:'Bahrain',BD:'Bangladesh',BY:'Belarus',BE:'Belgium',
@@ -178,23 +187,56 @@
     };
 
     const FLAG_EMOJIS = {};
-    for (const [code] of Object.entries(COUNTRY_NAMES)) {
+    for (const code of Object.keys(COUNTRY_NAMES)) {
         FLAG_EMOJIS[code] = code.toUpperCase().replace(/./g, c =>
             String.fromCodePoint(c.charCodeAt(0) + 127397));
     }
 
-    let allOffers = [];
-    let selectedOfferId = null;
+    // Add markup % to cost price
+    const MARKUP = 1.35; // 35% markup
 
-    auth.onAuthStateChanged(user => {
+    let allOffers = [];
+    let selectedOffer = null;
+
+    auth.onAuthStateChanged(async user => {
         if (user) {
             document.getElementById('userEmail').textContent = user.email;
             checkBalance();
-            loadOffers();
+            await loadOffers();
+            checkReturnFromStripe();
         } else {
             window.location.href = 'index.html';
         }
     });
+
+    // ── Check if returning from Stripe payment ────────────────────────────
+    async function checkReturnFromStripe() {
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
+        const offerId = params.get('offer');
+        if (!sessionId || !offerId) return;
+
+        // Clean URL
+        window.history.replaceState({}, '', '/dashboard.html');
+
+        document.getElementById('paidBanner').style.display = 'block';
+        setMsg('⏳ Verifying payment...', 'msg-loading');
+
+        try {
+            const r = await fetch(`${STRIPE_API}?action=verify&sessionId=${sessionId}`);
+            const data = await r.json();
+
+            if (data.paid) {
+                setMsg('✅ Payment verified! Issuing eSIM...', 'msg-success');
+                issueESIM(offerId);
+            } else {
+                document.getElementById('paidBanner').style.display = 'none';
+                setMsg('❌ Payment not completed. Please try again.', 'msg-error');
+            }
+        } catch(e) {
+            setMsg('❌ Verification error: ' + e.message, 'msg-error');
+        }
+    }
 
     async function checkBalance() {
         try {
@@ -214,7 +256,6 @@
             const data = await r.json();
             allOffers = data.offers || [];
 
-            // Get unique countries sorted by name
             const countrySet = {};
             allOffers.forEach(o => {
                 if (o.country && !countrySet[o.country]) {
@@ -226,27 +267,30 @@
             const countrySelect = document.getElementById('countrySelect');
             countrySelect.innerHTML = '<option value="">Select a country...</option>';
             sorted.forEach(([code, name]) => {
-                const flag = FLAG_EMOJIS[code] || '';
                 const opt = document.createElement('option');
                 opt.value = code;
-                opt.textContent = `${flag} ${name}`;
+                opt.textContent = `${FLAG_EMOJIS[code] || ''} ${name}`;
                 countrySelect.appendChild(opt);
             });
 
             document.getElementById('offersLoading').style.display = 'none';
             document.getElementById('offersUI').style.display = 'block';
         } catch(e) {
-            document.getElementById('offersLoading').textContent = '❌ Failed to load offers';
+            document.getElementById('offersLoading').textContent = '❌ Failed to load offers. Refresh to retry.';
         }
+    }
+
+    function getSellPrice(offer) {
+        const cost = offer.cost / (offer.priceCurrencyDivisor || 100);
+        return Math.ceil(cost * MARKUP * 100) / 100;
     }
 
     function onCountryChange() {
         const country = document.getElementById('countrySelect').value;
         const durationSelect = document.getElementById('durationSelect');
         const dataSelect = document.getElementById('dataSelect');
-
-        selectedOfferId = null;
-        document.getElementById('getBtn').disabled = true;
+        selectedOffer = null;
+        document.getElementById('buyBtn').disabled = true;
         document.getElementById('pricePreview').style.display = 'none';
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
         dataSelect.disabled = true;
@@ -257,9 +301,7 @@
             return;
         }
 
-        const countryOffers = allOffers.filter(o => o.country === country);
-        const durations = [...new Set(countryOffers.map(o => o.durationDays))].sort((a, b) => a - b);
-
+        const durations = [...new Set(allOffers.filter(o => o.country === country).map(o => o.durationDays))].sort((a,b)=>a-b);
         durationSelect.innerHTML = '<option value="">Select duration...</option>';
         durations.forEach(d => {
             const opt = document.createElement('option');
@@ -274,9 +316,8 @@
         const country = document.getElementById('countrySelect').value;
         const duration = parseInt(document.getElementById('durationSelect').value);
         const dataSelect = document.getElementById('dataSelect');
-
-        selectedOfferId = null;
-        document.getElementById('getBtn').disabled = true;
+        selectedOffer = null;
+        document.getElementById('buyBtn').disabled = true;
         document.getElementById('pricePreview').style.display = 'none';
 
         if (!duration) {
@@ -286,13 +327,12 @@
         }
 
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
-
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
         filtered.forEach(o => {
             const opt = document.createElement('option');
             opt.value = o.offerId;
             const data = o.dataUnlimited ? 'Unlimited' : `${o.dataGB}GB`;
-            const price = (o.price / (o.priceCurrencyDivisor || 100)).toFixed(2);
+            const price = getSellPrice(o).toFixed(2);
             opt.textContent = `${data} — £${price}`;
             dataSelect.appendChild(opt);
         });
@@ -301,67 +341,88 @@
 
     function onDataChange() {
         const offerId = document.getElementById('dataSelect').value;
-        selectedOfferId = offerId;
-
         if (!offerId) {
-            document.getElementById('getBtn').disabled = true;
+            selectedOffer = null;
+            document.getElementById('buyBtn').disabled = true;
             document.getElementById('pricePreview').style.display = 'none';
             return;
         }
 
-        const offer = allOffers.find(o => o.offerId === offerId);
-        if (offer) {
-            const price = (offer.price / (offer.priceCurrencyDivisor || 100)).toFixed(2);
-            const data = offer.dataUnlimited ? 'Unlimited data' : `${offer.dataGB}GB data`;
-            const days = offer.durationDays === 1 ? '1 day' : `${offer.durationDays} days`;
-            const country = COUNTRY_NAMES[offer.country] || offer.country;
-            const flag = FLAG_EMOJIS[offer.country] || '';
-
+        selectedOffer = allOffers.find(o => o.offerId === offerId);
+        if (selectedOffer) {
+            const price = getSellPrice(selectedOffer).toFixed(2);
+            const data = selectedOffer.dataUnlimited ? 'Unlimited data' : `${selectedOffer.dataGB}GB`;
+            const days = selectedOffer.durationDays === 1 ? '1 day' : `${selectedOffer.durationDays} days`;
+            const country = COUNTRY_NAMES[selectedOffer.country] || selectedOffer.country;
+            const flag = FLAG_EMOJIS[selectedOffer.country] || '';
             document.getElementById('previewName').textContent = `${flag} ${country}`;
-            document.getElementById('previewDetails').textContent = `${data} · ${days} · ${(offer.dataSpeeds||[]).join('/')}`;
+            document.getElementById('previewDetails').textContent = `${data} · ${days} · ${(selectedOffer.dataSpeeds||[]).join('/')}`;
             document.getElementById('previewPrice').textContent = `£${price}`;
             document.getElementById('pricePreview').style.display = 'block';
         }
 
-        document.getElementById('getBtn').disabled = false;
+        document.getElementById('buyBtn').disabled = false;
         document.getElementById('qrContainer').innerHTML =
-            '<p style="color:#888; font-size:14px; padding:10px 0;">Tap below to get your real eSIM</p>';
+            '<p style="color:#888; font-size:14px; padding:10px 0;">Tap Buy Now to pay and get your eSIM</p>';
         setMsg('', '');
     }
 
-    function setMsg(text, type) {
-        const el = document.getElementById('message');
-        el.textContent = text;
-        el.className = type;
+    // ── Buy Now → Stripe checkout ─────────────────────────────────────────
+    async function buyNow() {
+        if (!selectedOffer) return;
+        const btn = document.getElementById('buyBtn');
+        btn.disabled = true;
+        setMsg('⏳ Redirecting to payment...', 'msg-loading');
+
+        const price = getSellPrice(selectedOffer);
+        const country = COUNTRY_NAMES[selectedOffer.country] || selectedOffer.country;
+        const data = selectedOffer.dataUnlimited ? 'Unlimited' : `${selectedOffer.dataGB}GB`;
+        const days = selectedOffer.durationDays === 1 ? '1 Day' : `${selectedOffer.durationDays} Days`;
+        const offerName = `FootySIMs eSIM – ${country} – ${data} – ${days}`;
+
+        try {
+            const r = await fetch(`${STRIPE_API}?action=create-checkout`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    offerId: selectedOffer.offerId,
+                    offerName,
+                    price
+                })
+            });
+            const data2 = await r.json();
+            if (data2.url) {
+                window.location.href = data2.url;
+            } else {
+                setMsg('❌ ' + (data2.error || 'Could not create checkout'), 'msg-error');
+                btn.disabled = false;
+            }
+        } catch(e) {
+            setMsg('❌ ' + e.message, 'msg-error');
+            btn.disabled = false;
+        }
     }
 
-    async function getESIM() {
-        if (!selectedOfferId) return;
-        const offer = allOffers.find(o => o.offerId === selectedOfferId);
+    // ── Issue eSIM after payment verified ─────────────────────────────────
+    async function issueESIM(offerId) {
+        const offer = allOffers.find(o => o.offerId === offerId);
         const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
-        const btn = document.getElementById('getBtn');
-
-        btn.disabled = true;
-        setMsg('⏳ Creating your eSIM...', 'msg-loading');
-        document.getElementById('qrContainer').innerHTML =
-            '<p style="font-size:28px;margin-bottom:8px;"><span class="spinner">⚙️</span></p><p style="color:#666;font-size:14px;">Contacting Zendit...</p>';
 
         try {
             const r = await fetch(`${API}?action=purchase`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ offerId: selectedOfferId })
+                body: JSON.stringify({ offerId })
             });
             const purchase = await r.json();
 
             if (purchase.error || !purchase.transactionId) {
-                setMsg('❌ ' + (purchase.error?.message || purchase.error?.description || JSON.stringify(purchase)), 'msg-error');
-                btn.disabled = false;
+                setMsg('❌ eSIM issue failed: ' + (purchase.error?.message || JSON.stringify(purchase)), 'msg-error');
                 return;
             }
 
             const txId = purchase.transactionId;
-            setMsg('⏳ Provisioning eSIM... (0s)', 'msg-loading');
+            setMsg('⏳ Provisioning eSIM...', 'msg-loading');
 
             let attempts = 0;
             const interval = setInterval(async () => {
@@ -376,42 +437,43 @@
                         const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
                         const iccid = result.iccid || 'N/A';
                         const days = offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '';
-                        const data = offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '';
+                        const dataStr = offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '';
+                        document.getElementById('paidBanner').style.display = 'none';
                         document.getElementById('qrContainer').innerHTML = `
                             <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
                             <span class="badge badge-live">✅ Real eSIM — Ready!</span>
                             <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
                                 <b>ICCID:</b> ${iccid}<br>
-                                <b>Plan:</b> ${country} · ${data} · ${days}<br>
+                                <b>Plan:</b> ${country} · ${dataStr} · ${days}<br>
                                 <b>Speed:</b> ${(offer?.dataSpeeds||['4G']).join('/')}<br><br>
                                 📱 <b>Open Camera → scan QR → install eSIM</b>
                             </p>`;
                         setMsg('✅ eSIM ready! Scan the QR above.', 'msg-success');
                         checkBalance();
-                        btn.disabled = false;
                     } else if (status === 'FAILED') {
                         clearInterval(interval);
-                        const errMsg = result.error?.message || result.error?.description || 'Transaction failed';
-                        setMsg('❌ ' + errMsg, 'msg-error');
-                        btn.disabled = false;
+                        setMsg('❌ ' + (result.error?.message || 'eSIM provisioning failed'), 'msg-error');
                     } else if (attempts >= 40) {
                         clearInterval(interval);
-                        setMsg('⚠️ Timed out. Status: ' + status + ' | TX: ' + txId, 'msg-error');
-                        btn.disabled = false;
+                        setMsg('⚠️ Taking long — TX: ' + txId, 'msg-error');
                     } else {
                         setMsg(`⏳ Provisioning... ${attempts * 3}s`, 'msg-loading');
                     }
                 } catch(e) {
                     clearInterval(interval);
                     setMsg('❌ ' + e.message, 'msg-error');
-                    btn.disabled = false;
                 }
             }, 3000);
 
         } catch(e) {
             setMsg('❌ ' + e.message, 'msg-error');
-            btn.disabled = false;
         }
+    }
+
+    function setMsg(text, type) {
+        const el = document.getElementById('message');
+        el.textContent = text;
+        el.className = type;
     }
 
     function addMate() { alert('Group eSIM sharing coming soon!'); }
