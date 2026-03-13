@@ -1,6 +1,9 @@
 {
-  "outputDirectory": "public",
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
-  ]
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/(.*)", "dest": "/public/$1" }
+  ],
+  "error": {
+    "404": "/public/404.html"
+  }
 }
