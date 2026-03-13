@@ -505,30 +505,24 @@
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
 
-        // Deduplicate by label — keep cheapest of each unique label (e.g. only 1 Unlimited)
-        const isUnlimited = o => o.dataUnlimited || !o.dataGB || o.dataGB === 0;
-        const getLabel = o => isUnlimited(o) ? 'Unlimited' : `${o.dataGB}GB`;
-        const labelMap = {};
-        filtered.forEach(o => {
-            const label = getLabel(o);
-            const price = getSellPrice(o);
-            if (price === null) return;
-            if (!labelMap[label] || price < getSellPrice(labelMap[label])) {
-                labelMap[label] = o;
-            }
-        });
-        const deduped = Object.values(labelMap).sort((a, b) => {
-            // Unlimited first, then GB options ascending
-            const aUnlim = isUnlimited(a), bUnlim = isUnlimited(b);
-            if (aUnlim && !bUnlim) return -1;
-            if (!aUnlim && bUnlim) return 1;
-            return (a.dataGB || 0) - (b.dataGB || 0);
-        });
+        // Sort by price, label unlimited tiers as Standard/Plus/Premium
+        const isUnlimited = o => o.dataUnlimited || !o.dataGB || o.dataGB >= 50;
+        const withPrice = filtered.map(o => ({ o, price: getSellPrice(o) })).filter(x => x.price !== null);
+        withPrice.sort((a, b) => a.price - b.price);
 
-        deduped.forEach(o => {
-            const sellPrice = getSellPrice(o);
-            const priceStr = sellPrice ? `£${sellPrice.toFixed(2)}` : 'Price TBC';
-            const dataLabel = getLabel(o);
+        // Assign tier labels to unlimited options
+        const unlimitedTiers = ['Unlimited (Standard)', 'Unlimited (Plus)', 'Unlimited (Premium)'];
+        let unlimitedCount = 0;
+
+        withPrice.forEach(({ o, price }) => {
+            const priceStr = `£${price.toFixed(2)}`;
+            let dataLabel;
+            if (isUnlimited(o)) {
+                dataLabel = unlimitedTiers[unlimitedCount] || `Unlimited (Plan ${unlimitedCount + 1})`;
+                unlimitedCount++;
+            } else {
+                dataLabel = `${o.dataGB}GB`;
+            }
             const opt = document.createElement('option');
             opt.value = o.offerId;
             opt.textContent = `${dataLabel} — ${priceStr}`;
