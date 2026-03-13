@@ -83,6 +83,37 @@
         .welcome p { font-size: 13px; opacity: 0.85; }
 
 ```
+    /* Manual entry details */
+    .manual-details {
+        background: #f8fdf8; border: 1.5px solid #c8e6c9;
+        border-radius: 10px; padding: 14px; margin-top: 12px;
+    }
+    .manual-details h4 {
+        font-size: 13px; font-weight: 700; color: var(--green);
+        margin-bottom: 10px;
+    }
+    .manual-row {
+        display: flex; justify-content: space-between;
+        align-items: center; margin-bottom: 8px;
+    }
+    .manual-row:last-child { margin-bottom: 0; }
+    .manual-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .manual-value {
+        font-size: 12px; font-weight: 700; color: var(--text);
+        font-family: monospace; word-break: break-all; text-align: right;
+        max-width: 65%;
+    }
+    .copy-btn {
+        background: var(--green); color: white;
+        border: none; border-radius: 6px; padding: 4px 10px;
+        font-size: 11px; font-weight: 700; cursor: pointer;
+        margin-left: 8px; flex-shrink: 0;
+    }
+    .manual-instructions {
+        background: #fff8e1; border-radius: 8px; padding: 10px 12px;
+        margin-top: 10px; font-size: 12px; color: #6d4c00; line-height: 1.6;
+    }
+
     /* Purchase history */
     .purchase-item {
         background: #f8fdf8; border: 1.5px solid #d0ecd0;
@@ -95,7 +126,6 @@
     .purchase-detail { font-size: 12px; color: #555; margin-bottom: 10px; }
     .purchase-qr { text-align: center; margin-top: 10px; }
     .purchase-qr img { max-width: 200px; border: 4px solid var(--green); border-radius: 10px; display: block; margin: 8px auto; }
-    .no-purchases { text-align: center; color: #888; font-size: 14px; padding: 12px 0; }
 </style>
 ```
 
@@ -243,6 +273,51 @@
         return Math.ceil(base * MARKUP * 100) / 100;
     }
 
+    function buildESIMDetails(result, offer) {
+        const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
+        const days = offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '';
+        const dataStr = offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '';
+        const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
+        const iccid = result.iccid || 'N/A';
+        const smdp = result.smdpAddress || '';
+        const actCode = result.activationCode || '';
+
+        return `
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
+            <span class="badge badge-live">✅ Real eSIM — Ready!</span>
+            <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.8;">
+                <b>Plan:</b> ${country} · ${dataStr} · ${days}<br>
+                <b>Speed:</b> ${(offer?.dataSpeeds||['4G']).join('/')}<br>
+                <b>ICCID:</b> ${iccid}
+            </p>
+            <div class="manual-details">
+                <h4>📱 Can't scan? Enter manually instead</h4>
+                <div class="manual-row">
+                    <span class="manual-label">SM-DP+ Address</span>
+                    <span class="manual-value" id="smdpVal">${smdp}</span>
+                    <button class="copy-btn" onclick="copyText('${smdp}', this)">Copy</button>
+                </div>
+                <div class="manual-row">
+                    <span class="manual-label">Activation Code</span>
+                    <span class="manual-value" id="actVal">${actCode}</span>
+                    <button class="copy-btn" onclick="copyText('${actCode}', this)">Copy</button>
+                </div>
+                <div class="manual-instructions">
+                    <b>iPhone:</b> Settings → Mobile Data → Add eSIM → Enter Details Manually<br>
+                    <b>Android:</b> Settings → Connections → SIM Manager → Add eSIM → Enter Manually
+                </div>
+            </div>
+            <p style="margin-top:10px;font-size:12px;color:#888;">📷 Or open Camera app → scan the QR code above</p>
+        `;
+    }
+
+    function copyText(text, btn) {
+        navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied!';
+            setTimeout(() => btn.textContent = 'Copy', 2000);
+        });
+    }
+
     auth.onAuthStateChanged(async user => {
         if (user) {
             currentUser = user;
@@ -255,7 +330,6 @@
         }
     });
 
-    // ── Purchase History ──────────────────────────────────────────────────
     async function loadPurchaseHistory() {
         try {
             const snap = await db.collection('purchases')
@@ -283,8 +357,8 @@
                         <div class="purchase-name">${flag} ${country}</div>
                         <div class="purchase-date">${date}</div>
                     </div>
-                    <div class="purchase-detail">${p.dataStr || ''} · ${p.days || ''} · ${p.offerId || ''}</div>
-                    <button class="btn-sm btn-sm-green" onclick="showPurchaseQR('${doc.id}', '${p.transactionId}')">📱 Show QR Code</button>
+                    <div class="purchase-detail">${p.dataStr || ''} · ${p.days || ''}</div>
+                    <button class="btn-sm btn-sm-green" onclick="showPurchaseQR('${doc.id}', '${p.transactionId}', '${p.country}', '${p.dataStr}', '${p.days}')">📱 Show QR & Details</button>
                     <div id="qr-${doc.id}"></div>
                 `;
                 list.appendChild(div);
@@ -294,25 +368,44 @@
         }
     }
 
-    async function showPurchaseQR(docId, transactionId) {
+    async function showPurchaseQR(docId, transactionId, country, dataStr, days) {
         const container = document.getElementById(`qr-${docId}`);
-        container.innerHTML = '<p style="font-size:13px;color:#666;padding:8px 0;">Loading QR...</p>';
+        container.innerHTML = '<p style="font-size:13px;color:#666;padding:8px 0;">Loading...</p>';
         try {
             const r = await fetch(`${API}?action=status&transactionId=${transactionId}`);
             const result = await r.json();
             if (result.smdpAddress) {
+                const fakeOffer = { country, dataStr, days, dataSpeeds: [] };
                 const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
+                const smdp = result.smdpAddress;
+                const actCode = result.activationCode || '';
                 container.innerHTML = `
                     <div class="purchase-qr">
                         <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrData)}" alt="QR">
                         <p style="font-size:11px;color:#555;margin-top:6px;">ICCID: ${result.iccid || 'N/A'}</p>
-                        <p style="font-size:11px;color:#1a7a1a;font-weight:600;">📱 Open Camera → scan to install</p>
+                        <div class="manual-details" style="text-align:left;">
+                            <h4>📱 Can't scan? Enter manually</h4>
+                            <div class="manual-row">
+                                <span class="manual-label">SM-DP+ Address</span>
+                                <button class="copy-btn" onclick="copyText('${smdp}', this)">Copy</button>
+                            </div>
+                            <div style="font-size:11px;font-family:monospace;word-break:break-all;color:#333;margin-bottom:8px;">${smdp}</div>
+                            <div class="manual-row">
+                                <span class="manual-label">Activation Code</span>
+                                <button class="copy-btn" onclick="copyText('${actCode}', this)">Copy</button>
+                            </div>
+                            <div style="font-size:11px;font-family:monospace;word-break:break-all;color:#333;margin-bottom:8px;">${actCode}</div>
+                            <div class="manual-instructions">
+                                <b>iPhone:</b> Settings → Mobile Data → Add eSIM → Enter Details Manually<br>
+                                <b>Android:</b> Settings → Connections → SIM Manager → Add eSIM → Enter Manually
+                            </div>
+                        </div>
                     </div>`;
             } else {
-                container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ Could not load QR: ${result.status}</p>`;
+                container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ Status: ${result.status}</p>`;
             }
         } catch(e) {
-            container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ Error: ${e.message}</p>`;
+            container.innerHTML = `<p style="font-size:13px;color:#d32f2f;padding:8px 0;">❌ ${e.message}</p>`;
         }
     }
 
@@ -333,7 +426,6 @@
         }
     }
 
-    // ── Stripe return ─────────────────────────────────────────────────────
     async function checkReturnFromStripe() {
         const params = new URLSearchParams(window.location.search);
         const sessionId = params.get('session_id');
@@ -362,15 +454,11 @@
             const r = await fetch(`${API}?action=offers`);
             const data = await r.json();
             allOffers = data.offers || [];
-
             const countrySet = {};
             allOffers.forEach(o => {
-                if (o.country && !countrySet[o.country]) {
-                    countrySet[o.country] = COUNTRY_NAMES[o.country] || o.country;
-                }
+                if (o.country && !countrySet[o.country]) countrySet[o.country] = COUNTRY_NAMES[o.country] || o.country;
             });
             const sorted = Object.entries(countrySet).sort((a, b) => a[1].localeCompare(b[1]));
-
             const countrySelect = document.getElementById('countrySelect');
             countrySelect.innerHTML = '<option value="">Select a country...</option>';
             sorted.forEach(([code, name]) => {
@@ -379,7 +467,6 @@
                 opt.textContent = `${FLAG_EMOJIS[code] || ''} ${name}`;
                 countrySelect.appendChild(opt);
             });
-
             document.getElementById('offersLoading').style.display = 'none';
             document.getElementById('offersUI').style.display = 'block';
         } catch(e) {
@@ -396,11 +483,7 @@
         document.getElementById('pricePreview').style.display = 'none';
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
         dataSelect.disabled = true;
-        if (!country) {
-            durationSelect.innerHTML = '<option value="">Select duration...</option>';
-            durationSelect.disabled = true;
-            return;
-        }
+        if (!country) { durationSelect.innerHTML = '<option value="">Select duration...</option>'; durationSelect.disabled = true; return; }
         const durations = [...new Set(allOffers.filter(o => o.country === country).map(o => o.durationDays))].sort((a,b)=>a-b);
         durationSelect.innerHTML = '<option value="">Select duration...</option>';
         durations.forEach(d => {
@@ -419,11 +502,7 @@
         selectedOffer = null;
         document.getElementById('buyBtn').disabled = true;
         document.getElementById('pricePreview').style.display = 'none';
-        if (!duration) {
-            dataSelect.innerHTML = '<option value="">Select data pack...</option>';
-            dataSelect.disabled = true;
-            return;
-        }
+        if (!duration) { dataSelect.innerHTML = '<option value="">Select data pack...</option>'; dataSelect.disabled = true; return; }
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
         filtered.forEach(o => {
@@ -460,8 +539,7 @@
             document.getElementById('pricePreview').style.display = 'block';
         }
         document.getElementById('buyBtn').disabled = false;
-        document.getElementById('qrContainer').innerHTML =
-            '<p style="color:#888; font-size:14px; padding:10px 0;">Tap Buy Now to pay and get your eSIM</p>';
+        document.getElementById('qrContainer').innerHTML = '<p style="color:#888; font-size:14px; padding:10px 0;">Tap Buy Now to pay and get your eSIM</p>';
         setMsg('', '');
     }
 
@@ -478,8 +556,7 @@
         const offerName = `FootySIMs eSIM – ${country} – ${dataLabel} – ${days}`;
         try {
             const r = await fetch(`${STRIPE_API}?action=create-checkout`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ offerId: selectedOffer.offerId, offerName, price: sellPrice })
             });
             const data = await r.json();
@@ -500,8 +577,7 @@
         const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
         try {
             const r = await fetch(`${API}?action=purchase`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ offerId })
             });
             const purchase = await r.json();
@@ -517,28 +593,14 @@
                 try {
                     const sr = await fetch(`${API}?action=status&transactionId=${txId}`);
                     const result = await sr.json();
-                    const status = result.status || '';
                     if (result.smdpAddress) {
                         clearInterval(interval);
-                        // Save to Firestore
                         await savePurchase(txId, offerId, offer);
                         loadPurchaseHistory();
-                        const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
-                        const iccid = result.iccid || 'N/A';
-                        const days = offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '';
-                        const dataStr = offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '';
                         document.getElementById('paidBanner').style.display = 'none';
-                        document.getElementById('qrContainer').innerHTML = `
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrData)}" alt="eSIM QR">
-                            <span class="badge badge-live">✅ Real eSIM — Ready!</span>
-                            <p style="margin-top:12px;font-size:13px;color:#444;line-height:1.7;">
-                                <b>ICCID:</b> ${iccid}<br>
-                                <b>Plan:</b> ${country} · ${dataStr} · ${days}<br>
-                                <b>Speed:</b> ${(offer?.dataSpeeds||['4G']).join('/')}<br><br>
-                                📱 <b>Open Camera → scan QR → install eSIM</b>
-                            </p>`;
-                        setMsg('✅ eSIM ready! Scan the QR above.', 'msg-success');
-                    } else if (status === 'FAILED') {
+                        document.getElementById('qrContainer').innerHTML = buildESIMDetails(result, offer);
+                        setMsg('✅ eSIM ready! Scan the QR or enter details manually.', 'msg-success');
+                    } else if (result.status === 'FAILED') {
                         clearInterval(interval);
                         setMsg('❌ ' + (result.error?.message || 'eSIM provisioning failed'), 'msg-error');
                     } else if (attempts >= 40) {
