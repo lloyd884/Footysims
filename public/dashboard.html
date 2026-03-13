@@ -438,7 +438,7 @@
             const data = await r.json();
             if (data.paid) {
                 setMsg('✅ Payment verified! Issuing eSIM...', 'msg-success');
-                issueESIM(offerId);
+                issueESIM(offerId, sessionId);
             } else {
                 document.getElementById('paidBanner').style.display = 'none';
                 setMsg('❌ Payment not completed. Please try again.', 'msg-error');
@@ -571,7 +571,20 @@
         }
     }
 
-    async function issueESIM(offerId) {
+    async function issueESIM(offerId, sessionId) {
+        // Dedup check — if webhook already claimed this session, just reload history
+        if (sessionId) {
+            try {
+                const claimed = await db.collection("stripe_sessions").doc(sessionId).get();
+                if (claimed.exists) {
+                    console.log("Webhook already handled this session, skipping browser issue");
+                    document.getElementById("paidBanner").style.display = "none";
+                    setMsg("✅ eSIM issued! Check Your eSIMs above.", "msg-success");
+                    setTimeout(() => loadPurchaseHistory(), 3000);
+                    return;
+                }
+            } catch(e) { /* ignore, proceed */ }
+        }
         const offer = allOffers.find(o => o.offerId === offerId);
         const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
         try {
