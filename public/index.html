@@ -317,6 +317,7 @@
         <button class="btn btn-primary" onclick="signUp()">Create Account</button>
         <button class="btn btn-outline" onclick="login()">Login</button>
     </div>
+    <div style="text-align:right; margin-top:4px;"><a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:500;">Forgot password?</a></div>
     <div id="message"></div>
     <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">
         Go to My Dashboard →
@@ -497,6 +498,14 @@
 
     function goToDashboard() {
         window.location.href = 'dashboard.html';
+    }
+
+    function forgotPassword() {
+        const email = document.getElementById("email").value.trim();
+        if (!email) return setMsg("❌ Enter your email address first.", "error");
+        auth.sendPasswordResetEmail(email)
+            .then(() => setMsg("✅ Reset email sent! Check your inbox.", "success"))
+            .catch(err => setMsg("❌ " + (err.code === "auth/user-not-found" ? "No account found with that email." : "Something went wrong. Try again."), "error"));
     }
 </script>
 
