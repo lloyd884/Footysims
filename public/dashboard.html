@@ -556,7 +556,7 @@
         try {
             const r = await fetch(`${STRIPE_API}?action=create-checkout`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ offerId: selectedOffer.offerId, offerName, price: sellPrice })
+                body: JSON.stringify({ offerId: selectedOffer.offerId, offerName, price: sellPrice, uid: currentUser.uid, email: currentUser.email })
             });
             const data = await r.json();
             if (data.url) {
