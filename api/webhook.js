@@ -1,8 +1,13 @@
-import Stripe from ‘stripe’;
-import admin from ‘firebase-admin’;
-
 export const config = { api: { bodyParser: false } };
 
+let _stripe, _admin, _db;
+async function getClients() {
+if (!_stripe) {
+const { default: Stripe } = await import(‘stripe’);
+_stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+}
+if (!_admin) {
+const { default: admin } = await import(‘firebase-admin’);
 if (!admin.apps.length) {
 admin.initializeApp({
 credential: admin.credential.cert(
@@ -10,9 +15,11 @@ JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
 )
 });
 }
-const db = admin.firestore();
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+_admin = admin;
+_db = admin.firestore();
+}
+return { stripe: _stripe, admin: _admin, db: _db };
+}
 const ZENDIT_KEY = process.env.ZENDIT_KEY;
 const BASE = ‘https://api.zendit.io/v1’;
 
@@ -105,7 +112,7 @@ if (!res.ok) console.error('Resend error:', await res.text());
 
 }
 
-async function purchaseAndSaveESIM(sessionId, offerId, uid, email) {
+async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin, db) {
 // ── Deduplication check ──────────────────────────────────────────
 // Use Firestore to claim this sessionId atomically.
 // If another process (browser or webhook) already claimed it, skip.
@@ -192,6 +199,8 @@ export default async function handler(req, res) {
 if (req.method !== ‘POST’) return res.status(405).end(‘Method not allowed’);
 
 ```
+const { stripe, admin, db } = await getClients();
+
 const rawBody = await getRawBody(req);
 const sig = req.headers['stripe-signature'];
 
@@ -212,7 +221,7 @@ if (event.type === 'checkout.session.completed') {
         return res.status(200).json({ received: true });
     }
 
-    purchaseAndSaveESIM(session.id, offerId, uid, email).catch(console.error);
+    purchaseAndSaveESIM(session.id, offerId, uid, email, stripe, admin, db).catch(console.error);
 }
 
 return res.status(200).json({ received: true });
