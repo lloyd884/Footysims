@@ -145,10 +145,8 @@
         color: var(--green);
     }
 
-    /* Form inputs */
     input[type="email"],
-    input[type="password"],
-    select {
+    input[type="password"] {
         width: 100%;
         padding: 13px 16px;
         margin-bottom: 12px;
@@ -161,7 +159,7 @@
         transition: border-color 0.2s;
         outline: none;
     }
-    input:focus, select:focus { border-color: var(--green); }
+    input:focus { border-color: var(--green); }
 
     .btn-row { display: flex; gap: 10px; margin-top: 4px; }
 
@@ -177,7 +175,6 @@
         transition: transform 0.1s, opacity 0.2s;
     }
     .btn:active { transform: scale(0.97); }
-
     .btn-primary { background: var(--green); color: white; }
     .btn-primary:hover { opacity: 0.9; }
     .btn-outline {
@@ -216,13 +213,8 @@
     #message.success { color: #1a7a1a; }
     #message.error { color: #d32f2f; }
 
-    /* Destination preview */
-    .dest-grid {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 4px;
-    }
+    /* Destination cards */
+    .dest-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
     .dest-card {
         display: flex;
         justify-content: space-between;
@@ -260,11 +252,7 @@
 
     /* How it works */
     .steps { display: flex; flex-direction: column; gap: 14px; }
-    .step {
-        display: flex;
-        gap: 16px;
-        align-items: flex-start;
-    }
+    .step { display: flex; gap: 16px; align-items: flex-start; }
     .step-num {
         background: var(--green);
         color: white;
@@ -296,14 +284,10 @@
 </head>
 <body>
 
-<!-- Header -->
-
 <header>
     <div class="logo">Footy<span>SIMs</span></div>
     <div class="header-tag">⚽ Built for Away Days</div>
 </header>
-
-<!-- Hero -->
 
 <div class="hero">
     <h1>The eSIM Built for<br><em>Football Fans</em></h1>
@@ -315,8 +299,6 @@
     </div>
 </div>
 
-<!-- Trust Bar -->
-
 <div class="trust-bar">
     <span>🔒 Stripe payments</span>
     <span>💰 24h refund</span>
@@ -324,12 +306,9 @@
     <span>📶 Instant QR</span>
 </div>
 
-<!-- Main Content -->
-
 <div class="main">
 
 ```
-<!-- Auth Card -->
 <div class="card">
     <h2>Sign Up / Login</h2>
     <input id="email" type="email" placeholder="Your email address">
@@ -344,7 +323,6 @@
     </button>
 </div>
 
-<!-- Popular Destinations -->
 <div class="card">
     <h2>Popular Destinations</h2>
     <div class="dest-grid">
@@ -384,10 +362,9 @@
             <div class="dest-price">£10.99</div>
         </div>
     </div>
-    <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Prices from live rates</p>
+    <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
 </div>
 
-<!-- How it works -->
 <div class="card">
     <h2>How It Works</h2>
     <div class="steps">
@@ -415,7 +392,6 @@
     </div>
 </div>
 
-<!-- Why FootySIMs -->
 <div class="card">
     <h2>Why FootySIMs?</h2>
     <div class="why-grid">
@@ -428,18 +404,15 @@
     </div>
 </div>
 
-<!-- Auth reminder -->
 <div class="card" style="text-align:center; padding:20px 28px;">
     <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
-    <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="document.getElementById('email').focus(); window.scrollTo({top:0,behavior:'smooth'})">
+    <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
         Get Your eSIM Now →
     </button>
 </div>
 ```
 
 </div>
-
-<!-- Footer -->
 
 <footer>
     <p>🔐 Secure &nbsp;•&nbsp; Transparent &nbsp;•&nbsp; Real eSIMs</p>
@@ -450,8 +423,6 @@
     </p>
     <p style="margin-top:8px; font-size:12px; opacity:0.6;">© 2026 FootySIMs. All rights reserved.</p>
 </footer>
-
-<!-- Firebase -->
 
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
 
@@ -473,6 +444,25 @@
         if (user) window.location.href = 'dashboard.html';
     });
 
+    function friendlyError(code) {
+        switch(code) {
+            case 'auth/invalid-credential':
+            case 'auth/wrong-password':
+            case 'auth/user-not-found':
+                return '❌ Email or password is incorrect.';
+            case 'auth/email-already-in-use':
+                return '❌ An account with this email already exists. Try logging in.';
+            case 'auth/weak-password':
+                return '❌ Password must be at least 6 characters.';
+            case 'auth/invalid-email':
+                return '❌ Please enter a valid email address.';
+            case 'auth/too-many-requests':
+                return '❌ Too many attempts. Please wait a moment and try again.';
+            default:
+                return '❌ Something went wrong. Please try again.';
+        }
+    }
+
     function setMsg(text, type) {
         const el = document.getElementById('message');
         el.textContent = text;
@@ -482,27 +472,27 @@
     function signUp() {
         const email    = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-        if (!email || !password) return setMsg('Please enter email and password.', 'error');
+        if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.createUserWithEmailAndPassword(email, password)
             .then(() => {
                 setMsg('✅ Account created! Heading to dashboard...', 'success');
                 document.getElementById('dashboardBtn').style.display = 'block';
                 setTimeout(() => window.location.href = 'dashboard.html', 1200);
             })
-            .catch(err => setMsg('❌ ' + err.message, 'error'));
+            .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
 
     function login() {
         const email    = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-        if (!email || !password) return setMsg('Please enter email and password.', 'error');
+        if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.signInWithEmailAndPassword(email, password)
             .then(() => {
                 setMsg('✅ Logged in! Heading to dashboard...', 'success');
                 document.getElementById('dashboardBtn').style.display = 'block';
                 setTimeout(() => window.location.href = 'dashboard.html', 1200);
             })
-            .catch(err => setMsg('❌ ' + err.message, 'error'));
+            .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
 
     function goToDashboard() {
