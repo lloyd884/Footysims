@@ -194,15 +194,13 @@
     let allOffers = [];
     let selectedOffer = null;
 
+    // cost and price are now pre-extracted as costFixed/costDivisor/priceFixed/priceDivisor
     function getSellPrice(offer) {
-        const divisor = offer.divisor || 100;
-        // Use cost if available, otherwise fall back to price field
-        const raw = offer.cost > 0 ? offer.cost : (offer.price || 0);
-        if (!raw || isNaN(raw)) return null;
-        const pounds = raw / divisor;
-        if (!pounds || isNaN(pounds) || pounds <= 0) return null;
-        // Apply markup on top of cost; if we used price as fallback, still add margin
-        return Math.ceil(pounds * MARKUP * 100) / 100;
+        const cost = (offer.costFixed || 0) / (offer.costDivisor || 100);
+        const price = (offer.priceFixed || 0) / (offer.priceDivisor || 100);
+        const base = cost > 0 ? cost : price;
+        if (!base || isNaN(base) || base <= 0) return null;
+        return Math.ceil(base * MARKUP * 100) / 100;
     }
 
     auth.onAuthStateChanged(async user => {
