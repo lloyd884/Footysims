@@ -569,7 +569,7 @@
         const country = COUNTRY_NAMES[selectedOffer.country] || selectedOffer.country;
         const dataLabel = selectedOffer.dataUnlimited ? 'Unlimited' : `${selectedOffer.dataGB}GB`;
         const days = selectedOffer.durationDays === 1 ? '1 Day' : `${selectedOffer.durationDays} Days`;
-        const offerName = `FootySIMs eSIM – ${country} – ${dataLabel} – ${days}`;
+        const offerName = `FootySIMs eSIM - ${country} - ${dataLabel} - ${days}`;
         try {
             const r = await fetch(`${STRIPE_API}?action=create-checkout`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
