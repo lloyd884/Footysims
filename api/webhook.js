@@ -1,10 +1,8 @@
 import Stripe from ‘stripe’;
 import admin from ‘firebase-admin’;
 
-// Disable Vercel body parsing — Stripe needs raw body to verify signature
 export const config = { api: { bodyParser: false } };
 
-// Init Firebase Admin once
 if (!admin.apps.length) {
 admin.initializeApp({
 credential: admin.credential.cert(
@@ -27,6 +25,97 @@ req.on(‘error’, reject);
 });
 }
 
+async function sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid }) {
+const qrData = `LPA:1$${smdpAddress}$${activationCode || ''}`;
+const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+
+```
+const html = `
+```
+
+<!DOCTYPE html>
+
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f4f7f4;font-family:Arial,sans-serif;">
+  <div style="max-width:520px;margin:0 auto;padding:32px 16px;">
+
+```
+<div style="background:#1a7a1a;border-radius:14px;padding:24px;text-align:center;margin-bottom:20px;">
+  <h1 style="color:white;font-size:26px;margin:0;">Footy<span style="color:#7fff00;">SIMs</span></h1>
+  <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px;">Your eSIM is ready ⚽</p>
+</div>
+
+<div style="background:white;border-radius:14px;padding:28px;text-align:center;margin-bottom:16px;">
+  <h2 style="color:#1a7a1a;font-size:20px;margin:0 0 8px;">✅ Your eSIM is Ready!</h2>
+  <p style="color:#555;font-size:14px;margin:0 0 20px;">Scan the QR code below to install your eSIM</p>
+  <img src="${qrUrl}" alt="eSIM QR Code" width="240" height="240"
+    style="border:6px solid #1a7a1a;border-radius:12px;display:block;margin:0 auto 20px;" />
+  <p style="font-size:12px;color:#888;margin:0 0 20px;">
+    📱 Open Camera → point at QR → tap notification → install eSIM
+  </p>
+  <div style="background:#f0faf0;border-radius:10px;padding:16px;text-align:left;margin-bottom:16px;">
+    <p style="font-size:13px;font-weight:700;color:#1a7a1a;margin:0 0 12px;">📋 Can't scan? Enter manually in Settings:</p>
+    <p style="font-size:11px;color:#666;font-weight:700;margin:0 0 2px;text-transform:uppercase;">SM-DP+ Address</p>
+    <p style="font-size:13px;font-family:monospace;background:white;padding:8px 10px;border-radius:6px;margin:0 0 10px;word-break:break-all;">${smdpAddress}</p>
+    <p style="font-size:11px;color:#666;font-weight:700;margin:0 0 2px;text-transform:uppercase;">Activation Code</p>
+    <p style="font-size:13px;font-family:monospace;background:white;padding:8px 10px;border-radius:6px;margin:0;word-break:break-all;">${activationCode || 'N/A'}</p>
+  </div>
+  <div style="background:#fff8e1;border-radius:8px;padding:12px;text-align:left;font-size:12px;color:#6d4c00;line-height:1.6;">
+    <strong>iPhone:</strong> Settings → Mobile Data → Add eSIM → Enter Details Manually<br>
+    <strong>Android:</strong> Settings → Connections → SIM Manager → Add eSIM → Enter Manually
+  </div>
+</div>
+
+<div style="background:white;border-radius:14px;padding:20px;margin-bottom:16px;">
+  <h3 style="color:#1a7a1a;font-size:16px;margin:0 0 12px;">Order Details</h3>
+  <table style="width:100%;font-size:13px;color:#444;">
+    <tr><td style="padding:4px 0;color:#888;">ICCID</td><td style="padding:4px 0;text-align:right;font-family:monospace;">${iccid || 'N/A'}</td></tr>
+    <tr><td style="padding:4px 0;color:#888;">Plan</td><td style="padding:4px 0;text-align:right;">${offerId}</td></tr>
+    <tr><td style="padding:4px 0;color:#888;">Transaction</td><td style="padding:4px 0;text-align:right;font-family:monospace;font-size:11px;">${transactionId}</td></tr>
+  </table>
+</div>
+
+<div style="text-align:center;margin-bottom:16px;">
+  <a href="https://footysims.com/dashboard.html"
+    style="display:inline-block;background:#1a7a1a;color:white;font-weight:700;font-size:15px;padding:14px 32px;border-radius:10px;text-decoration:none;">
+    View in Dashboard →
+  </a>
+</div>
+
+<div style="text-align:center;font-size:12px;color:#888;line-height:1.8;">
+  <p>Need help? <a href="mailto:footysims@proton.me" style="color:#1a7a1a;">footysims@proton.me</a></p>
+  <p style="margin-top:8px;">© 2026 FootySIMs</p>
+</div>
+```
+
+  </div>
+</body>
+</html>`;
+
+```
+const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: {
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        from: 'FootySIMs <noreply@footysims.com>',
+        to: email,
+        subject: '✅ Your FootySIMs eSIM is Ready!',
+        html
+    })
+});
+
+if (!res.ok) {
+    const err = await res.text();
+    console.error('Resend error:', err);
+}
+```
+
+}
+
 async function purchaseAndSaveESIM(offerId, uid, email) {
 const zenditHeaders = {
 ‘Authorization’: `Bearer ${ZENDIT_KEY}`,
@@ -34,7 +123,6 @@ const zenditHeaders = {
 };
 
 ```
-// Purchase eSIM from Zendit
 const transactionId = `footysims-wh-${Date.now()}`;
 const purchaseRes = await fetch(`${BASE}/esim/purchases`, {
     method: 'POST',
@@ -48,7 +136,6 @@ if (!purchase.transactionId) {
     return;
 }
 
-// Poll for eSIM status — up to 90 seconds
 let smdpAddress = null;
 let activationCode = null;
 let iccid = null;
@@ -64,17 +151,16 @@ for (let i = 0; i < 30; i++) {
         break;
     }
     if (status.status === 'FAILED') {
-        console.error('eSIM provisioning failed for tx:', transactionId);
+        console.error('eSIM provisioning failed:', transactionId);
         return;
     }
 }
 
 if (!smdpAddress) {
-    console.error('eSIM timed out for tx:', transactionId);
+    console.error('eSIM timed out:', transactionId);
     return;
 }
 
-// Save to Firestore
 await db.collection('purchases').add({
     uid,
     email,
@@ -87,7 +173,10 @@ await db.collection('purchases').add({
     createdAt: admin.firestore.FieldValue.serverTimestamp()
 });
 
-console.log('Webhook eSIM saved for:', email, transactionId);
+console.log('eSIM saved for:', email, transactionId);
+
+await sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid });
+console.log('Email sent to:', email);
 ```
 
 }
@@ -116,7 +205,6 @@ if (event.type === 'checkout.session.completed') {
         return res.status(200).json({ received: true });
     }
 
-    // Run async — don't make Stripe wait
     purchaseAndSaveESIM(offerId, uid, email).catch(console.error);
 }
 
