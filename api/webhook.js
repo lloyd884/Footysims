@@ -1,5 +1,3 @@
-export const config = { api: { bodyParser: false } };
-
 let _stripe, _admin, _db;
 async function getClients() {
 if (!_stripe) {
@@ -113,7 +111,7 @@ if (!res.ok) console.error('Resend error:', await res.text());
 }
 
 async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin, db) {
-// ── Deduplication check ──────────────────────────────────────────
+//    Deduplication check  
 // Use Firestore to claim this sessionId atomically.
 // If another process (browser or webhook) already claimed it, skip.
 const sessionRef = db.collection(‘stripe_sessions’).doc(sessionId);
@@ -129,7 +127,7 @@ if (!claimed) {
     console.log('Session already claimed, skipping duplicate:', sessionId);
     return;
 }
-// ────────────────────────────────────────────────────────────────
+//                                                                 
 
 const zenditHeaders = {
     'Authorization': `Bearer ${ZENDIT_KEY}`,
