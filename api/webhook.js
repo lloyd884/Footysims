@@ -48,26 +48,26 @@ const html = `
   <div style="max-width:520px;margin:0 auto;padding:32px 16px;">
     <div style="background:#1a7a1a;border-radius:14px;padding:24px;text-align:center;margin-bottom:20px;">
       <h1 style="color:white;font-size:26px;margin:0;">Footy<span style="color:#7fff00;">SIMs</span></h1>
-      <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px;">Your eSIM is ready ⚽</p>
+      <p style="color:rgba(255,255,255,0.85);margin:8px 0 0;font-size:14px;">Your eSIM is ready </p>
     </div>
     <div style="background:white;border-radius:14px;padding:28px;text-align:center;margin-bottom:16px;">
-      <h2 style="color:#1a7a1a;font-size:20px;margin:0 0 8px;">✅ Your eSIM is Ready!</h2>
+      <h2 style="color:#1a7a1a;font-size:20px;margin:0 0 8px;"> Your eSIM is Ready!</h2>
       <p style="color:#555;font-size:14px;margin:0 0 20px;">Scan the QR code below to install your eSIM</p>
       <img src="${qrUrl}" alt="eSIM QR Code" width="240" height="240"
         style="border:6px solid #1a7a1a;border-radius:12px;display:block;margin:0 auto 20px;" />
       <p style="font-size:12px;color:#888;margin:0 0 20px;">
-        📱 Open Camera → point at QR → tap notification → install eSIM
+         Open Camera -> point at QR -> tap notification -> install eSIM
       </p>
       <div style="background:#f0faf0;border-radius:10px;padding:16px;text-align:left;margin-bottom:16px;">
-        <p style="font-size:13px;font-weight:700;color:#1a7a1a;margin:0 0 12px;">📋 Can't scan? Enter manually in Settings:</p>
+        <p style="font-size:13px;font-weight:700;color:#1a7a1a;margin:0 0 12px;"> Can't scan? Enter manually in Settings:</p>
         <p style="font-size:11px;color:#666;font-weight:700;margin:0 0 2px;text-transform:uppercase;">SM-DP+ Address</p>
         <p style="font-size:13px;font-family:monospace;background:white;padding:8px 10px;border-radius:6px;margin:0 0 10px;word-break:break-all;">${smdpAddress}</p>
         <p style="font-size:11px;color:#666;font-weight:700;margin:0 0 2px;text-transform:uppercase;">Activation Code</p>
         <p style="font-size:13px;font-family:monospace;background:white;padding:8px 10px;border-radius:6px;margin:0;word-break:break-all;">${activationCode || 'N/A'}</p>
       </div>
       <div style="background:#fff8e1;border-radius:8px;padding:12px;text-align:left;font-size:12px;color:#6d4c00;line-height:1.6;">
-        <strong>iPhone:</strong> Settings → Mobile Data → Add eSIM → Enter Details Manually<br>
-        <strong>Android:</strong> Settings → Connections → SIM Manager → Add eSIM → Enter Manually
+        <strong>iPhone:</strong> Settings -> Mobile Data -> Add eSIM -> Enter Details Manually<br>
+        <strong>Android:</strong> Settings -> Connections -> SIM Manager -> Add eSIM -> Enter Manually
       </div>
     </div>
     <div style="background:white;border-radius:14px;padding:20px;margin-bottom:16px;">
@@ -81,12 +81,12 @@ const html = `
     <div style="text-align:center;margin-bottom:16px;">
       <a href="https://footysims.com/dashboard.html"
         style="display:inline-block;background:#1a7a1a;color:white;font-weight:700;font-size:15px;padding:14px 32px;border-radius:10px;text-decoration:none;">
-        View in Dashboard →
+        View in Dashboard ->
       </a>
     </div>
     <div style="text-align:center;font-size:12px;color:#888;line-height:1.8;">
       <p>Need help? <a href="mailto:footysims@proton.me" style="color:#1a7a1a;">footysims@proton.me</a></p>
-      <p style="margin-top:8px;">© 2026 FootySIMs</p>
+      <p style="margin-top:8px;">&copy; 2026 FootySIMs</p>
     </div>
   </div>
 </body>
@@ -102,7 +102,7 @@ const res = await fetch('https://api.resend.com/emails', {
     body: JSON.stringify({
         from: 'FootySIMs <noreply@footysims.com>',
         to: email,
-        subject: '✅ Your FootySIMs eSIM is Ready!',
+        subject: ' Your FootySIMs eSIM is Ready!',
         html
     })
 });
