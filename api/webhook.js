@@ -1,45 +1,41 @@
 let _stripe, _admin, _db;
 async function getClients() {
-if (!_stripe) {
-const { default: Stripe } = await import(‘stripe’);
-_stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-}
-if (!_admin) {
-const { default: admin } = await import(‘firebase-admin’);
-if (!admin.apps.length) {
-admin.initializeApp({
-credential: admin.credential.cert(
-JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
-)
-});
-}
-_admin = admin;
-_db = admin.firestore();
-}
-return { stripe: _stripe, admin: _admin, db: _db };
+    if (!_stripe) {
+        const { default: Stripe } = await import('stripe');
+        _stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    }
+    if (!_admin) {
+        const { default: admin } = await import('firebase-admin');
+        if (!admin.apps.length) {
+            admin.initializeApp({
+                credential: admin.credential.cert(
+                    JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
+                )
+            });
+        }
+        _admin = admin;
+        _db = admin.firestore();
+    }
+    return { stripe: _stripe, admin: _admin, db: _db };
 }
 const ZENDIT_KEY = process.env.ZENDIT_KEY;
-const BASE = ‘https://api.zendit.io/v1’;
+const BASE = 'https://api.zendit.io/v1';
 
 async function getRawBody(req) {
-return new Promise((resolve, reject) => {
-let data = ‘’;
-req.on(‘data’, chunk => data += chunk);
-req.on(‘end’, () => resolve(Buffer.from(data)));
-req.on(‘error’, reject);
-});
+    return new Promise((resolve, reject) => {
+        let data = '';
+        req.on('data', chunk => data += chunk);
+        req.on('end', () => resolve(Buffer.from(data)));
+        req.on('error', reject);
+    });
 }
 
 async function sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid }) {
-const qrData = `LPA:1$${smdpAddress}$${activationCode || ''}`;
-const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+    const qrData = `LPA:1$${smdpAddress}$${activationCode || ''}`;
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
 
-```
-const html = `
-```
-
+    const html = `
 <!DOCTYPE html>
-
 <html>
 <head><meta charset="UTF-8"></head>
 <body style="margin:0;padding:0;background:#f4f7f4;font-family:Arial,sans-serif;">
@@ -90,139 +86,130 @@ const html = `
 </body>
 </html>`;
 
-```
-const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        from: 'FootySIMs <noreply@footysims.com>',
-        to: email,
-        subject: ' Your FootySIMs eSIM is Ready!',
-        html
-    })
-});
+    const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            from: 'FootySIMs <noreply@footysims.com>',
+            to: email,
+            subject: ' Your FootySIMs eSIM is Ready!',
+            html
+        })
+    });
 
-if (!res.ok) console.error('Resend error:', await res.text());
-```
-
+    if (!res.ok) console.error('Resend error:', await res.text());
 }
 
 async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin, db) {
-//    Deduplication check  
-// Use Firestore to claim this sessionId atomically.
-// If another process (browser or webhook) already claimed it, skip.
-const sessionRef = db.collection(‘stripe_sessions’).doc(sessionId);
-const claimed = await db.runTransaction(async t => {
-const doc = await t.get(sessionRef);
-if (doc.exists) return false; // already claimed
-t.set(sessionRef, { claimedAt: admin.firestore.FieldValue.serverTimestamp(), uid, email, offerId });
-return true;
-});
+    //    Deduplication check                                           
+    // Use Firestore to claim this sessionId atomically.
+    // If another process (browser or webhook) already claimed it, skip.
+    const sessionRef = db.collection('stripe_sessions').doc(sessionId);
+    const claimed = await db.runTransaction(async t => {
+        const doc = await t.get(sessionRef);
+        if (doc.exists) return false; // already claimed
+        t.set(sessionRef, { claimedAt: admin.firestore.FieldValue.serverTimestamp(), uid, email, offerId });
+        return true;
+    });
 
-```
-if (!claimed) {
-    console.log('Session already claimed, skipping duplicate:', sessionId);
-    return;
-}
-//                                                                 
-
-const zenditHeaders = {
-    'Authorization': `Bearer ${ZENDIT_KEY}`,
-    'Content-Type': 'application/json'
-};
-
-const transactionId = `footysims-wh-${Date.now()}`;
-const purchaseRes = await fetch(`${BASE}/esim/purchases`, {
-    method: 'POST',
-    headers: zenditHeaders,
-    body: JSON.stringify({ offerId, transactionId })
-});
-const purchase = await purchaseRes.json();
-
-if (!purchase.transactionId) {
-    console.error('Zendit purchase failed:', JSON.stringify(purchase));
-    return;
-}
-
-let smdpAddress = null;
-let activationCode = null;
-let iccid = null;
-
-for (let i = 0; i < 30; i++) {
-    await new Promise(r => setTimeout(r, 3000));
-    const statusRes = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers: zenditHeaders });
-    const status = await statusRes.json();
-    if (status.confirmation?.smdpAddress) {
-        smdpAddress = status.confirmation.smdpAddress;
-        activationCode = status.confirmation.activationCode;
-        iccid = status.confirmation.iccid;
-        break;
-    }
-    if (status.status === 'FAILED') {
-        console.error('eSIM provisioning failed:', transactionId);
+    if (!claimed) {
+        console.log('Session already claimed, skipping duplicate:', sessionId);
         return;
     }
-}
+    //                                                                 
 
-if (!smdpAddress) {
-    console.error('eSIM timed out:', transactionId);
-    return;
-}
+    const zenditHeaders = {
+        'Authorization': `Bearer ${ZENDIT_KEY}`,
+        'Content-Type': 'application/json'
+    };
 
-await db.collection('purchases').add({
-    uid,
-    email,
-    transactionId,
-    offerId,
-    sessionId,
-    smdpAddress,
-    activationCode,
-    iccid,
-    source: 'webhook',
-    createdAt: admin.firestore.FieldValue.serverTimestamp()
-});
+    const transactionId = `footysims-wh-${Date.now()}`;
+    const purchaseRes = await fetch(`${BASE}/esim/purchases`, {
+        method: 'POST',
+        headers: zenditHeaders,
+        body: JSON.stringify({ offerId, transactionId })
+    });
+    const purchase = await purchaseRes.json();
 
-console.log('eSIM saved for:', email, transactionId);
+    if (!purchase.transactionId) {
+        console.error('Zendit purchase failed:', JSON.stringify(purchase));
+        return;
+    }
 
-await sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid });
-console.log('Email sent to:', email);
-```
+    let smdpAddress = null;
+    let activationCode = null;
+    let iccid = null;
 
+    for (let i = 0; i < 30; i++) {
+        await new Promise(r => setTimeout(r, 3000));
+        const statusRes = await fetch(`${BASE}/esim/purchases/${transactionId}`, { headers: zenditHeaders });
+        const status = await statusRes.json();
+        if (status.confirmation?.smdpAddress) {
+            smdpAddress = status.confirmation.smdpAddress;
+            activationCode = status.confirmation.activationCode;
+            iccid = status.confirmation.iccid;
+            break;
+        }
+        if (status.status === 'FAILED') {
+            console.error('eSIM provisioning failed:', transactionId);
+            return;
+        }
+    }
+
+    if (!smdpAddress) {
+        console.error('eSIM timed out:', transactionId);
+        return;
+    }
+
+    await db.collection('purchases').add({
+        uid,
+        email,
+        transactionId,
+        offerId,
+        sessionId,
+        smdpAddress,
+        activationCode,
+        iccid,
+        source: 'webhook',
+        createdAt: admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    console.log('eSIM saved for:', email, transactionId);
+
+    await sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid });
+    console.log('Email sent to:', email);
 }
 
 export default async function handler(req, res) {
-if (req.method !== ‘POST’) return res.status(405).end(‘Method not allowed’);
+    if (req.method !== 'POST') return res.status(405).end('Method not allowed');
 
-```
-const { stripe, admin, db } = await getClients();
+    const { stripe, admin, db } = await getClients();
 
-const rawBody = await getRawBody(req);
-const sig = req.headers['stripe-signature'];
+    const rawBody = await getRawBody(req);
+    const sig = req.headers['stripe-signature'];
 
-let event;
-try {
-    event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
-} catch (err) {
-    console.error('Webhook signature failed:', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-}
-
-if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const { offerId, uid, email } = session.metadata || {};
-
-    if (!offerId || !uid || !email) {
-        console.error('Missing metadata in session:', session.id);
-        return res.status(200).json({ received: true });
+    let event;
+    try {
+        event = stripe.webhooks.constructEvent(rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    } catch (err) {
+        console.error('Webhook signature failed:', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    purchaseAndSaveESIM(session.id, offerId, uid, email, stripe, admin, db).catch(console.error);
-}
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        const { offerId, uid, email } = session.metadata || {};
 
-return res.status(200).json({ received: true });
-```
+        if (!offerId || !uid || !email) {
+            console.error('Missing metadata in session:', session.id);
+            return res.status(200).json({ received: true });
+        }
 
+        purchaseAndSaveESIM(session.id, offerId, uid, email, stripe, admin, db).catch(console.error);
+    }
+
+    return res.status(200).json({ received: true });
 }
