@@ -31,8 +31,10 @@ async function getRawBody(req) {
 }
 
 async function sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid }) {
-    const qrData = `LPA:1$${smdpAddress}$${activationCode || ''}`;
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrData)}`;
+    const matchingId = activationCode || "";
+    const qrData = "LPA:1$" + smdpAddress + "$" + matchingId;
+    const qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(qrData);
+    const appleUrl = "https://esimsetup.apple.com/esim_qrcode_provisioning?carddata=LPA:1$" + smdpAddress + "$" + matchingId;
 
     const html = `
 <!DOCTYPE html>
@@ -47,6 +49,7 @@ async function sendESIMEmail({ email, offerId, transactionId, smdpAddress, activ
     <div style="background:white;border-radius:14px;padding:28px;text-align:center;margin-bottom:16px;">
       <h2 style="color:#1a7a1a;font-size:20px;margin:0 0 8px;"> Your eSIM is Ready!</h2>
       <p style="color:#555;font-size:14px;margin:0 0 20px;">Scan the QR code below to install your eSIM</p>
+      <a href="${appleUrl}" style="display:inline-block;background:#1a7a1a;color:white;font-weight:700;font-size:14px;padding:12px 24px;border-radius:10px;text-decoration:none;margin-bottom:16px;">Tap to Install eSIM (iPhone)</a><br><br>
       <img src="${qrUrl}" alt="eSIM QR Code" width="240" height="240"
         style="border:6px solid #1a7a1a;border-radius:12px;display:block;margin:0 auto 20px;" />
       <p style="font-size:12px;color:#888;margin:0 0 20px;">
@@ -149,7 +152,7 @@ async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin
         const status = await statusRes.json();
         if (status.confirmation?.smdpAddress) {
             smdpAddress = status.confirmation.smdpAddress;
-            activationCode = status.confirmation.activationCode;
+            activationCode = status.confirmation.externalReferenceId || status.confirmation.activationCode;
             iccid = status.confirmation.iccid;
             break;
         }
