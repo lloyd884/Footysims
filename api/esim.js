@@ -64,10 +64,13 @@ export default async function handler(req, res) {
       const data = await r.json();
       const conf = data.confirmation || {};
       if (conf.smdpAddress) {
-        data.qrData = `LPA:1$${conf.smdpAddress}$${conf.activationCode || ''}`;
+        const matchingId = conf.externalReferenceId || conf.activationCode || '';
+        data.qrData = `LPA:1$${conf.smdpAddress}$${matchingId}`;
         data.smdpAddress = conf.smdpAddress;
         data.iccid = conf.iccid;
-        data.activationCode = conf.activationCode;
+        data.activationCode = matchingId;
+        data.appleInstallUrl = `https://esimsetup.apple.com/esim_qrcode_provisioning?carddata=LPA:1$${conf.smdpAddress}$${matchingId}`;
+        data.androidInstallUrl = `https://esimsetup.android.com/esim_qrcode_provisioning?carddata=LPA:1$${conf.smdpAddress}$${matchingId}`;
       }
       return res.status(200).json(data);
     }
