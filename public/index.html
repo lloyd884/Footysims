@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
@@ -27,268 +26,265 @@
             --shadow: 0 6px 24px rgba(0,0,0,0.10);
         }
 
-```
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-        font-family: 'Inter', sans-serif;
-        background: var(--off);
-        color: var(--text);
-        min-height: 100vh;
-    }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--off);
+            color: var(--text);
+            min-height: 100vh;
+        }
 
-    /* ── Header ── */
-    header {
-        background: var(--green);
-        padding: 0 24px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        height: 64px;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    .logo {
-        font-family: 'Oswald', sans-serif;
-        font-size: 26px;
-        font-weight: 700;
-        color: white;
-        letter-spacing: 1px;
-    }
-    .logo span { color: var(--lime); }
-    .header-tag {
-        font-size: 12px;
-        background: rgba(255,255,255,0.15);
-        color: white;
-        padding: 4px 10px;
-        border-radius: 20px;
-        font-weight: 500;
-    }
+        /* ── Header ── */
+        header {
+            background: var(--green);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--lime); }
+        .header-tag {
+            font-size: 12px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
 
-    /* ── Hero ── */
-    .hero {
-        background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
-        color: white;
-        text-align: center;
-        padding: 48px 24px 40px;
-        position: relative;
-        overflow: hidden;
-    }
-    .hero::before {
-        content: '⚽';
-        position: absolute;
-        font-size: 220px;
-        opacity: 0.06;
-        top: -30px;
-        right: -30px;
-        line-height: 1;
-    }
-    .hero h1 {
-        font-family: 'Oswald', sans-serif;
-        font-size: clamp(28px, 6vw, 42px);
-        font-weight: 700;
-        line-height: 1.15;
-        margin-bottom: 12px;
-    }
-    .hero h1 em { color: var(--lime); font-style: normal; }
-    .hero p {
-        font-size: 16px;
-        opacity: 0.88;
-        max-width: 380px;
-        margin: 0 auto 24px;
-        line-height: 1.6;
-    }
-    .hero-pills {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        justify-content: center;
-    }
-    .pill {
-        background: rgba(255,255,255,0.15);
-        border: 1px solid rgba(255,255,255,0.25);
-        color: white;
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 13px;
-        font-weight: 500;
-    }
+        /* ── Hero ── */
+        .hero {
+            background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
+            color: white;
+            text-align: center;
+            padding: 48px 24px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '⚽';
+            position: absolute;
+            font-size: 220px;
+            opacity: 0.06;
+            top: -30px;
+            right: -30px;
+            line-height: 1;
+        }
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(28px, 6vw, 42px);
+            font-weight: 700;
+            line-height: 1.15;
+            margin-bottom: 12px;
+        }
+        .hero h1 em { color: var(--lime); font-style: normal; }
+        .hero p {
+            font-size: 16px;
+            opacity: 0.88;
+            max-width: 380px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+        }
+        .hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+        }
+        .pill {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
 
-    /* ── Trust Bar ── */
-    .trust-bar {
-        background: white;
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 6px 24px;
-        padding: 14px 20px;
-        border-bottom: 1px solid #e8ede8;
-    }
-    .trust-bar span {
-        font-size: 13px;
-        color: var(--muted);
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+        /* ── Trust Bar ── */
+        .trust-bar {
+            background: white;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 6px 24px;
+            padding: 14px 20px;
+            border-bottom: 1px solid #e8ede8;
+        }
+        .trust-bar span {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-    /* ── Main cards ── */
-    .main { padding: 28px 16px 60px; max-width: 480px; margin: 0 auto; }
+        /* ── Main cards ── */
+        .main { padding: 28px 16px 60px; max-width: 480px; margin: 0 auto; }
 
-    .card {
-        background: white;
-        border-radius: var(--radius);
-        box-shadow: var(--shadow);
-        padding: 28px;
-        margin-bottom: 20px;
-    }
-    .card h2 {
-        font-family: 'Oswald', sans-serif;
-        font-size: 20px;
-        font-weight: 600;
-        margin-bottom: 18px;
-        color: var(--green);
-    }
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: var(--green);
+        }
 
-    input[type="email"],
-    input[type="password"] {
-        width: 100%;
-        padding: 13px 16px;
-        margin-bottom: 12px;
-        font-size: 15px;
-        font-family: 'Inter', sans-serif;
-        border: 1.5px solid #d8e4d8;
-        border-radius: 10px;
-        background: #fafffe;
-        color: var(--text);
-        transition: border-color 0.2s;
-        outline: none;
-    }
-    input:focus { border-color: var(--green); }
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 13px 16px;
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-family: 'Inter', sans-serif;
+            border: 1.5px solid #d8e4d8;
+            border-radius: 10px;
+            background: #fafffe;
+            color: var(--text);
+            transition: border-color 0.2s;
+            outline: none;
+        }
+        input:focus { border-color: var(--green); }
 
-    .btn-row { display: flex; gap: 10px; margin-top: 4px; }
+        .btn-row { display: flex; gap: 10px; margin-top: 4px; }
 
-    .btn {
-        flex: 1;
-        padding: 14px;
-        font-size: 15px;
-        font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: transform 0.1s, opacity 0.2s;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--green); color: white; }
-    .btn-primary:hover { opacity: 0.9; }
-    .btn-outline {
-        background: transparent;
-        color: var(--green);
-        border: 2px solid var(--green);
-    }
-    .btn-outline:hover { background: #f0faf0; }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: var(--green); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-outline {
+            background: transparent;
+            color: var(--green);
+            border: 2px solid var(--green);
+        }
+        .btn-outline:hover { background: #f0faf0; }
 
-    .btn-dashboard {
-        width: 100%;
-        padding: 15px;
-        font-size: 16px;
-        font-weight: 700;
-        font-family: 'Oswald', sans-serif;
-        letter-spacing: 0.5px;
-        background: linear-gradient(135deg, var(--green), var(--green2));
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-        display: none;
-        margin-top: 14px;
-        transition: opacity 0.2s;
-    }
-    .btn-dashboard:hover { opacity: 0.9; }
+        .btn-dashboard {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--green), var(--green2));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            margin-top: 14px;
+            transition: opacity 0.2s;
+        }
+        .btn-dashboard:hover { opacity: 0.9; }
 
-    #message {
-        min-height: 22px;
-        font-size: 14px;
-        font-weight: 500;
-        margin-top: 10px;
-        border-radius: 8px;
-        padding: 0 4px;
-    }
-    #message.success { color: #1a7a1a; }
-    #message.error { color: #d32f2f; }
+        #message {
+            min-height: 22px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-top: 10px;
+            border-radius: 8px;
+            padding: 0 4px;
+        }
+        #message.success { color: #1a7a1a; }
+        #message.error { color: #d32f2f; }
 
-    /* Destination cards */
-    .dest-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-    .dest-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background: var(--off);
-        border-radius: 10px;
-        padding: 12px 16px;
-    }
-    .dest-info { font-size: 14px; font-weight: 600; }
-    .dest-detail { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
-    .dest-price {
-        font-family: 'Oswald', sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: var(--green);
-    }
+        /* Destination cards */
+        .dest-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
+        .dest-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--off);
+            border-radius: 10px;
+            padding: 12px 16px;
+        }
+        .dest-info { font-size: 14px; font-weight: 600; }
+        .dest-detail { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+        .dest-price {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--green);
+        }
 
-    /* Why grid */
-    .why-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-    }
-    .why-item {
-        background: var(--off);
-        border-radius: 10px;
-        padding: 14px 8px;
-        text-align: center;
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text);
-        line-height: 1.4;
-    }
-    .why-item .icon { font-size: 22px; display: block; margin-bottom: 5px; }
+        /* Why grid */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .why-item {
+            background: var(--off);
+            border-radius: 10px;
+            padding: 14px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+        }
+        .why-item .icon { font-size: 22px; display: block; margin-bottom: 5px; }
 
-    /* How it works */
-    .steps { display: flex; flex-direction: column; gap: 14px; }
-    .step { display: flex; gap: 16px; align-items: flex-start; }
-    .step-num {
-        background: var(--green);
-        color: white;
-        font-family: 'Oswald', sans-serif;
-        font-size: 16px;
-        font-weight: 700;
-        width: 34px; height: 34px;
-        border-radius: 50%;
-        display: flex; align-items: center; justify-content: center;
-        flex-shrink: 0;
-    }
-    .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-    .step-text p { font-size: 13px; color: var(--muted); line-height: 1.4; }
+        /* How it works */
+        .steps { display: flex; flex-direction: column; gap: 14px; }
+        .step { display: flex; gap: 16px; align-items: flex-start; }
+        .step-num {
+            background: var(--green);
+            color: white;
+            font-family: 'Oswald', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            width: 34px; height: 34px;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+        .step-text p { font-size: 13px; color: var(--muted); line-height: 1.4; }
 
-    /* Footer */
-    footer {
-        background: var(--green2);
-        color: rgba(255,255,255,0.85);
-        text-align: center;
-        padding: 24px 20px;
-        font-size: 13px;
-        line-height: 2;
-    }
-    footer a { color: var(--lime); text-decoration: none; font-weight: 600; }
-    footer a:hover { text-decoration: underline; }
-</style>
-```
-
+        /* Footer */
+        footer {
+            background: var(--green2);
+            color: rgba(255,255,255,0.85);
+            text-align: center;
+            padding: 24px 20px;
+            font-size: 13px;
+            line-height: 2;
+        }
+        footer a { color: var(--lime); text-decoration: none; font-weight: 600; }
+        footer a:hover { text-decoration: underline; }
+    </style>
 </head>
 <body>
 
@@ -316,110 +312,108 @@
 
 <div class="main">
 
-```
-<div class="card">
-    <h2>Sign Up / Login</h2>
-    <input id="email" type="email" placeholder="Your email address">
-    <input id="password" type="password" placeholder="Password (6+ characters)">
-    <div class="btn-row">
-        <button class="btn btn-primary" onclick="signUp()">Create Account</button>
-        <button class="btn btn-outline" onclick="login()">Login</button>
+    <div class="card">
+        <h2>Sign Up / Login</h2>
+        <input id="email" type="email" placeholder="Your email address">
+        <input id="password" type="password" placeholder="Password (6+ characters)">
+        <div class="btn-row">
+            <button class="btn btn-primary" onclick="signUp()">Create Account</button>
+            <button class="btn btn-outline" onclick="login()">Login</button>
+        </div>
+        <div style="text-align:right; margin-top:4px;"><a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:500;">Forgot password?</a></div>
+        <div id="message"></div>
+        <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">
+            Go to My Dashboard →
+        </button>
     </div>
-    <div style="text-align:right; margin-top:4px;"><a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:500;">Forgot password?</a></div>
-    <div id="message"></div>
-    <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">
-        Go to My Dashboard →
-    </button>
-</div>
 
-<div class="card">
-    <h2>Popular Destinations</h2>
-    <div class="dest-grid">
-        <div class="dest-card">
-            <div>
-                <div class="dest-info">🇹🇭 Thailand</div>
-                <div class="dest-detail">Unlimited · 1 Day</div>
+    <div class="card">
+        <h2>Popular Destinations</h2>
+        <div class="dest-grid">
+            <div class="dest-card">
+                <div>
+                    <div class="dest-info">🇹🇭 Thailand</div>
+                    <div class="dest-detail">Unlimited · 1 Day</div>
+                </div>
+                <div class="dest-price">£3.39</div>
             </div>
-            <div class="dest-price">£3.39</div>
-        </div>
-        <div class="dest-card">
-            <div>
-                <div class="dest-info">🇪🇸 Spain</div>
-                <div class="dest-detail">Unlimited · 7 Days</div>
+            <div class="dest-card">
+                <div>
+                    <div class="dest-info">🇪🇸 Spain</div>
+                    <div class="dest-detail">Unlimited · 7 Days</div>
+                </div>
+                <div class="dest-price">£8.21</div>
             </div>
-            <div class="dest-price">£8.21</div>
-        </div>
-        <div class="dest-card">
-            <div>
-                <div class="dest-info">🇩🇪 Germany</div>
-                <div class="dest-detail">Unlimited · 7 Days</div>
+            <div class="dest-card">
+                <div>
+                    <div class="dest-info">🇩🇪 Germany</div>
+                    <div class="dest-detail">Unlimited · 7 Days</div>
+                </div>
+                <div class="dest-price">£8.24</div>
             </div>
-            <div class="dest-price">£8.24</div>
-        </div>
-        <div class="dest-card">
-            <div>
-                <div class="dest-info">🇯🇵 Japan</div>
-                <div class="dest-detail">Unlimited · 7 Days</div>
+            <div class="dest-card">
+                <div>
+                    <div class="dest-info">🇯🇵 Japan</div>
+                    <div class="dest-detail">Unlimited · 7 Days</div>
+                </div>
+                <div class="dest-price">£13.29</div>
             </div>
-            <div class="dest-price">£13.29</div>
-        </div>
-        <div class="dest-card">
-            <div>
-                <div class="dest-info">🇺🇸 USA</div>
-                <div class="dest-detail">Unlimited · 7 Days</div>
+            <div class="dest-card">
+                <div>
+                    <div class="dest-info">🇺🇸 USA</div>
+                    <div class="dest-detail">Unlimited · 7 Days</div>
+                </div>
+                <div class="dest-price">£14.19</div>
             </div>
-            <div class="dest-price">£14.19</div>
         </div>
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
     </div>
-    <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
-</div>
 
-<div class="card">
-    <h2>How It Works</h2>
-    <div class="steps">
-        <div class="step">
-            <div class="step-num">1</div>
-            <div class="step-text">
-                <h3>Pick your destination & plan</h3>
-                <p>Choose from hundreds of countries with flexible durations and data amounts.</p>
+    <div class="card">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <h3>Pick your destination & plan</h3>
+                    <p>Choose from hundreds of countries with flexible durations and data amounts.</p>
+                </div>
             </div>
-        </div>
-        <div class="step">
-            <div class="step-num">2</div>
-            <div class="step-text">
-                <h3>Pay securely with Stripe</h3>
-                <p>Card payments via Stripe. Your QR code is ready instantly after payment.</p>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <h3>Pay securely with Stripe</h3>
+                    <p>Card payments via Stripe. Your QR code is ready instantly after payment.</p>
+                </div>
             </div>
-        </div>
-        <div class="step">
-            <div class="step-num">3</div>
-            <div class="step-text">
-                <h3>Scan QR & go</h3>
-                <p>Open your camera, scan the QR code, install the eSIM and you're online the moment you land.</p>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <h3>Scan QR & go</h3>
+                    <p>Open your camera, scan the QR code, install the eSIM and you're online the moment you land.</p>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card">
-    <h2>Why FootySIMs?</h2>
-    <div class="why-grid">
-        <div class="why-item"><span class="icon">⚡</span>Instant QR</div>
-        <div class="why-item"><span class="icon">💸</span>Great rates</div>
-        <div class="why-item"><span class="icon">🌍</span>190+ countries</div>
-        <div class="why-item"><span class="icon">📵</span>No app needed</div>
-        <div class="why-item"><span class="icon">🔒</span>Secure pay</div>
-        <div class="why-item"><span class="icon">📱</span>iOS & Android</div>
+    <div class="card">
+        <h2>Why FootySIMs?</h2>
+        <div class="why-grid">
+            <div class="why-item"><span class="icon">⚡</span>Instant QR</div>
+            <div class="why-item"><span class="icon">💸</span>Great rates</div>
+            <div class="why-item"><span class="icon">🌍</span>190+ countries</div>
+            <div class="why-item"><span class="icon">📵</span>No app needed</div>
+            <div class="why-item"><span class="icon">🔒</span>Secure pay</div>
+            <div class="why-item"><span class="icon">📱</span>iOS & Android</div>
+        </div>
     </div>
-</div>
 
-<div class="card" style="text-align:center; padding:20px 28px;">
-    <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
-    <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-        Get Your eSIM Now →
-    </button>
-</div>
-```
+    <div class="card" style="text-align:center; padding:20px 28px;">
+        <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
+        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+            Get Your eSIM Now →
+        </button>
+    </div>
 
 </div>
 
@@ -429,14 +423,14 @@
         <a href="howto.html">How it works</a>
         &nbsp;•&nbsp;
         <a href="terms.html">Refund policy</a>
+        &nbsp;•&nbsp;
+        <a href="world-cup-2026-esim.html">⚽ World Cup 2026 eSIM Guide</a>
     </p>
     <p style="margin-top:8px; font-size:12px; opacity:0.6;">© 2026 FootySIMs. All rights reserved.</p>
 </footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
@@ -516,6 +510,5 @@
             .catch(err => setMsg("❌ " + (err.code === "auth/user-not-found" ? "No account found with that email." : "Something went wrong. Try again."), "error"));
     }
 </script>
-
 </body>
 </html>
