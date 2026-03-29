@@ -151,6 +151,89 @@
             color: var(--green);
         }
 
+        /* ── Country Selector ── */
+        .selector-wrap {
+            position: relative;
+        }
+        .country-select {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            border: 2px solid var(--green);
+            border-radius: 10px;
+            background: #fafffe;
+            color: var(--text);
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .country-select:focus { border-color: var(--lime); }
+        .select-arrow {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--green);
+            font-size: 18px;
+        }
+
+        .plans-list {
+            margin-top: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .plan-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--off);
+            border-radius: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.15s, background 0.15s;
+        }
+        .plan-row:hover { border-color: var(--green); background: #edf7ed; }
+        .plan-row.selected { border-color: var(--green); background: #edf7ed; }
+        .plan-label { font-size: 14px; font-weight: 600; }
+        .plan-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+        .plan-price {
+            font-family: 'Oswald', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--green);
+        }
+
+        .btn-get-esim {
+            width: 100%;
+            margin-top: 14px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 700;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--green), var(--green2));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            display: none;
+            transition: opacity 0.2s;
+        }
+        .btn-get-esim:hover { opacity: 0.9; }
+
+        .selector-hint {
+            text-align: center;
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 10px;
+        }
+
         input[type="email"],
         input[type="password"] {
             width: 100%;
@@ -312,7 +395,37 @@
 
 <div class="main">
 
+    <!-- ── Country Selector ── -->
     <div class="card">
+        <h2>🌍 Where Are You Headed?</h2>
+        <div class="selector-wrap">
+            <select class="country-select" id="countrySelect" onchange="showPlans()">
+                <option value="">Select a country...</option>
+                <option value="thailand">🇹🇭 Thailand</option>
+                <option value="spain">🇪🇸 Spain</option>
+                <option value="germany">🇩🇪 Germany</option>
+                <option value="france">🇫🇷 France</option>
+                <option value="italy">🇮🇹 Italy</option>
+                <option value="netherlands">🇳🇱 Netherlands</option>
+                <option value="portugal">🇵🇹 Portugal</option>
+                <option value="japan">🇯🇵 Japan</option>
+                <option value="usa">🇺🇸 USA</option>
+                <option value="australia">🇦🇺 Australia</option>
+                <option value="uae">🇦🇪 UAE</option>
+                <option value="brazil">🇧🇷 Brazil</option>
+            </select>
+            <span class="select-arrow">▾</span>
+        </div>
+
+        <div class="plans-list" id="plansList"></div>
+        <button class="btn-get-esim" id="getEsimBtn" onclick="scrollToSignup()">
+            Get This eSIM →
+        </button>
+        <p class="selector-hint" id="selectorHint">190+ countries available · Instant setup · No app needed</p>
+    </div>
+
+    <!-- ── Sign Up / Login ── -->
+    <div class="card" id="signupCard">
         <h2>Sign Up / Login</h2>
         <input id="email" type="email" placeholder="Your email address">
         <input id="password" type="password" placeholder="Password (6+ characters)">
@@ -410,7 +523,7 @@
 
     <div class="card" style="text-align:center; padding:20px 28px;">
         <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
-        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="scrollToSignup()">
             Get Your eSIM Now →
         </button>
     </div>
@@ -446,6 +559,62 @@
     auth.onAuthStateChanged(user => {
         if (user) window.location.href = 'dashboard.html';
     });
+
+    // ── Country plan data ──
+    const countryPlans = {
+        thailand:    [{ data: '1GB', days: 1, price: '£3.39' }, { data: '3GB', days: 7, price: '£7.49' }, { data: 'Unlimited', days: 15, price: '£12.99' }],
+        spain:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        germany:     [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.24' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        france:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        italy:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        netherlands: [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        portugal:    [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        japan:       [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.29' }, { data: 'Unlimited', days: 30, price: '£24.99' }],
+        usa:         [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£14.19' }, { data: 'Unlimited', days: 30, price: '£26.99' }],
+        australia:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        uae:         [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
+        brazil:      [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
+    };
+
+    function showPlans() {
+        const country = document.getElementById('countrySelect').value;
+        const list = document.getElementById('plansList');
+        const btn = document.getElementById('getEsimBtn');
+        const hint = document.getElementById('selectorHint');
+        list.innerHTML = '';
+
+        if (!country) {
+            btn.style.display = 'none';
+            hint.style.display = 'block';
+            return;
+        }
+
+        const plans = countryPlans[country] || [];
+        plans.forEach((plan, i) => {
+            const row = document.createElement('div');
+            row.className = 'plan-row' + (i === 0 ? ' selected' : '');
+            row.innerHTML = `
+                <div>
+                    <div class="plan-label">${plan.data} Data</div>
+                    <div class="plan-sub">${plan.days} Day${plan.days > 1 ? 's' : ''} · Instant QR · No app needed</div>
+                </div>
+                <div class="plan-price">${plan.price}</div>
+            `;
+            row.onclick = () => {
+                document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected'));
+                row.classList.add('selected');
+            };
+            list.appendChild(row);
+        });
+
+        btn.style.display = 'block';
+        hint.style.display = 'none';
+    }
+
+    function scrollToSignup() {
+        document.getElementById('signupCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => document.getElementById('email').focus(), 600);
+    }
 
     function friendlyError(code) {
         switch(code) {
