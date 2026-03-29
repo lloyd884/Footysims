@@ -25,17 +25,9 @@
             --radius: 14px;
             --shadow: 0 6px 24px rgba(0,0,0,0.10);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--off);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        /* ── Header ── */
         header {
             background: var(--green);
             padding: 0 24px;
@@ -48,24 +40,10 @@
             z-index: 100;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
-        .logo {
-            font-family: 'Oswald', sans-serif;
-            font-size: 26px;
-            font-weight: 700;
-            color: white;
-            letter-spacing: 1px;
-        }
+        .logo { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; color: white; letter-spacing: 1px; }
         .logo span { color: var(--lime); }
-        .header-tag {
-            font-size: 12px;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-weight: 500;
-        }
+        .header-tag { font-size: 12px; background: rgba(255,255,255,0.15); color: white; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
 
-        /* ── Hero ── */
         .hero {
             background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
             color: white;
@@ -74,87 +52,22 @@
             position: relative;
             overflow: hidden;
         }
-        .hero::before {
-            content: '⚽';
-            position: absolute;
-            font-size: 220px;
-            opacity: 0.06;
-            top: -30px;
-            right: -30px;
-            line-height: 1;
-        }
-        .hero h1 {
-            font-family: 'Oswald', sans-serif;
-            font-size: clamp(28px, 6vw, 42px);
-            font-weight: 700;
-            line-height: 1.15;
-            margin-bottom: 12px;
-        }
+        .hero::before { content: '⚽'; position: absolute; font-size: 220px; opacity: 0.06; top: -30px; right: -30px; line-height: 1; }
+        .hero h1 { font-family: 'Oswald', sans-serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
         .hero h1 em { color: var(--lime); font-style: normal; }
-        .hero p {
-            font-size: 16px;
-            opacity: 0.88;
-            max-width: 380px;
-            margin: 0 auto 24px;
-            line-height: 1.6;
-        }
-        .hero-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-        .pill {
-            background: rgba(255,255,255,0.15);
-            border: 1px solid rgba(255,255,255,0.25);
-            color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-        }
+        .hero p { font-size: 16px; opacity: 0.88; max-width: 380px; margin: 0 auto 24px; line-height: 1.6; }
+        .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+        .pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; }
 
-        /* ── Trust Bar ── */
-        .trust-bar {
-            background: white;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 6px 24px;
-            padding: 14px 20px;
-            border-bottom: 1px solid #e8ede8;
-        }
-        .trust-bar span {
-            font-size: 13px;
-            color: var(--muted);
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .trust-bar { background: white; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 24px; padding: 14px 20px; border-bottom: 1px solid #e8ede8; }
+        .trust-bar span { font-size: 13px; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 6px; }
 
-        /* ── Main cards ── */
         .main { padding: 28px 16px 60px; max-width: 480px; margin: 0 auto; }
 
-        .card {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px;
-            margin-bottom: 20px;
-        }
-        .card h2 {
-            font-family: 'Oswald', sans-serif;
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 18px;
-            color: var(--green);
-        }
+        .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; }
+        .card h2 { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; margin-bottom: 18px; color: var(--green); }
 
-        /* ── Country Selector ── */
-        .selector-wrap {
-            position: relative;
-        }
+        .selector-wrap { position: relative; }
         .country-select {
             width: 100%;
             padding: 14px 16px;
@@ -171,22 +84,9 @@
             transition: border-color 0.2s;
         }
         .country-select:focus { border-color: var(--lime); }
-        .select-arrow {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-            color: var(--green);
-            font-size: 18px;
-        }
+        .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--green); font-size: 18px; }
 
-        .plans-list {
-            margin-top: 14px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
+        .plans-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
         .plan-row {
             display: flex;
             justify-content: space-between;
@@ -202,12 +102,7 @@
         .plan-row.selected { border-color: var(--green); background: #edf7ed; }
         .plan-label { font-size: 14px; font-weight: 600; }
         .plan-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-        .plan-price {
-            font-family: 'Oswald', sans-serif;
-            font-size: 22px;
-            font-weight: 700;
-            color: var(--green);
-        }
+        .plan-price { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--green); }
 
         .btn-get-esim {
             width: 100%;
@@ -226,145 +121,47 @@
             transition: opacity 0.2s;
         }
         .btn-get-esim:hover { opacity: 0.9; }
+        .selector-hint { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
 
-        .selector-hint {
-            text-align: center;
-            font-size: 13px;
-            color: var(--muted);
-            margin-top: 10px;
-        }
-
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 13px 16px;
-            margin-bottom: 12px;
-            font-size: 15px;
-            font-family: 'Inter', sans-serif;
-            border: 1.5px solid #d8e4d8;
-            border-radius: 10px;
-            background: #fafffe;
-            color: var(--text);
-            transition: border-color 0.2s;
-            outline: none;
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 13px 16px; margin-bottom: 12px;
+            font-size: 15px; font-family: 'Inter', sans-serif;
+            border: 1.5px solid #d8e4d8; border-radius: 10px;
+            background: #fafffe; color: var(--text);
+            transition: border-color 0.2s; outline: none;
         }
         input:focus { border-color: var(--green); }
-
         .btn-row { display: flex; gap: 10px; margin-top: 4px; }
-
-        .btn {
-            flex: 1;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-        }
+        .btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
         .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--green); color: white; }
         .btn-primary:hover { opacity: 0.9; }
-        .btn-outline {
-            background: transparent;
-            color: var(--green);
-            border: 2px solid var(--green);
-        }
+        .btn-outline { background: transparent; color: var(--green); border: 2px solid var(--green); }
         .btn-outline:hover { background: #f0faf0; }
-
-        .btn-dashboard {
-            width: 100%;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: 'Oswald', sans-serif;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, var(--green), var(--green2));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: none;
-            margin-top: 14px;
-            transition: opacity 0.2s;
-        }
+        .btn-dashboard { width: 100%; padding: 15px; font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--green), var(--green2)); color: white; border: none; border-radius: 10px; cursor: pointer; display: none; margin-top: 14px; transition: opacity 0.2s; }
         .btn-dashboard:hover { opacity: 0.9; }
 
-        #message {
-            min-height: 22px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-top: 10px;
-            border-radius: 8px;
-            padding: 0 4px;
-        }
+        #message { min-height: 22px; font-size: 14px; font-weight: 500; margin-top: 10px; border-radius: 8px; padding: 0 4px; }
         #message.success { color: #1a7a1a; }
         #message.error { color: #d32f2f; }
 
-        /* Destination cards */
         .dest-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-        .dest-card {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--off);
-            border-radius: 10px;
-            padding: 12px 16px;
-        }
+        .dest-card { display: flex; justify-content: space-between; align-items: center; background: var(--off); border-radius: 10px; padding: 12px 16px; }
         .dest-info { font-size: 14px; font-weight: 600; }
         .dest-detail { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
-        .dest-price {
-            font-family: 'Oswald', sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--green);
-        }
+        .dest-price { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; color: var(--green); }
 
-        /* Why grid */
-        .why-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .why-item {
-            background: var(--off);
-            border-radius: 10px;
-            padding: 14px 8px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--text);
-            line-height: 1.4;
-        }
+        .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .why-item { background: var(--off); border-radius: 10px; padding: 14px 8px; text-align: center; font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
         .why-item .icon { font-size: 22px; display: block; margin-bottom: 5px; }
 
-        /* How it works */
         .steps { display: flex; flex-direction: column; gap: 14px; }
         .step { display: flex; gap: 16px; align-items: flex-start; }
-        .step-num {
-            background: var(--green);
-            color: white;
-            font-family: 'Oswald', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
-            width: 34px; height: 34px;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
+        .step-num { background: var(--green); color: white; font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
         .step-text p { font-size: 13px; color: var(--muted); line-height: 1.4; }
 
-        /* Footer */
-        footer {
-            background: var(--green2);
-            color: rgba(255,255,255,0.85);
-            text-align: center;
-            padding: 24px 20px;
-            font-size: 13px;
-            line-height: 2;
-        }
+        footer { background: var(--green2); color: rgba(255,255,255,0.85); text-align: center; padding: 24px 20px; font-size: 13px; line-height: 2; }
         footer a { color: var(--lime); text-decoration: none; font-weight: 600; }
         footer a:hover { text-decoration: underline; }
     </style>
@@ -395,36 +192,111 @@
 
 <div class="main">
 
-    <!-- ── Country Selector ── -->
+    <!-- Country Selector -->
     <div class="card">
         <h2>🌍 Where Are You Headed?</h2>
         <div class="selector-wrap">
             <select class="country-select" id="countrySelect" onchange="showPlans()">
                 <option value="">Select a country...</option>
-                <option value="thailand">🇹🇭 Thailand</option>
-                <option value="spain">🇪🇸 Spain</option>
-                <option value="germany">🇩🇪 Germany</option>
-                <option value="france">🇫🇷 France</option>
-                <option value="italy">🇮🇹 Italy</option>
-                <option value="netherlands">🇳🇱 Netherlands</option>
-                <option value="portugal">🇵🇹 Portugal</option>
-                <option value="japan">🇯🇵 Japan</option>
-                <option value="usa">🇺🇸 USA</option>
-                <option value="australia">🇦🇺 Australia</option>
-                <option value="uae">🇦🇪 UAE</option>
-                <option value="brazil">🇧🇷 Brazil</option>
+                <optgroup label="🌏 Asia">
+                    <option value="thailand">🇹🇭 Thailand</option>
+                    <option value="japan">🇯🇵 Japan</option>
+                    <option value="south_korea">🇰🇷 South Korea</option>
+                    <option value="china">🇨🇳 China</option>
+                    <option value="india">🇮🇳 India</option>
+                    <option value="indonesia">🇮🇩 Indonesia</option>
+                    <option value="malaysia">🇲🇾 Malaysia</option>
+                    <option value="singapore">🇸🇬 Singapore</option>
+                    <option value="philippines">🇵🇭 Philippines</option>
+                    <option value="vietnam">🇻🇳 Vietnam</option>
+                    <option value="hong_kong">🇭🇰 Hong Kong</option>
+                    <option value="taiwan">🇹🇼 Taiwan</option>
+                    <option value="cambodia">🇰🇭 Cambodia</option>
+                    <option value="myanmar">🇲🇲 Myanmar</option>
+                    <option value="sri_lanka">🇱🇰 Sri Lanka</option>
+                    <option value="nepal">🇳🇵 Nepal</option>
+                    <option value="bangladesh">🇧🇩 Bangladesh</option>
+                    <option value="pakistan">🇵🇰 Pakistan</option>
+                </optgroup>
+                <optgroup label="🌍 Middle East">
+                    <option value="uae">🇦🇪 UAE</option>
+                    <option value="saudi_arabia">🇸🇦 Saudi Arabia</option>
+                    <option value="qatar">🇶🇦 Qatar</option>
+                    <option value="kuwait">🇰🇼 Kuwait</option>
+                    <option value="bahrain">🇧🇭 Bahrain</option>
+                    <option value="oman">🇴🇲 Oman</option>
+                    <option value="israel">🇮🇱 Israel</option>
+                    <option value="jordan">🇯🇴 Jordan</option>
+                    <option value="turkey">🇹🇷 Turkey</option>
+                </optgroup>
+                <optgroup label="🌍 Africa">
+                    <option value="south_africa">🇿🇦 South Africa</option>
+                    <option value="egypt">🇪🇬 Egypt</option>
+                    <option value="morocco">🇲🇦 Morocco</option>
+                    <option value="nigeria">🇳🇬 Nigeria</option>
+                    <option value="kenya">🇰🇪 Kenya</option>
+                    <option value="ghana">🇬🇭 Ghana</option>
+                    <option value="ethiopia">🇪🇹 Ethiopia</option>
+                    <option value="tanzania">🇹🇿 Tanzania</option>
+                </optgroup>
+                <optgroup label="🌍 Europe">
+                    <option value="uk">🇬🇧 United Kingdom</option>
+                    <option value="ireland">🇮🇪 Ireland</option>
+                    <option value="spain">🇪🇸 Spain</option>
+                    <option value="germany">🇩🇪 Germany</option>
+                    <option value="france">🇫🇷 France</option>
+                    <option value="italy">🇮🇹 Italy</option>
+                    <option value="netherlands">🇳🇱 Netherlands</option>
+                    <option value="portugal">🇵🇹 Portugal</option>
+                    <option value="belgium">🇧🇪 Belgium</option>
+                    <option value="switzerland">🇨🇭 Switzerland</option>
+                    <option value="austria">🇦🇹 Austria</option>
+                    <option value="poland">🇵🇱 Poland</option>
+                    <option value="sweden">🇸🇪 Sweden</option>
+                    <option value="norway">🇳🇴 Norway</option>
+                    <option value="denmark">🇩🇰 Denmark</option>
+                    <option value="finland">🇫🇮 Finland</option>
+                    <option value="czech_republic">🇨🇿 Czech Republic</option>
+                    <option value="hungary">🇭🇺 Hungary</option>
+                    <option value="romania">🇷🇴 Romania</option>
+                    <option value="greece">🇬🇷 Greece</option>
+                    <option value="croatia">🇭🇷 Croatia</option>
+                    <option value="serbia">🇷🇸 Serbia</option>
+                    <option value="ukraine">🇺🇦 Ukraine</option>
+                    <option value="slovakia">🇸🇰 Slovakia</option>
+                    <option value="bulgaria">🇧🇬 Bulgaria</option>
+                    <option value="albania">🇦🇱 Albania</option>
+                </optgroup>
+                <optgroup label="🌎 Americas">
+                    <option value="usa">🇺🇸 USA</option>
+                    <option value="canada">🇨🇦 Canada</option>
+                    <option value="mexico">🇲🇽 Mexico</option>
+                    <option value="brazil">🇧🇷 Brazil</option>
+                    <option value="argentina">🇦🇷 Argentina</option>
+                    <option value="colombia">🇨🇴 Colombia</option>
+                    <option value="chile">🇨🇱 Chile</option>
+                    <option value="peru">🇵🇪 Peru</option>
+                    <option value="ecuador">🇪🇨 Ecuador</option>
+                    <option value="uruguay">🇺🇾 Uruguay</option>
+                    <option value="costa_rica">🇨🇷 Costa Rica</option>
+                    <option value="panama">🇵🇦 Panama</option>
+                    <option value="jamaica">🇯🇲 Jamaica</option>
+                </optgroup>
+                <optgroup label="🌏 Oceania">
+                    <option value="australia">🇦🇺 Australia</option>
+                    <option value="new_zealand">🇳🇿 New Zealand</option>
+                    <option value="fiji">🇫🇯 Fiji</option>
+                </optgroup>
             </select>
             <span class="select-arrow">▾</span>
         </div>
 
         <div class="plans-list" id="plansList"></div>
-        <button class="btn-get-esim" id="getEsimBtn" onclick="scrollToSignup()">
-            Get This eSIM →
-        </button>
+        <button class="btn-get-esim" id="getEsimBtn" onclick="scrollToSignup()">Get This eSIM →</button>
         <p class="selector-hint" id="selectorHint">190+ countries available · Instant setup · No app needed</p>
     </div>
 
-    <!-- ── Sign Up / Login ── -->
+    <!-- Sign Up / Login -->
     <div class="card" id="signupCard">
         <h2>Sign Up / Login</h2>
         <input id="email" type="email" placeholder="Your email address">
@@ -435,53 +307,42 @@
         </div>
         <div style="text-align:right; margin-top:4px;"><a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:500;">Forgot password?</a></div>
         <div id="message"></div>
-        <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">
-            Go to My Dashboard →
-        </button>
+        <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">Go to My Dashboard →</button>
     </div>
 
+    <!-- Popular Destinations -->
     <div class="card">
         <h2>Popular Destinations</h2>
         <div class="dest-grid">
             <div class="dest-card">
-                <div>
-                    <div class="dest-info">🇹🇭 Thailand</div>
-                    <div class="dest-detail">Unlimited · 1 Day</div>
-                </div>
+                <div><div class="dest-info">🇹🇭 Thailand</div><div class="dest-detail">Unlimited · 1 Day</div></div>
                 <div class="dest-price">£3.39</div>
             </div>
             <div class="dest-card">
-                <div>
-                    <div class="dest-info">🇪🇸 Spain</div>
-                    <div class="dest-detail">Unlimited · 7 Days</div>
-                </div>
+                <div><div class="dest-info">🇮🇳 India</div><div class="dest-detail">Unlimited · 7 Days</div></div>
+                <div class="dest-price">£7.99</div>
+            </div>
+            <div class="dest-card">
+                <div><div class="dest-info">🇪🇸 Spain</div><div class="dest-detail">Unlimited · 7 Days</div></div>
                 <div class="dest-price">£8.21</div>
             </div>
             <div class="dest-card">
-                <div>
-                    <div class="dest-info">🇩🇪 Germany</div>
-                    <div class="dest-detail">Unlimited · 7 Days</div>
-                </div>
+                <div><div class="dest-info">🇩🇪 Germany</div><div class="dest-detail">Unlimited · 7 Days</div></div>
                 <div class="dest-price">£8.24</div>
             </div>
             <div class="dest-card">
-                <div>
-                    <div class="dest-info">🇯🇵 Japan</div>
-                    <div class="dest-detail">Unlimited · 7 Days</div>
-                </div>
+                <div><div class="dest-info">🇯🇵 Japan</div><div class="dest-detail">Unlimited · 7 Days</div></div>
                 <div class="dest-price">£13.29</div>
             </div>
             <div class="dest-card">
-                <div>
-                    <div class="dest-info">🇺🇸 USA</div>
-                    <div class="dest-detail">Unlimited · 7 Days</div>
-                </div>
+                <div><div class="dest-info">🇺🇸 USA</div><div class="dest-detail">Unlimited · 7 Days</div></div>
                 <div class="dest-price">£14.19</div>
             </div>
         </div>
         <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
     </div>
 
+    <!-- How It Works -->
     <div class="card">
         <h2>How It Works</h2>
         <div class="steps">
@@ -509,6 +370,7 @@
         </div>
     </div>
 
+    <!-- Why FootySIMs -->
     <div class="card">
         <h2>Why FootySIMs?</h2>
         <div class="why-grid">
@@ -560,20 +422,84 @@
         if (user) window.location.href = 'dashboard.html';
     });
 
-    // ── Country plan data ──
     const countryPlans = {
-        thailand:    [{ data: '1GB', days: 1, price: '£3.39' }, { data: '3GB', days: 7, price: '£7.49' }, { data: 'Unlimited', days: 15, price: '£12.99' }],
-        spain:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        germany:     [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.24' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        france:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        italy:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        netherlands: [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        portugal:    [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        japan:       [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.29' }, { data: 'Unlimited', days: 30, price: '£24.99' }],
-        usa:         [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£14.19' }, { data: 'Unlimited', days: 30, price: '£26.99' }],
-        australia:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        uae:         [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
-        brazil:      [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
+        thailand:      [{ data: '1GB', days: 1, price: '£3.39' }, { data: '3GB', days: 7, price: '£7.49' }, { data: 'Unlimited', days: 15, price: '£12.99' }],
+        japan:         [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.29' }, { data: 'Unlimited', days: 30, price: '£24.99' }],
+        south_korea:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
+        china:         [{ data: '1GB', days: 7, price: '£7.49' }, { data: '3GB', days: 15, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
+        india:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        indonesia:     [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        malaysia:      [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
+        singapore:     [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
+        philippines:   [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        vietnam:       [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
+        hong_kong:     [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        taiwan:        [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        cambodia:      [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
+        myanmar:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: '3GB', days: 15, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        sri_lanka:     [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
+        nepal:         [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
+        bangladesh:    [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
+        pakistan:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: '3GB', days: 15, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        uae:           [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
+        saudi_arabia:  [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
+        qatar:         [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        kuwait:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        bahrain:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        oman:          [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        israel:        [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        jordan:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        turkey:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        south_africa:  [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
+        egypt:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        morocco:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
+        nigeria:       [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        kenya:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        ghana:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        ethiopia:      [{ data: '1GB', days: 7, price: '£5.99' }, { data: '3GB', days: 15, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        tanzania:      [{ data: '1GB', days: 7, price: '£5.99' }, { data: '3GB', days: 15, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        uk:            [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
+        ireland:       [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
+        spain:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        germany:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.24' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        france:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        italy:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        netherlands:   [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        portugal:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        belgium:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        switzerland:   [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
+        austria:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        poland:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        sweden:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        norway:        [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
+        denmark:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        finland:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        czech_republic:[{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        hungary:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        romania:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        greece:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        croatia:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        serbia:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        ukraine:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        slovakia:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        bulgaria:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        albania:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
+        usa:           [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£14.19' }, { data: 'Unlimited', days: 30, price: '£26.99' }],
+        canada:        [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£25.99' }],
+        mexico:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        brazil:        [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
+        argentina:     [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        colombia:      [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        chile:         [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        peru:          [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        ecuador:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        uruguay:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        costa_rica:    [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        panama:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
+        jamaica:       [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
+        australia:     [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        new_zealand:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
+        fiji:          [{ data: '1GB', days: 7, price: '£7.49' }, { data: '3GB', days: 15, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
     };
 
     function showPlans() {
@@ -620,18 +546,12 @@
         switch(code) {
             case 'auth/invalid-credential':
             case 'auth/wrong-password':
-            case 'auth/user-not-found':
-                return '❌ Email or password is incorrect.';
-            case 'auth/email-already-in-use':
-                return '❌ An account with this email already exists. Try logging in.';
-            case 'auth/weak-password':
-                return '❌ Password must be at least 6 characters.';
-            case 'auth/invalid-email':
-                return '❌ Please enter a valid email address.';
-            case 'auth/too-many-requests':
-                return '❌ Too many attempts. Please wait a moment and try again.';
-            default:
-                return '❌ Something went wrong. Please try again.';
+            case 'auth/user-not-found': return '❌ Email or password is incorrect.';
+            case 'auth/email-already-in-use': return '❌ An account with this email already exists. Try logging in.';
+            case 'auth/weak-password': return '❌ Password must be at least 6 characters.';
+            case 'auth/invalid-email': return '❌ Please enter a valid email address.';
+            case 'auth/too-many-requests': return '❌ Too many attempts. Please wait a moment and try again.';
+            default: return '❌ Something went wrong. Please try again.';
         }
     }
 
@@ -642,7 +562,7 @@
     }
 
     function signUp() {
-        const email    = document.getElementById('email').value.trim();
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.createUserWithEmailAndPassword(email, password)
@@ -655,7 +575,7 @@
     }
 
     function login() {
-        const email    = document.getElementById('email').value.trim();
+        const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.signInWithEmailAndPassword(email, password)
@@ -667,9 +587,7 @@
             .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
 
-    function goToDashboard() {
-        window.location.href = 'dashboard.html';
-    }
+    function goToDashboard() { window.location.href = 'dashboard.html'; }
 
     function forgotPassword() {
         const email = document.getElementById("email").value.trim();
