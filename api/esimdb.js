@@ -24,50 +24,82 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter enabled only and calculate price correctly from raw Zendit structure
+    // Filter enabled only and calculate price
     const enabled = all
       .filter(o => o.enabled)
       .map(o => {
         const priceFixed = o.price?.fixed || o.priceFixed || 0;
         const priceDivisor = o.price?.currencyDivisor || o.priceDivisor || 100;
-        const price = priceFixed / priceDivisor;
-        return { ...o, _price: price };
+        const costFixed = o.cost?.fixed || o.costFixed || 0;
+        const costDivisor = o.cost?.currencyDivisor || o.costDivisor || 100;
+        const cost = costFixed / costDivisor;
+        const MARKUP = 1.35;
+        const sellPrice = cost > 0 ? Math.ceil(cost * MARKUP * 100) / 100 : priceFixed / priceDivisor;
+        return { ...o, _sellPrice: sellPrice };
       });
 
-    // Deduplicate — keep cheapest plan per country + durationDays + data combo
+    // Deduplicate — keep cheapest plan per country + duration + data combo
     const bestMap = {};
     for (const o of enabled) {
       const key = `${o.country}-${o.durationDays}-${o.dataUnlimited ? 'unlimited' : o.dataGB + 'gb'}`;
-      if (!bestMap[key] || o._price < bestMap[key]._price) {
+      if (!bestMap[key] || o._sellPrice < bestMap[key]._sellPrice) {
         bestMap[key] = o;
       }
     }
 
-    const plans = Object.values(bestMap).map(o => ({
-      id: o.offerId,
-      provider: 'FootySIMs',
-      providerUrl: 'https://footysims.com',
-      name: o.offerId,
-      countries: [o.country],
-      regions: o.regions || [],
-      dataAmount: o.dataUnlimited ? null : (o.dataGB > 0 ? o.dataGB : null),
-      dataUnlimited: o.dataUnlimited || false,
-      durationDays: o.durationDays,
-      dataSpeeds: o.dataSpeeds || [],
-      price: parseFloat(o._price.toFixed(2)),
-      currency: 'GBP',
-      purchaseUrl: 'https://footysims.com',
-      promoCode: 'ESIMDB',
-      updatedAt: new Date().toISOString()
-    }));
+    // Map to eSIMDB schema
+    const plans = Object.values(bestMap).map(o => {
+      const country = o.country || '';
+      const days = o.durationDays || 0;
+      const isUnlimited = o.dataUnlimited || false;
+      const dataGB = o.dataGB || 0;
+      const speeds = o.dataSpeeds || [];
+      const sellPrice = parseFloat(o._sellPrice.toFixed(2));
 
-    return res.status(200).json({
-      provider: 'FootySIMs',
-      providerUrl: 'https://footysims.com',
-      totalPlans: plans.length,
-      updatedAt: new Date().toISOString(),
-      plans: plans
+      // dataCap: 0 for truly unlimited, otherwise GB value
+      const dataCap = isUnlimited ? 0 : dataGB;
+
+      // planName max 35 chars
+      const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
+      const rawName = `${country} ${dataLabel} ${days}d`;
+      const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
+
+      // Speed tier info
+      const maxSpeed = speeds.includes('5G') ? 1000000 :
+                       speeds.includes('4G') ? 150000 :
+                       speeds.includes('3G') ? 7200 :
+                       speeds.includes('2G') ? 384 : null;
+
+      return {
+        planName: planName,
+        validity: days,
+        dataCap: dataCap,
+        dataUnit: 'GB',
+        dataCapPer: null,
+        maxSpeed: maxSpeed,
+        reducedSpeed: isUnlimited ? 128 : null,
+        prices: {
+          GBP: sellPrice
+        },
+        link: `https://footysims.com?promo=ESIMDB`,
+        telephony: null,
+        subscription: false,
+        canTopUp: false,
+        eKYC: false,
+        tethering: true,
+        promoEnabled: true,
+        hasAds: false,
+        payAsYouGo: false,
+        newUserOnly: false,
+        coverages: [
+          {
+            code: country
+          }
+        ]
+      };
     });
+
+    return res.status(200).json(plans);
 
   } catch (e) {
     return res.status(500).json({ error: e.message });
