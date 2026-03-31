@@ -24,41 +24,36 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter enabled only and map to eSIMDB schema
-    const plans = all
-      .filter(o => o.enabled)
-      .map(o => {
-        const price = o.price?.fixed
-          ? (o.price.fixed / (o.price.currencyDivisor || 100))
-          : (o.priceFixed / (o.priceDivisor || 100));
+    // Filter enabled only
+    const enabled = all.filter(o => o.enabled);
 
-        const dataAmount = o.dataUnlimited
-          ? null
-          : (o.dataGB > 0 ? o.dataGB : null);
+    // Deduplicate — keep cheapest plan per country + durationDays + dataUnlimited + dataGB combo
+    const bestMap = {};
+    for (const o of enabled) {
+      const price = o.priceFixed / (o.priceDivisor || 100);
+      const key = `${o.country}-${o.durationDays}-${o.dataUnlimited ? 'unlimited' : o.dataGB + 'gb'}`;
+      if (!bestMap[key] || price < bestMap[key].price) {
+        bestMap[key] = { ...o, price };
+      }
+    }
 
-        // Build country list — use regions if multi-country, else single country
-        const countries = o.regions && o.regions.length > 0 && o.country === 'GLOBAL'
-          ? o.regions
-          : [o.country];
-
-        return {
-          id: o.offerId,
-          provider: 'FootySIMs',
-          providerUrl: 'https://footysims.com',
-          name: o.offerId,
-          countries: countries,
-          regions: o.regions || [],
-          dataAmount: dataAmount,       // GB, null if unlimited
-          dataUnlimited: o.dataUnlimited || false,
-          durationDays: o.durationDays,
-          dataSpeeds: o.dataSpeeds || [],
-          price: parseFloat(price.toFixed(2)),
-          currency: 'GBP',
-          purchaseUrl: 'https://footysims.com',
-          promoCode: 'ESIMDB',          // referral tracking code for eSIMDB
-          updatedAt: new Date().toISOString()
-        };
-      });
+    const plans = Object.values(bestMap).map(o => ({
+      id: o.offerId,
+      provider: 'FootySIMs',
+      providerUrl: 'https://footysims.com',
+      name: o.offerId,
+      countries: [o.country],
+      regions: o.regions || [],
+      dataAmount: o.dataUnlimited ? null : (o.dataGB > 0 ? o.dataGB : null),
+      dataUnlimited: o.dataUnlimited || false,
+      durationDays: o.durationDays,
+      dataSpeeds: o.dataSpeeds || [],
+      price: parseFloat(o.price.toFixed(2)),
+      currency: 'GBP',
+      purchaseUrl: 'https://footysims.com',
+      promoCode: 'ESIMDB',
+      updatedAt: new Date().toISOString()
+    }));
 
     return res.status(200).json({
       provider: 'FootySIMs',
