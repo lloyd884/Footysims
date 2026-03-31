@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <!-- Google tag (gtag.js) -->
@@ -89,54 +88,26 @@
         }
         .welcome h1 { font-family: 'Oswald', sans-serif; font-size: 22px; margin-bottom: 4px; }
         .welcome p { font-size: 13px; opacity: 0.85; }
-
-```
-    /* Manual entry details */
-    .manual-details {
-        background: #f8fdf8; border: 1.5px solid #c8e6c9;
-        border-radius: 10px; padding: 14px; margin-top: 12px;
-    }
-    .manual-details h4 {
-        font-size: 13px; font-weight: 700; color: var(--green);
-        margin-bottom: 10px;
-    }
-    .manual-row {
-        display: flex; justify-content: space-between;
-        align-items: center; margin-bottom: 8px;
-    }
-    .manual-row:last-child { margin-bottom: 0; }
-    .manual-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .manual-value {
-        font-size: 12px; font-weight: 700; color: var(--text);
-        font-family: monospace; word-break: break-all; text-align: right;
-        max-width: 65%;
-    }
-    .copy-btn {
-        background: var(--green); color: white;
-        border: none; border-radius: 6px; padding: 4px 10px;
-        font-size: 11px; font-weight: 700; cursor: pointer;
-        margin-left: 8px; flex-shrink: 0;
-    }
-    .manual-instructions {
-        background: #fff8e1; border-radius: 8px; padding: 10px 12px;
-        margin-top: 10px; font-size: 12px; color: #6d4c00; line-height: 1.6;
-    }
-
-    /* Purchase history */
-    .purchase-item {
-        background: #f8fdf8; border: 1.5px solid #d0ecd0;
-        border-radius: 12px; padding: 14px 16px; margin-bottom: 12px;
-    }
-    .purchase-item:last-child { margin-bottom: 0; }
-    .purchase-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-    .purchase-name { font-weight: 700; font-size: 14px; }
-    .purchase-date { font-size: 12px; color: #888; }
-    .purchase-detail { font-size: 12px; color: #555; margin-bottom: 10px; }
-    .purchase-qr { text-align: center; margin-top: 10px; }
-    .purchase-qr img { max-width: 200px; border: 4px solid var(--green); border-radius: 10px; display: block; margin: 8px auto; }
-</style>
-```
-
+        .manual-details {
+            background: #f8fdf8; border: 1.5px solid #c8e6c9;
+            border-radius: 10px; padding: 14px; margin-top: 12px;
+        }
+        .manual-details h4 { font-size: 13px; font-weight: 700; color: var(--green); margin-bottom: 10px; }
+        .manual-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .manual-row:last-child { margin-bottom: 0; }
+        .manual-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .manual-value { font-size: 12px; font-weight: 700; color: var(--text); font-family: monospace; word-break: break-all; text-align: right; max-width: 65%; }
+        .copy-btn { background: var(--green); color: white; border: none; border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 700; cursor: pointer; margin-left: 8px; flex-shrink: 0; }
+        .manual-instructions { background: #fff8e1; border-radius: 8px; padding: 10px 12px; margin-top: 10px; font-size: 12px; color: #6d4c00; line-height: 1.6; }
+        .purchase-item { background: #f8fdf8; border: 1.5px solid #d0ecd0; border-radius: 12px; padding: 14px 16px; margin-bottom: 12px; }
+        .purchase-item:last-child { margin-bottom: 0; }
+        .purchase-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
+        .purchase-name { font-weight: 700; font-size: 14px; }
+        .purchase-date { font-size: 12px; color: #888; }
+        .purchase-detail { font-size: 12px; color: #555; margin-bottom: 10px; }
+        .purchase-qr { text-align: center; margin-top: 10px; }
+        .purchase-qr img { max-width: 200px; border: 4px solid var(--green); border-radius: 10px; display: block; margin: 8px auto; }
+    </style>
 </head>
 <body>
 
@@ -147,81 +118,74 @@
 
 <div class="main">
 
-```
-<div class="welcome">
-    <h1>Welcome back! ⚽</h1>
-    <p>Select a country below to get your travel eSIM</p>
-</div>
-
-<!-- Purchase History -->
-<div class="card" id="historyCard" style="display:none;">
-    <h2>Your eSIMs</h2>
-    <div id="historyList"></div>
-</div>
-
-<!-- New Purchase -->
-<div class="card">
-    <h2>Get Your eSIM</h2>
-
-    <div id="paidBanner" class="paid-banner">✅ Payment confirmed! Issuing your eSIM now...</div>
-
-    <div id="offersLoading" class="loading-offers">
-        <span class="spinner">⚙️</span> Loading countries...
+    <div class="welcome">
+        <h1>Welcome back! ⚽</h1>
+        <p>Select a country below to get your travel eSIM</p>
     </div>
 
-    <div id="offersUI" style="display:none;">
-        <label>🌍 Country</label>
-        <select id="countrySelect" onchange="onCountryChange()">
-            <option value="">Select a country...</option>
-        </select>
+    <div class="card" id="historyCard" style="display:none;">
+        <h2>Your eSIMs</h2>
+        <div id="historyList"></div>
+    </div>
 
-        <label>📅 Duration</label>
-        <select id="durationSelect" onchange="onDurationChange()" disabled>
-            <option value="">Select duration...</option>
-        </select>
+    <div class="card">
+        <h2>Get Your eSIM</h2>
 
-        <label>📶 Data</label>
-        <select id="dataSelect" onchange="onDataChange()" disabled>
-            <option value="">Select data pack...</option>
-        </select>
+        <div id="paidBanner" class="paid-banner">✅ Payment confirmed! Issuing your eSIM now...</div>
 
-        <div class="price-preview" id="pricePreview">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div>
-                    <div id="previewName" style="font-weight:600; margin-bottom:2px;"></div>
-                    <div id="previewDetails" style="font-size:12px; color:#666;"></div>
+        <div id="offersLoading" class="loading-offers">
+            <span class="spinner">⚙️</span> Loading countries...
+        </div>
+
+        <div id="offersUI" style="display:none;">
+            <label>🌍 Country</label>
+            <select id="countrySelect" onchange="onCountryChange()">
+                <option value="">Select a country...</option>
+            </select>
+
+            <label>📅 Duration</label>
+            <select id="durationSelect" onchange="onDurationChange()" disabled>
+                <option value="">Select duration...</option>
+            </select>
+
+            <label>📶 Data</label>
+            <select id="dataSelect" onchange="onDataChange()" disabled>
+                <option value="">Select data pack...</option>
+            </select>
+
+            <div class="price-preview" id="pricePreview">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div id="previewName" style="font-weight:600; margin-bottom:2px;"></div>
+                        <div id="previewDetails" style="font-size:12px; color:#666;"></div>
+                    </div>
+                    <div class="price" id="previewPrice"></div>
                 </div>
-                <div class="price" id="previewPrice"></div>
             </div>
         </div>
+
+        <div id="qrContainer">
+            <p style="color:#888; font-size:14px; padding:10px 0;">Select a country and plan above</p>
+        </div>
+        <div id="message"></div>
+
+        <p style="font-size:12px;color:#888;text-align:center;margin-bottom:8px;">💡 If you see multiple Unlimited options, these are different speed tiers — cheapest is standard, most expensive is fastest.</p>
+        <button class="btn btn-stripe" id="buyBtn" onclick="buyNow()" disabled>💳 Buy Now</button>
+        <button class="btn btn-secondary" onclick="window.location.href='howto.html'">📖 How to Install eSIM</button>
     </div>
 
-    <div id="qrContainer">
-        <p style="color:#888; font-size:14px; padding:10px 0;">Select a country and plan above</p>
+    <div class="card">
+        <h2>More</h2>
+        <button class="btn btn-secondary" onclick="addMate()">👥 Add Mate (Group Travel)</button>
+        <hr class="divider">
+        <button class="btn btn-danger" onclick="logout()">Logout</button>
     </div>
-    <div id="message"></div>
-
-    <p style="font-size:12px;color:#888;text-align:center;margin-bottom:8px;">💡 If you see multiple Unlimited options, these are different speed tiers — cheapest is standard, most expensive is fastest.</p>
-    <button class="btn btn-stripe" id="buyBtn" onclick="buyNow()" disabled>💳 Buy Now</button>
-    <button class="btn btn-secondary" onclick="window.location.href='howto.html'">📖 How to Install eSIM</button>
-</div>
-
-<div class="card">
-    <h2>More</h2>
-    <button class="btn btn-secondary" onclick="addMate()">👥 Add Mate (Group Travel)</button>
-    <hr class="divider">
-    <button class="btn btn-danger" onclick="logout()">Logout</button>
-</div>
-```
 
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore-compat.js"></script>
-
 <script>
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
@@ -237,6 +201,14 @@
     const API = '/api/esim';
     const STRIPE_API = '/api/stripe';
     const MARKUP = 1.35;
+
+    let allOffers = [];
+    let selectedOffer = null;
+    let currentUser = null;
+
+    // Capture promo code from URL or session storage (for eSIMDB referral tracking)
+    let promoCode = new URLSearchParams(window.location.search).get('promo') || sessionStorage.getItem('promoCode') || '';
+    if (promoCode) sessionStorage.setItem('promoCode', promoCode);
 
     const COUNTRY_NAMES = {
         AF:'Afghanistan',AL:'Albania',DZ:'Algeria',AD:'Andorra',AO:'Angola',AR:'Argentina',AM:'Armenia',
@@ -269,10 +241,6 @@
         FLAG_EMOJIS[code] = code.toUpperCase().replace(/./g, c =>
             String.fromCodePoint(c.charCodeAt(0) + 127397));
     }
-
-    let allOffers = [];
-    let selectedOffer = null;
-    let currentUser = null;
 
     function getSellPrice(offer) {
         const cost = (offer.costFixed || 0) / (offer.costDivisor || 100);
@@ -383,7 +351,6 @@
             const r = await fetch(`${API}?action=status&transactionId=${transactionId}`);
             const result = await r.json();
             if (result.smdpAddress) {
-                const fakeOffer = { country, dataStr, days, dataSpeeds: [] };
                 const qrData = `LPA:1$${result.smdpAddress}$${result.activationCode || ''}`;
                 const smdp = result.smdpAddress;
                 const actCode = result.activationCode || '';
@@ -427,6 +394,7 @@
                 country: offer?.country || '',
                 dataStr: offer ? (offer.dataUnlimited ? 'Unlimited' : `${offer.dataGB}GB`) : '',
                 days: offer ? (offer.durationDays === 1 ? '1 Day' : `${offer.durationDays} Days`) : '',
+                promoCode: promoCode || '',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
         } catch(e) {
@@ -514,12 +482,10 @@
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
 
-        // Sort by price, label unlimited tiers as Standard/Plus/Premium
         const isUnlimited = o => o.dataUnlimited || !o.dataGB || o.dataGB >= 50;
         const withPrice = filtered.map(o => ({ o, price: getSellPrice(o) })).filter(x => x.price !== null);
         withPrice.sort((a, b) => a.price - b.price);
 
-        // Assign tier labels to unlimited options
         const unlimitedTiers = ['Unlimited (Standard)', 'Unlimited (Plus)', 'Unlimited (Premium)'];
         let unlimitedCount = 0;
 
@@ -538,7 +504,6 @@
             dataSelect.appendChild(opt);
         });
         dataSelect.disabled = false;
-        const unlimCount = filtered.filter(o => isUnlimited(o) && getSellPrice(o) !== null).length;
     }
 
     function onDataChange() {
@@ -581,7 +546,7 @@
         try {
             const r = await fetch(`${STRIPE_API}?action=create-checkout`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ offerId: selectedOffer.offerId, offerName, price: sellPrice, uid: currentUser.uid, email: currentUser.email })
+                body: JSON.stringify({ offerId: selectedOffer.offerId, offerName, price: sellPrice, uid: currentUser.uid, email: currentUser.email, promoCode })
             });
             const data = await r.json();
             if (data.url) {
@@ -597,7 +562,6 @@
     }
 
     async function issueESIM(offerId, sessionId) {
-        // Dedup check — if webhook already claimed this session, just reload history
         if (sessionId) {
             try {
                 const claimed = await db.collection("stripe_sessions").doc(sessionId).get();
@@ -611,7 +575,6 @@
             } catch(e) { /* ignore, proceed */ }
         }
         const offer = allOffers.find(o => o.offerId === offerId);
-        const country = offer ? (COUNTRY_NAMES[offer.country] || offer.country) : '';
         try {
             const r = await fetch(`${API}?action=purchase`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
