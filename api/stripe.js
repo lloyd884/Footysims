@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
     try {
         if (action === 'create-checkout') {
-            const { offerId, offerName, price, uid, email } = req.body;
+            const { offerId, offerName, price, uid, email, promoCode } = req.body;
             const amountPence = Math.round(price * 100);
 
             const session = await stripe.checkout.sessions.create({
@@ -31,7 +31,8 @@ export default async function handler(req, res) {
                 metadata: {
                     offerId,
                     uid: uid || '',
-                    email: email || ''
+                    email: email || '',
+                    promoCode: promoCode || ''
                 }
             });
 
@@ -43,7 +44,8 @@ export default async function handler(req, res) {
             const session = await stripe.checkout.sessions.retrieve(sessionId);
             return res.status(200).json({
                 paid: session.payment_status === 'paid',
-                offerId: session.metadata ? session.metadata.offerId : null
+                offerId: session.metadata ? session.metadata.offerId : null,
+                promoCode: session.metadata ? session.metadata.promoCode : null
             });
         }
 
