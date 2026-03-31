@@ -24,16 +24,22 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter enabled only
-    const enabled = all.filter(o => o.enabled);
+    // Filter enabled only and calculate price correctly from raw Zendit structure
+    const enabled = all
+      .filter(o => o.enabled)
+      .map(o => {
+        const priceFixed = o.price?.fixed || o.priceFixed || 0;
+        const priceDivisor = o.price?.currencyDivisor || o.priceDivisor || 100;
+        const price = priceFixed / priceDivisor;
+        return { ...o, _price: price };
+      });
 
-    // Deduplicate — keep cheapest plan per country + durationDays + dataUnlimited + dataGB combo
+    // Deduplicate — keep cheapest plan per country + durationDays + data combo
     const bestMap = {};
     for (const o of enabled) {
-      const price = o.priceFixed / (o.priceDivisor || 100);
       const key = `${o.country}-${o.durationDays}-${o.dataUnlimited ? 'unlimited' : o.dataGB + 'gb'}`;
-      if (!bestMap[key] || price < bestMap[key].price) {
-        bestMap[key] = { ...o, price };
+      if (!bestMap[key] || o._price < bestMap[key]._price) {
+        bestMap[key] = o;
       }
     }
 
@@ -48,7 +54,7 @@ export default async function handler(req, res) {
       dataUnlimited: o.dataUnlimited || false,
       durationDays: o.durationDays,
       dataSpeeds: o.dataSpeeds || [],
-      price: parseFloat(o.price.toFixed(2)),
+      price: parseFloat(o._price.toFixed(2)),
       currency: 'GBP',
       purchaseUrl: 'https://footysims.com',
       promoCode: 'ESIMDB',
