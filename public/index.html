@@ -175,7 +175,7 @@
 
 <div class="hero">
     <h1>The eSIM Built for<br><em>Football Fans</em></h1>
-    <p>Stay connected on every away day.<br>Instant data in 190+ countries from £3.50.</p>
+    <p>Stay connected on every away day.<br>Instant data in 190+ countries from £1.49.</p>
     <div class="hero-pills">
         <span class="pill">🏆 Champions League</span>
         <span class="pill">✈️ Away Days</span>
@@ -407,6 +407,16 @@
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 <script>
+    // ── Referral cookie tracking ──
+    // Captures ?ref=esimdb from eSIMDB links and stores as a 30-day cookie
+    (function() {
+        const ref = new URLSearchParams(window.location.search).get('ref');
+        if (ref) {
+            const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
+            document.cookie = `fsRef=${encodeURIComponent(ref)}; expires=${expires}; path=/; SameSite=Lax`;
+        }
+    })();
+
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
         authDomain: "footysims-43be5.firebaseapp.com",
