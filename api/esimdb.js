@@ -24,14 +24,14 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter enabled only and calculate price
+    // Filter enabled only, must have a valid 2-letter country code
     const enabled = all
-      .filter(o => o.enabled)
+      .filter(o => o.enabled && o.country && o.country.length === 2)
       .map(o => {
-        const priceFixed = o.price?.fixed || o.priceFixed || 0;
-        const priceDivisor = o.price?.currencyDivisor || o.priceDivisor || 100;
         const costFixed = o.cost?.fixed || o.costFixed || 0;
         const costDivisor = o.cost?.currencyDivisor || o.costDivisor || 100;
+        const priceFixed = o.price?.fixed || o.priceFixed || 0;
+        const priceDivisor = o.price?.currencyDivisor || o.priceDivisor || 100;
         const cost = costFixed / costDivisor;
         const MARKUP = 1.35;
         const sellPrice = cost > 0 ? Math.ceil(cost * MARKUP * 100) / 100 : priceFixed / priceDivisor;
@@ -48,56 +48,62 @@ export default async function handler(req, res) {
     }
 
     // Map to eSIMDB schema
-    const plans = Object.values(bestMap).map(o => {
-      const country = o.country || '';
-      const days = o.durationDays || 0;
-      const isUnlimited = o.dataUnlimited || false;
-      const dataGB = o.dataGB || 0;
-      const speeds = o.dataSpeeds || [];
-      const sellPrice = parseFloat(o._sellPrice.toFixed(2));
+    const plans = Object.values(bestMap)
+      .filter(o => {
+        // Must have valid data info — either unlimited flag or a positive dataGB
+        return o.dataUnlimited || (o.dataGB && o.dataGB > 0);
+      })
+      .map(o => {
+        const country = o.country;
+        const days = o.durationDays || 0;
+        const isUnlimited = o.dataUnlimited || false;
+        const dataGB = o.dataGB || 0;
+        const speeds = o.dataSpeeds || [];
+        const sellPrice = parseFloat(o._sellPrice.toFixed(2));
 
-      // dataCap: 0 for truly unlimited, otherwise GB value
-      const dataCap = isUnlimited ? 0 : dataGB;
+        // dataCap: high-speed data before throttling
+        // 0 = truly unlimited high speed, otherwise the GB cap
+        const dataCap = isUnlimited ? 0 : dataGB;
 
-      // planName max 35 chars
-      const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
-      const rawName = `${country} ${dataLabel} ${days}d`;
-      const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
+        // planName max 35 chars
+        const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
+        const rawName = `${country} ${dataLabel} ${days}d`;
+        const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
 
-      // Speed tier info
-      const maxSpeed = speeds.includes('5G') ? 1000000 :
-                       speeds.includes('4G') ? 150000 :
-                       speeds.includes('3G') ? 7200 :
-                       speeds.includes('2G') ? 384 : null;
+        // Max speed from data speeds array
+        const maxSpeed = speeds.includes('5G') ? 1000000 :
+                         speeds.includes('4G') ? 150000 :
+                         speeds.includes('3G') ? 7200 :
+                         speeds.includes('2G') ? 384 : null;
 
-      return {
-        planName: planName,
-        validity: days,
-        dataCap: dataCap,
-        dataUnit: 'GB',
-        dataCapPer: null,
-        maxSpeed: maxSpeed,
-        reducedSpeed: isUnlimited ? 128 : null,
-        prices: {
-          GBP: sellPrice
-        },
-        link: `https://footysims.com?promo=ESIMDB`,
-        telephony: null,
-        subscription: false,
-        canTopUp: false,
-        eKYC: false,
-        tethering: true,
-        promoEnabled: true,
-        hasAds: false,
-        payAsYouGo: false,
-        newUserOnly: false,
-        coverages: [
-          {
-            code: country
-          }
-        ]
-      };
-    });
+        return {
+          planName: planName,
+          validity: days,
+          dataCap: dataCap,
+          dataUnit: 'GB',
+          dataCapPer: null,
+          maxSpeed: maxSpeed,
+          reducedSpeed: isUnlimited ? 128 : null,
+          prices: {
+            GBP: sellPrice
+          },
+          link: `https://footysims.com?ref=esimdb`,
+          telephony: null,
+          subscription: false,
+          canTopUp: false,
+          eKYC: false,
+          tethering: true,
+          promoEnabled: true,
+          hasAds: false,
+          payAsYouGo: false,
+          newUserOnly: false,
+          coverages: [
+            {
+              code: country
+            }
+          ]
+        };
+      });
 
     return res.status(200).json(plans);
 
