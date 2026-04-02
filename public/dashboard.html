@@ -206,8 +206,15 @@
     let selectedOffer = null;
     let currentUser = null;
 
-    // Capture promo code from URL or session storage (for eSIMDB referral tracking)
-    let promoCode = new URLSearchParams(window.location.search).get('promo') || sessionStorage.getItem('promoCode') || '';
+    // ── Cookie-based referral tracking for eSIMDB ──
+    function getCookie(name) {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? decodeURIComponent(match[2]) : '';
+    }
+    let promoCode = new URLSearchParams(window.location.search).get('ref')
+        || getCookie('fsRef')
+        || sessionStorage.getItem('promoCode')
+        || '';
     if (promoCode) sessionStorage.setItem('promoCode', promoCode);
 
     const COUNTRY_NAMES = {
@@ -313,13 +320,10 @@
                 .where('uid', '==', currentUser.uid)
                 .limit(10)
                 .get();
-
             if (snap.empty) return;
-
             document.getElementById('historyCard').style.display = 'block';
             const list = document.getElementById('historyList');
             list.innerHTML = '';
-
             snap.forEach(doc => {
                 const p = doc.data();
                 const country = COUNTRY_NAMES[p.country] || p.country || '';
@@ -481,14 +485,11 @@
         if (!duration) { dataSelect.innerHTML = '<option value="">Select data pack...</option>'; dataSelect.disabled = true; return; }
         const filtered = allOffers.filter(o => o.country === country && o.durationDays === duration);
         dataSelect.innerHTML = '<option value="">Select data pack...</option>';
-
         const isUnlimited = o => o.dataUnlimited || !o.dataGB || o.dataGB >= 50;
         const withPrice = filtered.map(o => ({ o, price: getSellPrice(o) })).filter(x => x.price !== null);
         withPrice.sort((a, b) => a.price - b.price);
-
         const unlimitedTiers = ['Unlimited (Standard)', 'Unlimited (Plus)', 'Unlimited (Premium)'];
         let unlimitedCount = 0;
-
         withPrice.forEach(({ o, price }) => {
             const priceStr = `£${price.toFixed(2)}`;
             let dataLabel;
