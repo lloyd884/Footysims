@@ -58,11 +58,9 @@ export default async function handler(req, res) {
         const days = o.durationDays || 0;
         const isUnlimited = o.dataUnlimited || false;
         const dataGB = o.dataGB || 0;
-        const speeds = o.dataSpeeds || [];
         const sellPrice = parseFloat(o._sellPrice.toFixed(2));
 
-        // dataCap: high-speed data before throttling
-        // 0 = truly unlimited high speed, otherwise the GB cap
+        // dataCap: 0 = truly unlimited per eSIMDB spec, otherwise actual GB allowance
         const dataCap = isUnlimited ? 0 : dataGB;
 
         // planName max 35 chars
@@ -70,30 +68,24 @@ export default async function handler(req, res) {
         const rawName = `${country} ${dataLabel} ${days}d`;
         const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
 
-        // Max speed from data speeds array
-        const maxSpeed = speeds.includes('5G') ? 1000000 :
-                         speeds.includes('4G') ? 150000 :
-                         speeds.includes('3G') ? 7200 :
-                         speeds.includes('2G') ? 384 : null;
-
         return {
           planName: planName,
           validity: days,
           dataCap: dataCap,
           dataUnit: 'GB',
           dataCapPer: null,
-          maxSpeed: maxSpeed,
-          reducedSpeed: isUnlimited ? 128 : null,
+          maxSpeed: null,       // best effort — no speed cap data available
+          reducedSpeed: null,   // no throttle data available from provider
           prices: {
             GBP: sellPrice
           },
-          link: `https://footysims.com?ref=esimdb`,
+          link: 'https://footysims.com?ref=esimdb',
           telephony: null,
           subscription: false,
           canTopUp: false,
           eKYC: false,
           tethering: true,
-          promoEnabled: true,
+          promoEnabled: false,  // no promo/discount codes offered
           hasAds: false,
           payAsYouGo: false,
           newUserOnly: false,
