@@ -11,6 +11,17 @@ export default async function handler(req, res) {
     'Content-Type': 'application/json'
   };
 
+  // EXACT countries shown on footysims.com — API must match site exactly
+  const SITE_COUNTRIES = new Set([
+    'TH','JP','KR','CN','IN','ID','MY','SG','PH','VN','HK','TW','KH','MM','LK','NP','BD','PK', // Asia
+    'AE','SA','QA','KW','BH','OM','IL','JO','TR',                                                // Middle East
+    'ZA','EG','MA','NG','KE','GH','ET','TZ',                                                     // Africa
+    'GB','IE','ES','DE','FR','IT','NL','PT','BE','CH','AT','PL','SE','NO','DK','FI',             // Europe
+    'CZ','HU','RO','GR','HR','RS','UA','SK','BG','AL',                                           // Europe cont.
+    'US','CA','MX','BR','AR','CO','CL','PE','EC','UY','CR','PA','JM',                            // Americas
+    'AU','NZ','FJ'                                                                                // Oceania
+  ]);
+
   try {
     // Fetch all offers from Zendit
     let all = [];
@@ -24,9 +35,14 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter enabled only, must have a valid 2-letter country code
+    // Filter: enabled, valid 2-letter country code, must be in site country list
     const enabled = all
-      .filter(o => o.enabled && o.country && o.country.length === 2)
+      .filter(o =>
+        o.enabled &&
+        o.country &&
+        o.country.length === 2 &&
+        SITE_COUNTRIES.has(o.country)
+      )
       .map(o => {
         const costFixed = o.cost?.fixed || o.costFixed || 0;
         const costDivisor = o.cost?.currencyDivisor || o.costDivisor || 100;
@@ -47,28 +63,16 @@ export default async function handler(req, res) {
       }
     }
 
-    // Determine FUP tier from offerId subtype
-    // UNLIMITED = Fast: 1GB/day HS, throttled at 512kbps
-    // ULE       = Faster: 1GB/day HS, throttled at 1280kbps
-    // ULP       = Fastest: 2GB/day HS, throttled at 2048kbps
-    function getFUP(offerId, durationDays, isUnlimited) {
-      if (!isUnlimited) return { dataCap: null, reducedSpeed: null, dataCapPer: null };
-
+    // FUP tier mapping from Zendit offerId subtype (confirmed by Zendit support)
+    // UNLIMITED = Fast:    1GB/day HS, throttled at 512kbps
+    // ULE       = Faster:  1GB/day HS, throttled at 1280kbps (1.25Mbps)
+    // ULP       = Fastest: 2GB/day HS, throttled at 2048kbps (2Mbps)
+    function getFUP(offerId) {
       const id = offerId.toUpperCase();
-
-      if (id.includes('-ULP-')) {
-        // Fastest: 2GB/day high speed, then 2Mbps
-        return { dataCap: 2, reducedSpeed: 2048, dataCapPer: 'day' };
-      } else if (id.includes('-ULE-')) {
-        // Faster: 1GB/day high speed, then 1.25Mbps
-        return { dataCap: 1, reducedSpeed: 1280, dataCapPer: 'day' };
-      } else if (id.includes('-UNLIMITED-')) {
-        // Fast: 1GB/day high speed, then 512kbps
-        return { dataCap: 1, reducedSpeed: 512, dataCapPer: 'day' };
-      }
-
-      // Fallback for any other unlimited
-      return { dataCap: 1, reducedSpeed: 512, dataCapPer: 'day' };
+      if (id.includes('-ULP-'))       return { dataCap: 2, reducedSpeed: 2048, dataCapPer: 'day' };
+      if (id.includes('-ULE-'))       return { dataCap: 1, reducedSpeed: 1280, dataCapPer: 'day' };
+      if (id.includes('-UNLIMITED-')) return { dataCap: 1, reducedSpeed: 512,  dataCapPer: 'day' };
+      return                                 { dataCap: 1, reducedSpeed: 512,  dataCapPer: 'day' };
     }
 
     // Map to eSIMDB schema
@@ -81,29 +85,25 @@ export default async function handler(req, res) {
         const dataGB = o.dataGB || 0;
         const sellPrice = parseFloat(o._sellPrice.toFixed(2));
 
-        const fup = getFUP(o.offerId, days, isUnlimited);
+        const fup = isUnlimited ? getFUP(o.offerId) : null;
 
-        // For capped plans, dataCap is the total GB allowance
-        const dataCap = isUnlimited ? fup.dataCap : dataGB;
-        const dataCapPer = isUnlimited ? fup.dataCapPer : null;
+        const dataCap     = isUnlimited ? fup.dataCap     : dataGB;
+        const dataCapPer  = isUnlimited ? fup.dataCapPer  : null;
         const reducedSpeed = isUnlimited ? fup.reducedSpeed : null;
 
-        // planName max 35 chars
         const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
         const rawName = `${country} ${dataLabel} ${days}d`;
         const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
 
         return {
-          planName: planName,
+          planName,
           validity: days,
-          dataCap: dataCap,
+          dataCap,
           dataUnit: 'GB',
-          dataCapPer: dataCapPer,
+          dataCapPer,
           maxSpeed: null,
-          reducedSpeed: reducedSpeed,
-          prices: {
-            GBP: sellPrice
-          },
+          reducedSpeed,
+          prices: { GBP: sellPrice },
           link: 'https://footysims.com?ref=esimdb',
           telephony: null,
           subscription: false,
@@ -114,11 +114,7 @@ export default async function handler(req, res) {
           hasAds: false,
           payAsYouGo: false,
           newUserOnly: false,
-          coverages: [
-            {
-              code: country
-            }
-          ]
+          coverages: [{ code: country }]
         };
       });
 
