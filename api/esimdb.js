@@ -47,12 +47,33 @@ export default async function handler(req, res) {
       }
     }
 
+    // Determine FUP tier from offerId subtype
+    // UNLIMITED = Fast: 1GB/day HS, throttled at 512kbps
+    // ULE       = Faster: 1GB/day HS, throttled at 1280kbps
+    // ULP       = Fastest: 2GB/day HS, throttled at 2048kbps
+    function getFUP(offerId, durationDays, isUnlimited) {
+      if (!isUnlimited) return { dataCap: null, reducedSpeed: null, dataCapPer: null };
+
+      const id = offerId.toUpperCase();
+
+      if (id.includes('-ULP-')) {
+        // Fastest: 2GB/day high speed, then 2Mbps
+        return { dataCap: 2, reducedSpeed: 2048, dataCapPer: 'day' };
+      } else if (id.includes('-ULE-')) {
+        // Faster: 1GB/day high speed, then 1.25Mbps
+        return { dataCap: 1, reducedSpeed: 1280, dataCapPer: 'day' };
+      } else if (id.includes('-UNLIMITED-')) {
+        // Fast: 1GB/day high speed, then 512kbps
+        return { dataCap: 1, reducedSpeed: 512, dataCapPer: 'day' };
+      }
+
+      // Fallback for any other unlimited
+      return { dataCap: 1, reducedSpeed: 512, dataCapPer: 'day' };
+    }
+
     // Map to eSIMDB schema
     const plans = Object.values(bestMap)
-      .filter(o => {
-        // Must have valid data info — either unlimited flag or a positive dataGB
-        return o.dataUnlimited || (o.dataGB && o.dataGB > 0);
-      })
+      .filter(o => o.dataUnlimited || (o.dataGB && o.dataGB > 0))
       .map(o => {
         const country = o.country;
         const days = o.durationDays || 0;
@@ -60,8 +81,12 @@ export default async function handler(req, res) {
         const dataGB = o.dataGB || 0;
         const sellPrice = parseFloat(o._sellPrice.toFixed(2));
 
-        // dataCap: 0 = truly unlimited per eSIMDB spec, otherwise actual GB allowance
-        const dataCap = isUnlimited ? 0 : dataGB;
+        const fup = getFUP(o.offerId, days, isUnlimited);
+
+        // For capped plans, dataCap is the total GB allowance
+        const dataCap = isUnlimited ? fup.dataCap : dataGB;
+        const dataCapPer = isUnlimited ? fup.dataCapPer : null;
+        const reducedSpeed = isUnlimited ? fup.reducedSpeed : null;
 
         // planName max 35 chars
         const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
@@ -73,9 +98,9 @@ export default async function handler(req, res) {
           validity: days,
           dataCap: dataCap,
           dataUnit: 'GB',
-          dataCapPer: null,
-          maxSpeed: null,       // best effort — no speed cap data available
-          reducedSpeed: null,   // no throttle data available from provider
+          dataCapPer: dataCapPer,
+          maxSpeed: null,
+          reducedSpeed: reducedSpeed,
           prices: {
             GBP: sellPrice
           },
@@ -85,7 +110,7 @@ export default async function handler(req, res) {
           canTopUp: false,
           eKYC: false,
           tethering: true,
-          promoEnabled: false,  // no promo/discount codes offered
+          promoEnabled: false,
           hasAds: false,
           payAsYouGo: false,
           newUserOnly: false,
