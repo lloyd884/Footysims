@@ -16,7 +16,7 @@ export default async function handler(req, res) {
   // Slots chosen to match actually available Zendit offers per country.
   const SITE_PLANS = {
     'TH': [{ unlimited: false, dataGB: 1, days: 1  }, { unlimited: false, dataGB: 3, days: 7  }, { unlimited: true,  days: 15 }],
-    'JP': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
+    'JP': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 10, days: 30 }],
     'KR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'CN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true,  days: 30 }],
     'IN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     'EG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'MA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'NG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
-    'KE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
+    'KE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 5, days: 30 }],
     'GH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'ET': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 5, days: 30 }, { unlimited: true,  days: 7  }],
     'TZ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 5, days: 30 }, { unlimited: true,  days: 7  }],
@@ -88,14 +88,13 @@ export default async function handler(req, res) {
     'UY': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'CR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'PA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
-    'JM': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
+    'JM': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 10, days: 30 }],
     'AU': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'NZ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'FJ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 5, days: 30 }, { unlimited: true,  days: 7  }],
   };
 
   try {
-    // Fetch all offers from Zendit
     let all = [];
     let offset = 0;
     while (true) {
@@ -107,7 +106,6 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter: enabled, valid country, must be in SITE_PLANS
     const enabled = all
       .filter(o =>
         o.enabled &&
@@ -126,7 +124,6 @@ export default async function handler(req, res) {
         return { ...o, _sellPrice: sellPrice };
       });
 
-    // FUP tier mapping (confirmed by Zendit support)
     function getFUP(offerId) {
       const id = offerId.toUpperCase();
       if (id.includes('-ULP-'))       return { dataCap: 2, reducedSpeed: 2048, dataCapPer: 'day' };
@@ -135,7 +132,6 @@ export default async function handler(req, res) {
       return                                 { dataCap: 1, reducedSpeed: 512,  dataCapPer: 'day' };
     }
 
-    // For each country and each allowed plan slot, find cheapest matching Zendit offer
     const plans = [];
 
     for (const [countryCode, allowedPlans] of Object.entries(SITE_PLANS)) {
