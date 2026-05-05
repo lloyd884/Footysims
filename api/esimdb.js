@@ -11,16 +11,87 @@ export default async function handler(req, res) {
     'Content-Type': 'application/json'
   };
 
-  // EXACT countries shown on footysims.com — API must match site exactly
-  const SITE_COUNTRIES = new Set([
-    'TH','JP','KR','CN','IN','ID','MY','SG','PH','VN','HK','TW','KH','MM','LK','NP','BD','PK', // Asia
-    'AE','SA','QA','KW','BH','OM','IL','JO','TR',                                                // Middle East
-    'ZA','EG','MA','NG','KE','GH','ET','TZ',                                                     // Africa
-    'GB','IE','ES','DE','FR','IT','NL','PT','BE','CH','AT','PL','SE','NO','DK','FI',             // Europe
-    'CZ','HU','RO','GR','HR','RS','UA','SK','BG','AL',                                           // Europe cont.
-    'US','CA','MX','BR','AR','CO','CL','PE','EC','UY','CR','PA','JM',                            // Americas
-    'AU','NZ','FJ'                                                                                // Oceania
-  ]);
+  // Exactly the plans shown publicly on footysims.com before any sign-up wall.
+  // Each entry: { unlimited, dataGB (if not unlimited), days }
+  const SITE_PLANS = {
+    'TH': [{ unlimited: false, dataGB: 1, days: 1  }, { unlimited: false, dataGB: 3, days: 7  }, { unlimited: true, days: 15 }],
+    'JP': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'KR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'IN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'ID': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'MY': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'SG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'PH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'VN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'HK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'TW': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'KH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'MM': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'LK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'NP': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'BD': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'PK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'AE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'SA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'QA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'KW': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'BH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'OM': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'IL': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'JO': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'TR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'ZA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'EG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'MA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'NG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'KE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'GH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'ET': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'TZ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+    'GB': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'IE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'ES': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'DE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'FR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'IT': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'NL': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'PT': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'BE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'AT': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'PL': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'SE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'NO': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'DK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'FI': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CZ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'HU': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'RO': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'GR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'HR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'RS': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'UA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'SK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'BG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'AL': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'US': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'MX': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'BR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'AR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CO': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CL': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'PE': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'EC': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'UY': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'CR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'PA': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'JM': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'AU': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'NZ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true, days: 7  }, { unlimited: true, days: 30 }],
+    'FJ': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true, days: 30 }],
+  };
 
   try {
     // Fetch all offers from Zendit
@@ -35,13 +106,13 @@ export default async function handler(req, res) {
       offset += 100;
     }
 
-    // Filter: enabled, valid 2-letter country code, must be in site country list
+    // Filter: enabled, valid country, must be in SITE_PLANS
     const enabled = all
       .filter(o =>
         o.enabled &&
         o.country &&
         o.country.length === 2 &&
-        SITE_COUNTRIES.has(o.country)
+        SITE_PLANS[o.country]
       )
       .map(o => {
         const costFixed = o.cost?.fixed || o.costFixed || 0;
@@ -54,19 +125,7 @@ export default async function handler(req, res) {
         return { ...o, _sellPrice: sellPrice };
       });
 
-    // Deduplicate — keep cheapest plan per country + duration + data combo
-    const bestMap = {};
-    for (const o of enabled) {
-      const key = `${o.country}-${o.durationDays}-${o.dataUnlimited ? 'unlimited' : o.dataGB + 'gb'}`;
-      if (!bestMap[key] || o._sellPrice < bestMap[key]._sellPrice) {
-        bestMap[key] = o;
-      }
-    }
-
-    // FUP tier mapping from Zendit offerId subtype (confirmed by Zendit support)
-    // UNLIMITED = Fast:    1GB/day HS, throttled at 512kbps
-    // ULE       = Faster:  1GB/day HS, throttled at 1280kbps (1.25Mbps)
-    // ULP       = Fastest: 2GB/day HS, throttled at 2048kbps (2Mbps)
+    // FUP tier mapping (confirmed by Zendit support)
     function getFUP(offerId) {
       const id = offerId.toUpperCase();
       if (id.includes('-ULP-'))       return { dataCap: 2, reducedSpeed: 2048, dataCapPer: 'day' };
@@ -75,27 +134,43 @@ export default async function handler(req, res) {
       return                                 { dataCap: 1, reducedSpeed: 512,  dataCapPer: 'day' };
     }
 
-    // Map to eSIMDB schema
-    const plans = Object.values(bestMap)
-      .filter(o => o.dataUnlimited || (o.dataGB && o.dataGB > 0))
-      .map(o => {
-        const country = o.country;
-        const days = o.durationDays || 0;
-        const isUnlimited = o.dataUnlimited || false;
-        const dataGB = o.dataGB || 0;
-        const sellPrice = parseFloat(o._sellPrice.toFixed(2));
+    // For each country, for each allowed plan slot, find the cheapest matching Zendit offer
+    const plans = [];
 
-        const fup = isUnlimited ? getFUP(o.offerId) : null;
+    for (const [countryCode, allowedPlans] of Object.entries(SITE_PLANS)) {
+      const countryOffers = enabled.filter(o => o.country === countryCode);
 
-        const dataCap     = isUnlimited ? fup.dataCap     : dataGB;
-        const dataCapPer  = isUnlimited ? fup.dataCapPer  : null;
+      for (const slot of allowedPlans) {
+        // Find offers matching this slot
+        const matches = countryOffers.filter(o => {
+          if (slot.unlimited) {
+            return o.dataUnlimited === true && o.durationDays === slot.days;
+          } else {
+            return o.dataUnlimited === false && o.dataGB === slot.dataGB && o.durationDays === slot.days;
+          }
+        });
+
+        if (matches.length === 0) continue;
+
+        // Pick cheapest
+        const best = matches.reduce((a, b) => a._sellPrice < b._sellPrice ? a : b);
+
+        const isUnlimited = best.dataUnlimited || false;
+        const dataGB = best.dataGB || 0;
+        const days = best.durationDays || 0;
+        const sellPrice = parseFloat(best._sellPrice.toFixed(2));
+
+        const fup = isUnlimited ? getFUP(best.offerId) : null;
+
+        const dataCap      = isUnlimited ? fup.dataCap      : dataGB;
+        const dataCapPer   = isUnlimited ? fup.dataCapPer   : null;
         const reducedSpeed = isUnlimited ? fup.reducedSpeed : null;
 
         const dataLabel = isUnlimited ? 'Unlimited' : `${dataGB}GB`;
-        const rawName = `${country} ${dataLabel} ${days}d`;
+        const rawName = `${countryCode} ${dataLabel} ${days}d`;
         const planName = rawName.length > 35 ? rawName.substring(0, 35) : rawName;
 
-        return {
+        plans.push({
           planName,
           validity: days,
           dataCap,
@@ -114,9 +189,10 @@ export default async function handler(req, res) {
           hasAds: false,
           payAsYouGo: false,
           newUserOnly: false,
-          coverages: [{ code: country }]
-        };
-      });
+          coverages: [{ code: countryCode }]
+        });
+      }
+    }
 
     return res.status(200).json(plans);
 
