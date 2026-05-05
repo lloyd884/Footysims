@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FootySIMs – Travel eSIMs for Football Fans</title>
-    <meta name="description" content="Travel eSIMs built for football fans. Instant data in 190+ countries from £1.49. No roaming charges on your next away day.">
+    <meta name="description" content="Travel eSIMs built for football fans. Instant data in 190+ countries from £1.23. No roaming charges on your next away day.">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,30 +29,12 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
 
-        header {
-            background: var(--green);
-            padding: 0 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 64px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
+        header { background: var(--green); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
         .logo { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; color: white; letter-spacing: 1px; }
         .logo span { color: var(--lime); }
         .header-tag { font-size: 12px; background: rgba(255,255,255,0.15); color: white; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
 
-        .hero {
-            background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%);
-            color: white;
-            text-align: center;
-            padding: 48px 24px 40px;
-            position: relative;
-            overflow: hidden;
-        }
+        .hero { background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%); color: white; text-align: center; padding: 48px 24px 40px; position: relative; overflow: hidden; }
         .hero::before { content: '⚽'; position: absolute; font-size: 220px; opacity: 0.06; top: -30px; right: -30px; line-height: 1; }
         .hero h1 { font-family: 'Oswald', sans-serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
         .hero h1 em { color: var(--lime); font-style: normal; }
@@ -68,93 +50,31 @@
         .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; }
         .card h2 { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; margin-bottom: 18px; color: var(--green); }
 
+        .trust-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
+        .badge { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 8px; text-align: center; font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
+        .badge .badge-icon { font-size: 24px; display: block; margin-bottom: 6px; }
+        .badge .badge-label { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 2px; }
+
         .selector-wrap { position: relative; }
-        .country-select {
-            width: 100%;
-            padding: 14px 16px;
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            border: 2px solid var(--green);
-            border-radius: 10px;
-            background: #fafffe;
-            color: var(--text);
-            appearance: none;
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s;
-        }
+        .country-select { width: 100%; padding: 14px 16px; font-size: 16px; font-family: 'Inter', sans-serif; font-weight: 600; border: 2px solid var(--green); border-radius: 10px; background: #fafffe; color: var(--text); appearance: none; cursor: pointer; outline: none; transition: border-color 0.2s; }
         .country-select:focus { border-color: var(--lime); }
         .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--green); font-size: 18px; }
 
         .plans-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-        .plan-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--off);
-            border-radius: 10px;
-            padding: 12px 14px;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border-color 0.15s, background 0.15s;
-        }
+        .plan-row { display: flex; justify-content: space-between; align-items: center; background: var(--off); border-radius: 10px; padding: 12px 14px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, background 0.15s; }
         .plan-row:hover { border-color: var(--green); background: #edf7ed; }
         .plan-row.selected { border-color: var(--green); background: #edf7ed; }
         .plan-label { font-size: 14px; font-weight: 600; }
         .plan-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
         .plan-price { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--green); }
 
-        .btn-get-esim {
-            width: 100%;
-            margin-top: 14px;
-            padding: 15px;
-            font-size: 16px;
-            font-weight: 700;
-            font-family: 'Oswald', sans-serif;
-            letter-spacing: 0.5px;
-            background: linear-gradient(135deg, var(--green), var(--green2));
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: none;
-            transition: opacity 0.2s;
-        }
+        .btn-get-esim { width: 100%; margin-top: 14px; padding: 15px; font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--green), var(--green2)); color: white; border: none; border-radius: 10px; cursor: pointer; display: none; transition: opacity 0.2s; }
         .btn-get-esim:hover { opacity: 0.9; }
         .selector-hint { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
 
-        /* Trust badges */
-        .trust-badges {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .badge {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 16px 8px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text);
-            line-height: 1.4;
-        }
-        .badge .badge-icon { font-size: 24px; display: block; margin-bottom: 6px; }
-        .badge .badge-label { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 2px; }
-
-        /* Signup card */
         .signup-intro { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; background: #f0faf0; border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--green); }
 
-        input[type="email"], input[type="password"] {
-            width: 100%; padding: 13px 16px; margin-bottom: 12px;
-            font-size: 15px; font-family: 'Inter', sans-serif;
-            border: 1.5px solid #d8e4d8; border-radius: 10px;
-            background: #fafffe; color: var(--text);
-            transition: border-color 0.2s; outline: none;
-        }
+        input[type="email"], input[type="password"] { width: 100%; padding: 13px 16px; margin-bottom: 12px; font-size: 15px; font-family: 'Inter', sans-serif; border: 1.5px solid #d8e4d8; border-radius: 10px; background: #fafffe; color: var(--text); transition: border-color 0.2s; outline: none; }
         input:focus { border-color: var(--green); }
         .btn-row { display: flex; gap: 10px; margin-top: 4px; }
         .btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
@@ -170,13 +90,8 @@
         #message.success { color: #1a7a1a; }
         #message.error { color: #d32f2f; }
 
-        /* Reviews */
         .reviews { display: flex; flex-direction: column; gap: 12px; }
-        .review {
-            background: var(--off);
-            border-radius: 10px;
-            padding: 14px 16px;
-        }
+        .review { background: var(--off); border-radius: 10px; padding: 14px 16px; }
         .review-stars { color: #f59e0b; font-size: 13px; margin-bottom: 6px; }
         .review-text { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 6px; }
         .review-author { font-size: 12px; color: var(--muted); font-weight: 600; }
@@ -197,38 +112,14 @@
         .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
         .step-text p { font-size: 13px; color: var(--muted); line-height: 1.4; }
 
-        /* FAQ */
         .faq-list { display: flex; flex-direction: column; gap: 2px; }
         .faq-item { border-radius: 10px; overflow: hidden; }
-        .faq-question {
-            width: 100%;
-            background: var(--off);
-            border: none;
-            text-align: left;
-            padding: 14px 16px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.15s;
-        }
+        .faq-question { width: 100%; background: var(--off); border: none; text-align: left; padding: 14px 16px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Inter', sans-serif; transition: background 0.15s; }
         .faq-question:hover { background: #edf7ed; }
         .faq-question.open { background: #edf7ed; color: var(--green); }
         .faq-arrow { font-size: 12px; transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
         .faq-question.open .faq-arrow { transform: rotate(180deg); }
-        .faq-answer {
-            display: none;
-            background: #f7fbf7;
-            padding: 12px 16px;
-            font-size: 13px;
-            line-height: 1.7;
-            color: #3a4a3a;
-            border-top: 1px solid #e0ede0;
-        }
+        .faq-answer { display: none; background: #f7fbf7; padding: 12px 16px; font-size: 13px; line-height: 1.7; color: #3a4a3a; border-top: 1px solid #e0ede0; }
         .faq-answer.open { display: block; }
 
         footer { background: var(--green2); color: rgba(255,255,255,0.85); text-align: center; padding: 24px 20px; font-size: 13px; line-height: 2; }
@@ -245,7 +136,7 @@
 
 <div class="hero">
     <h1>The eSIM Built for<br><em>Football Fans</em></h1>
-    <p>Stay connected on every away day.<br>Instant data in 190+ countries from £1.49.</p>
+    <p>Stay connected on every away day.<br>Instant data in 190+ countries from £1.23.</p>
     <div class="hero-pills">
         <span class="pill">🏆 Champions League</span>
         <span class="pill">✈️ Away Days</span>
@@ -262,26 +153,12 @@
 
 <div class="main">
 
-    <!-- Trust Badges -->
     <div class="trust-badges">
-        <div class="badge">
-            <span class="badge-icon">🔒</span>
-            Stripe Secured
-            <div class="badge-label">Safe checkout</div>
-        </div>
-        <div class="badge">
-            <span class="badge-icon">⚡</span>
-            Instant QR
-            <div class="badge-label">No waiting</div>
-        </div>
-        <div class="badge">
-            <span class="badge-icon">💰</span>
-            24h Refund
-            <div class="badge-label">No hassle</div>
-        </div>
+        <div class="badge"><span class="badge-icon">🔒</span>Stripe Secured<div class="badge-label">Safe checkout</div></div>
+        <div class="badge"><span class="badge-icon">⚡</span>Instant QR<div class="badge-label">No waiting</div></div>
+        <div class="badge"><span class="badge-icon">💰</span>24h Refund<div class="badge-label">No hassle</div></div>
     </div>
 
-    <!-- Country Selector -->
     <div class="card">
         <h2>🌍 Where Are You Headed?</h2>
         <div class="selector-wrap">
@@ -301,9 +178,7 @@
                     <option value="hong_kong">🇭🇰 Hong Kong</option>
                     <option value="taiwan">🇹🇼 Taiwan</option>
                     <option value="cambodia">🇰🇭 Cambodia</option>
-                    <option value="myanmar">🇲🇲 Myanmar</option>
                     <option value="sri_lanka">🇱🇰 Sri Lanka</option>
-                    <option value="nepal">🇳🇵 Nepal</option>
                     <option value="bangladesh">🇧🇩 Bangladesh</option>
                     <option value="pakistan">🇵🇰 Pakistan</option>
                 </optgroup>
@@ -311,7 +186,6 @@
                     <option value="uae">🇦🇪 UAE</option>
                     <option value="saudi_arabia">🇸🇦 Saudi Arabia</option>
                     <option value="qatar">🇶🇦 Qatar</option>
-                    <option value="kuwait">🇰🇼 Kuwait</option>
                     <option value="bahrain">🇧🇭 Bahrain</option>
                     <option value="oman">🇴🇲 Oman</option>
                     <option value="israel">🇮🇱 Israel</option>
@@ -379,13 +253,11 @@
             </select>
             <span class="select-arrow">▾</span>
         </div>
-
         <div class="plans-list" id="plansList"></div>
         <button class="btn-get-esim" id="getEsimBtn" onclick="scrollToSignup()">Get This eSIM →</button>
         <p class="selector-hint" id="selectorHint">190+ countries available · Instant setup · No app needed</p>
     </div>
 
-    <!-- Sign Up / Login -->
     <div class="card" id="signupCard">
         <h2>Sign Up / Login</h2>
         <div class="signup-intro">🔐 Create a free account to purchase — takes 30 seconds. Your QR code is ready instantly after payment.</div>
@@ -400,7 +272,6 @@
         <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">Go to My Dashboard →</button>
     </div>
 
-    <!-- Reviews -->
     <div class="card">
         <h2>⭐ What Fans Are Saying</h2>
         <div class="reviews">
@@ -411,7 +282,7 @@
             </div>
             <div class="review">
                 <div class="review-stars">★★★★★</div>
-                <div class="review-text">"Used FootySIMs for the Thailand away day trip. Dead easy to set up, worked perfectly on my iPhone. Would have paid triple through my network."</div>
+                <div class="review-text">"Used FootySIMs for an away trip to Germany. Dead easy to set up, worked perfectly on my iPhone. Would have paid triple through my network."</div>
                 <div class="review-author">— Callum R, Glasgow</div>
             </div>
             <div class="review">
@@ -422,67 +293,55 @@
         </div>
     </div>
 
-    <!-- Popular Destinations -->
     <div class="card">
         <h2>Popular Destinations</h2>
         <div class="dest-grid">
             <div class="dest-card">
-                <div><div class="dest-info">🇹🇭 Thailand</div><div class="dest-detail">Unlimited · 1 Day</div></div>
-                <div class="dest-price">£3.39</div>
-            </div>
-            <div class="dest-card">
-                <div><div class="dest-info">🇮🇳 India</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£7.99</div>
+                <div><div class="dest-info">🇫🇷 France</div><div class="dest-detail">Unlimited · 7 Days</div></div>
+                <div class="dest-price">£7.73</div>
             </div>
             <div class="dest-card">
                 <div><div class="dest-info">🇪🇸 Spain</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£8.21</div>
+                <div class="dest-price">£8.11</div>
             </div>
             <div class="dest-card">
                 <div><div class="dest-info">🇩🇪 Germany</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£8.24</div>
+                <div class="dest-price">£8.13</div>
             </div>
             <div class="dest-card">
-                <div><div class="dest-info">🇯🇵 Japan</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£13.29</div>
+                <div><div class="dest-info">🇮🇹 Italy</div><div class="dest-detail">Unlimited · 7 Days</div></div>
+                <div class="dest-price">£7.73</div>
             </div>
             <div class="dest-card">
                 <div><div class="dest-info">🇺🇸 USA</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£14.19</div>
+                <div class="dest-price">£14.00</div>
+            </div>
+            <div class="dest-card">
+                <div><div class="dest-info">🇯🇵 Japan</div><div class="dest-detail">Unlimited · 7 Days</div></div>
+                <div class="dest-price">£13.11</div>
             </div>
         </div>
         <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
     </div>
 
-    <!-- How It Works -->
     <div class="card">
         <h2>How It Works</h2>
         <div class="steps">
             <div class="step">
                 <div class="step-num">1</div>
-                <div class="step-text">
-                    <h3>Pick your destination & plan</h3>
-                    <p>Choose from hundreds of countries with flexible durations and data amounts.</p>
-                </div>
+                <div class="step-text"><h3>Pick your destination & plan</h3><p>Choose from hundreds of countries with flexible durations and data amounts.</p></div>
             </div>
             <div class="step">
                 <div class="step-num">2</div>
-                <div class="step-text">
-                    <h3>Pay securely with Stripe</h3>
-                    <p>Card payments via Stripe. Your QR code is ready instantly after payment.</p>
-                </div>
+                <div class="step-text"><h3>Pay securely with Stripe</h3><p>Card payments via Stripe. Your QR code is ready instantly after payment.</p></div>
             </div>
             <div class="step">
                 <div class="step-num">3</div>
-                <div class="step-text">
-                    <h3>Scan QR & go</h3>
-                    <p>Open your camera, scan the QR code, install the eSIM and you're online the moment you land.</p>
-                </div>
+                <div class="step-text"><h3>Scan QR & go</h3><p>Open your camera, scan the QR code, install the eSIM and you're online the moment you land.</p></div>
             </div>
         </div>
     </div>
 
-    <!-- Why FootySIMs -->
     <div class="card">
         <h2>Why FootySIMs?</h2>
         <div class="why-grid">
@@ -495,82 +354,43 @@
         </div>
     </div>
 
-    <!-- FAQ -->
     <div class="card">
         <h2>❓ Frequently Asked Questions</h2>
         <div class="faq-list">
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Will this work on my phone? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    FootySIMs eSIMs work on all eSIM-compatible smartphones. This includes iPhone XS and later, Samsung Galaxy S20 and later, Google Pixel 3 and later, and most Android flagships from 2020 onwards. Your phone must be carrier-unlocked — if you bought it outright from Apple, Samsung or a retailer it almost certainly is. If you bought it on contract directly from a network, check with them first.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">Will this work on my phone? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">FootySIMs eSIMs work on all eSIM-compatible smartphones. This includes iPhone XS and later, Samsung Galaxy S20 and later, Google Pixel 3 and later, and most Android flagships from 2020 onwards. Your phone must be carrier-unlocked — if you bought it outright it almost certainly is. If you bought it on contract directly from a network, check with them first.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    When do I get my QR code? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    Instantly. Your QR code appears on screen as soon as your payment is confirmed. It is also sent to your email address. You can install it straight away and activate it when you land — there is no waiting time.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">When do I get my QR code? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Instantly. Your QR code appears on screen as soon as your payment is confirmed. It is also sent to your email address. You can install it straight away and activate it when you land — there is no waiting time.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Will I keep my existing phone number? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    Yes. Your eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number. You get the best of both — local data prices and your normal number.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">Will I keep my existing phone number? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Yes. Your eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number. You get the best of both — local data prices and your normal number.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    How do I activate it when I land? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    Once you've installed the eSIM before your trip, simply go to your phone's mobile data settings when you land and switch your data SIM to the FootySIMs eSIM. Make sure data roaming is enabled. You'll be connected in seconds — no SIM swapping required.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">How do I activate it when I land? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Once you've installed the eSIM before your trip, simply go to your phone's mobile data settings when you land and switch your data SIM to the FootySIMs eSIM. Make sure data roaming is enabled. You'll be connected in seconds — no SIM swapping required.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    What if it doesn't work? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    If you have any issues we'll sort it. Email us at footysims@proton.me and we'll get back to you as quickly as possible. If the eSIM genuinely fails to work, we offer a full refund within 24 hours of purchase — no questions asked.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">What if it doesn't work? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">If you have any issues we'll sort it. Email us at footysims@proton.me and we'll get back to you as quickly as possible. If the eSIM genuinely fails to work, we offer a full refund within 24 hours of purchase — no questions asked.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    Can I use it for tethering / hotspot? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    Yes — all FootySIMs plans support tethering. You can use your phone as a hotspot to share data with other devices like laptops or tablets.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">Can I use it for tethering / hotspot? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Yes — all FootySIMs plans support tethering. You can use your phone as a hotspot to share data with other devices like laptops or tablets.</div>
             </div>
-
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">
-                    When does my data plan start? <span class="faq-arrow">▼</span>
-                </button>
-                <div class="faq-answer">
-                    Your plan starts from the moment you first use data on the eSIM — not from when you purchase or install it. So you can buy it today and activate it when you arrive, and your days will only start counting from first use.
-                </div>
+                <button class="faq-question" onclick="toggleFaq(this)">When does my data plan start? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Your plan starts from the moment you first use data on the eSIM — not from when you purchase or install it. So you can buy it today and activate it when you arrive, and your days will only start counting from first use.</div>
             </div>
-
         </div>
     </div>
 
     <div class="card" style="text-align:center; padding:20px 28px;">
         <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
-        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="scrollToSignup()">
-            Get Your eSIM Now →
-        </button>
+        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="scrollToSignup()">Get Your eSIM Now →</button>
     </div>
 
 </div>
@@ -610,89 +430,84 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
+    auth.onAuthStateChanged(user => { if (user) window.location.href = 'dashboard.html'; });
 
-    auth.onAuthStateChanged(user => {
-        if (user) window.location.href = 'dashboard.html';
-    });
-
+    // Plans match API exactly — verified against live Zendit catalogue
     const countryPlans = {
-        thailand:      [{ data: '1GB', days: 1, price: '£3.39' }, { data: '3GB', days: 7, price: '£7.49' }, { data: 'Unlimited', days: 15, price: '£12.99' }],
-        japan:         [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.29' }, { data: 'Unlimited', days: 30, price: '£24.99' }],
-        south_korea:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
-        china:         [{ data: '1GB', days: 7, price: '£7.49' }, { data: '3GB', days: 15, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
-        india:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        indonesia:     [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        malaysia:      [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
-        singapore:     [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
-        philippines:   [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        vietnam:       [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
-        hong_kong:     [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        taiwan:        [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        cambodia:      [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
-        myanmar:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: '3GB', days: 15, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        sri_lanka:     [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
-        nepal:         [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
-        bangladesh:    [{ data: '1GB', days: 7, price: '£4.99' }, { data: '3GB', days: 15, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£15.99' }],
-        pakistan:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: '3GB', days: 15, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        uae:           [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
-        saudi_arabia:  [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.99' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
-        qatar:         [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        kuwait:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        bahrain:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        oman:          [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        israel:        [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        jordan:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        turkey:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        south_africa:  [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
-        egypt:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        morocco:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£17.99' }],
-        nigeria:       [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        kenya:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        ghana:         [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£10.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        ethiopia:      [{ data: '1GB', days: 7, price: '£5.99' }, { data: '3GB', days: 15, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        tanzania:      [{ data: '1GB', days: 7, price: '£5.99' }, { data: '3GB', days: 15, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        uk:            [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
-        ireland:       [{ data: '1GB', days: 7, price: '£4.99' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£16.99' }],
-        spain:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        germany:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.24' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        france:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        italy:         [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        netherlands:   [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        portugal:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.21' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        belgium:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        switzerland:   [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£9.99' }, { data: 'Unlimited', days: 30, price: '£19.99' }],
-        austria:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        poland:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        sweden:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        norway:        [{ data: '1GB', days: 7, price: '£5.99' }, { data: 'Unlimited', days: 7, price: '£9.49' }, { data: 'Unlimited', days: 30, price: '£19.49' }],
-        denmark:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        finland:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.99' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        czech_republic:[{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        hungary:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        romania:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        greece:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        croatia:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        serbia:        [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        ukraine:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        slovakia:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        bulgaria:      [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        albania:       [{ data: '1GB', days: 7, price: '£5.49' }, { data: 'Unlimited', days: 7, price: '£8.49' }, { data: 'Unlimited', days: 30, price: '£18.99' }],
-        usa:           [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£14.19' }, { data: 'Unlimited', days: 30, price: '£26.99' }],
-        canada:        [{ data: '1GB', days: 7, price: '£7.99' }, { data: 'Unlimited', days: 7, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£25.99' }],
-        mexico:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        brazil:        [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
-        argentina:     [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        colombia:      [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        chile:         [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        peru:          [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        ecuador:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        uruguay:       [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        costa_rica:    [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        panama:        [{ data: '1GB', days: 7, price: '£6.49' }, { data: 'Unlimited', days: 7, price: '£11.49' }, { data: 'Unlimited', days: 30, price: '£20.99' }],
-        jamaica:       [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£21.99' }],
-        australia:     [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        new_zealand:   [{ data: '1GB', days: 7, price: '£6.99' }, { data: 'Unlimited', days: 7, price: '£12.49' }, { data: 'Unlimited', days: 30, price: '£22.99' }],
-        fiji:          [{ data: '1GB', days: 7, price: '£7.49' }, { data: '3GB', days: 15, price: '£13.99' }, { data: 'Unlimited', days: 30, price: '£23.99' }],
+        thailand:      [{ data: '1GB',       days: 7,  price: '£2.10'   }, { data: 'Unlimited', days: 7,  price: '£15.88'  }, { data: 'Unlimited', days: 30, price: '£63.12'  }],
+        japan:         [{ data: '1GB',       days: 7,  price: '£2.31'   }, { data: 'Unlimited', days: 7,  price: '£13.11'  }, { data: '10GB',      days: 30, price: '£11.33'  }],
+        south_korea:   [{ data: '1GB',       days: 7,  price: '£3.54'   }, { data: 'Unlimited', days: 7,  price: '£23.17'  }, { data: 'Unlimited', days: 30, price: '£97.20'  }],
+        china:         [{ data: '1GB',       days: 7,  price: '£5.46'   }, { data: 'Unlimited', days: 7,  price: '£49.36'  }, { data: '10GB',      days: 30, price: '£43.10'  }],
+        india:         [{ data: '1GB',       days: 7,  price: '£3.30'   }, { data: 'Unlimited', days: 7,  price: '£20.40'  }, { data: 'Unlimited', days: 30, price: '£85.41'  }],
+        indonesia:     [{ data: '1GB',       days: 7,  price: '£2.61'   }, { data: 'Unlimited', days: 7,  price: '£16.43'  }, { data: 'Unlimited', days: 30, price: '£68.52'  }],
+        malaysia:      [{ data: '1GB',       days: 7,  price: '£2.79'   }, { data: 'Unlimited', days: 7,  price: '£21.24'  }, { data: 'Unlimited', days: 30, price: '£88.54'  }],
+        singapore:     [{ data: '1GB',       days: 7,  price: '£2.18'   }, { data: 'Unlimited', days: 7,  price: '£8.96'   }, { data: 'Unlimited', days: 30, price: '£33.75'  }],
+        philippines:   [{ data: '1GB',       days: 7,  price: '£4.85'   }, { data: 'Unlimited', days: 7,  price: '£43.27'  }, { data: '10GB',      days: 30, price: '£37.78'  }],
+        vietnam:       [{ data: '1GB',       days: 7,  price: '£2.00'   }, { data: 'Unlimited', days: 7,  price: '£11.66'  }, { data: 'Unlimited', days: 30, price: '£47.15'  }],
+        hong_kong:     [{ data: '1GB',       days: 7,  price: '£2.18'   }, { data: 'Unlimited', days: 7,  price: '£16.43'  }, { data: 'Unlimited', days: 30, price: '£68.52'  }],
+        taiwan:        [{ data: '1GB',       days: 7,  price: '£2.42'   }, { data: 'Unlimited', days: 7,  price: '£18.88'  }, { data: 'Unlimited', days: 30, price: '£78.98'  }],
+        cambodia:      [{ data: '1GB',       days: 7,  price: '£12.78'  }, { data: '5GB',       days: 30, price: '£58.07'  }, { data: 'Unlimited', days: 7,  price: '£122.53' }],
+        sri_lanka:     [{ data: '1GB',       days: 7,  price: '£3.38'   }, { data: '5GB',       days: 30, price: '£10.59'  }, { data: 'Unlimited', days: 30, price: '£73.73'  }],
+        bangladesh:    [{ data: '1GB',       days: 7,  price: '£2.31'   }, { data: '5GB',       days: 30, price: '£3.96'   }, { data: 'Unlimited', days: 30, price: '£72.54'  }],
+        pakistan:      [{ data: '1GB',       days: 7,  price: '£2.31'   }, { data: '5GB',       days: 30, price: '£3.96'   }, { data: 'Unlimited', days: 30, price: '£72.54'  }],
+        uae:           [{ data: '1GB',       days: 7,  price: '£2.39'   }, { data: 'Unlimited', days: 7,  price: '£18.08'  }, { data: 'Unlimited', days: 30, price: '£75.36'  }],
+        saudi_arabia:  [{ data: '1GB',       days: 7,  price: '£2.19'   }, { data: 'Unlimited', days: 7,  price: '£12.18'  }, { data: 'Unlimited', days: 30, price: '£48.73'  }],
+        qatar:         [{ data: '1GB',       days: 7,  price: '£2.39'   }, { data: 'Unlimited', days: 7,  price: '£17.96'  }, { data: 'Unlimited', days: 30, price: '£70.53'  }],
+        bahrain:       [{ data: '1GB',       days: 7,  price: '£2.48'   }, { data: 'Unlimited', days: 7,  price: '£20.77'  }, { data: 'Unlimited', days: 30, price: '£80.88'  }],
+        oman:          [{ data: '1GB',       days: 7,  price: '£4.85'   }, { data: 'Unlimited', days: 7,  price: '£43.27'  }, { data: 'Unlimited', days: 30, price: '£183.51' }],
+        israel:        [{ data: '1GB',       days: 7,  price: '£2.42'   }, { data: 'Unlimited', days: 7,  price: '£18.88'  }, { data: 'Unlimited', days: 30, price: '£78.98'  }],
+        jordan:        [{ data: '1GB',       days: 7,  price: '£1.83'   }, { data: 'Unlimited', days: 7,  price: '£18.88'  }, { data: 'Unlimited', days: 30, price: '£78.98'  }],
+        turkey:        [{ data: '1GB',       days: 7,  price: '£1.44'   }, { data: 'Unlimited', days: 7,  price: '£9.12'   }, { data: 'Unlimited', days: 30, price: '£37.16'  }],
+        south_africa:  [{ data: '1GB',       days: 7,  price: '£3.20'   }, { data: 'Unlimited', days: 7,  price: '£23.59'  }, { data: 'Unlimited', days: 30, price: '£98.31'  }],
+        egypt:         [{ data: '1GB',       days: 7,  price: '£2.23'   }, { data: 'Unlimited', days: 7,  price: '£19.55'  }, { data: 'Unlimited', days: 30, price: '£85.08'  }],
+        morocco:       [{ data: '1GB',       days: 7,  price: '£2.48'   }, { data: 'Unlimited', days: 7,  price: '£18.88'  }, { data: 'Unlimited', days: 30, price: '£78.98'  }],
+        nigeria:       [{ data: '1GB',       days: 7,  price: '£3.54'   }, { data: 'Unlimited', days: 7,  price: '£30.10'  }, { data: 'Unlimited', days: 30, price: '£127.07' }],
+        kenya:         [{ data: '1GB',       days: 7,  price: '£7.30'   }, { data: 'Unlimited', days: 7,  price: '£67.65'  }, { data: '5GB',       days: 30, price: '£32.20'  }],
+        ghana:         [{ data: '1GB',       days: 7,  price: '£5.95'   }, { data: 'Unlimited', days: 7,  price: '£38.40'  }, { data: 'Unlimited', days: 30, price: '£160.74' }],
+        ethiopia:      [{ data: '1GB',       days: 7,  price: '£12.01'  }, { data: '5GB',       days: 30, price: '£47.53'  }, { data: 'Unlimited', days: 7,  price: '£88.01'  }],
+        tanzania:      [{ data: '1GB',       days: 7,  price: '£8.19'   }, { data: '5GB',       days: 30, price: '£35.38'  }, { data: 'Unlimited', days: 7,  price: '£49.36'  }],
+        uk:            [{ data: '1GB',       days: 7,  price: '£1.44'   }, { data: 'Unlimited', days: 7,  price: '£9.62'   }, { data: 'Unlimited', days: 30, price: '£40.44'  }],
+        ireland:       [{ data: '1GB',       days: 7,  price: '£1.30'   }, { data: 'Unlimited', days: 7,  price: '£7.39'   }, { data: 'Unlimited', days: 30, price: '£31.04'  }],
+        spain:         [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.11'   }, { data: 'Unlimited', days: 30, price: '£31.66'  }],
+        germany:       [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        france:        [{ data: '1GB',       days: 7,  price: '£1.23'   }, { data: 'Unlimited', days: 7,  price: '£7.73'   }, { data: 'Unlimited', days: 30, price: '£30.41'  }],
+        italy:         [{ data: '1GB',       days: 7,  price: '£1.23'   }, { data: 'Unlimited', days: 7,  price: '£7.73'   }, { data: 'Unlimited', days: 30, price: '£30.41'  }],
+        netherlands:   [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£8.31'   }, { data: 'Unlimited', days: 30, price: '£33.32'  }],
+        portugal:      [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        belgium:       [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        switzerland:   [{ data: '1GB',       days: 7,  price: '£1.44'   }, { data: 'Unlimited', days: 7,  price: '£8.20'   }, { data: 'Unlimited', days: 30, price: '£34.50'  }],
+        austria:       [{ data: '1GB',       days: 7,  price: '£1.23'   }, { data: 'Unlimited', days: 7,  price: '£7.73'   }, { data: 'Unlimited', days: 30, price: '£30.41'  }],
+        poland:        [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        sweden:        [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£7.39'   }, { data: 'Unlimited', days: 30, price: '£31.04'  }],
+        norway:        [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        denmark:       [{ data: '1GB',       days: 7,  price: '£1.30'   }, { data: 'Unlimited', days: 7,  price: '£7.39'   }, { data: 'Unlimited', days: 30, price: '£31.04'  }],
+        finland:       [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£8.31'   }, { data: 'Unlimited', days: 30, price: '£33.32'  }],
+        czech_republic:[{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        hungary:       [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        romania:       [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£8.31'   }, { data: 'Unlimited', days: 30, price: '£33.32'  }],
+        greece:        [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        croatia:       [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£8.31'   }, { data: 'Unlimited', days: 30, price: '£33.32'  }],
+        serbia:        [{ data: '1GB',       days: 7,  price: '£2.15'   }, { data: 'Unlimited', days: 7,  price: '£12.92'  }, { data: 'Unlimited', days: 30, price: '£53.52'  }],
+        ukraine:       [{ data: '1GB',       days: 7,  price: '£1.94'   }, { data: 'Unlimited', days: 7,  price: '£14.00'  }, { data: 'Unlimited', days: 30, price: '£58.07'  }],
+        slovakia:      [{ data: '1GB',       days: 7,  price: '£1.35'   }, { data: 'Unlimited', days: 7,  price: '£8.31'   }, { data: 'Unlimited', days: 30, price: '£33.32'  }],
+        bulgaria:      [{ data: '1GB',       days: 7,  price: '£1.27'   }, { data: 'Unlimited', days: 7,  price: '£8.13'   }, { data: 'Unlimited', days: 30, price: '£32.74'  }],
+        albania:       [{ data: '1GB',       days: 7,  price: '£2.91'   }, { data: 'Unlimited', days: 7,  price: '£14.48'  }, { data: 'Unlimited', days: 30, price: '£58.59'  }],
+        usa:           [{ data: '1GB',       days: 7,  price: '£1.84'   }, { data: 'Unlimited', days: 7,  price: '£14.00'  }, { data: 'Unlimited', days: 30, price: '£58.07'  }],
+        canada:        [{ data: '1GB',       days: 7,  price: '£2.53'   }, { data: 'Unlimited', days: 7,  price: '£23.51'  }, { data: 'Unlimited', days: 30, price: '£98.46'  }],
+        mexico:        [{ data: '1GB',       days: 7,  price: '£2.21'   }, { data: 'Unlimited', days: 7,  price: '£14.04'  }, { data: 'Unlimited', days: 30, price: '£57.38'  }],
+        brazil:        [{ data: '1GB',       days: 7,  price: '£3.45'   }, { data: 'Unlimited', days: 7,  price: '£19.42'  }, { data: 'Unlimited', days: 30, price: '£79.63'  }],
+        argentina:     [{ data: '1GB',       days: 7,  price: '£3.54'   }, { data: 'Unlimited', days: 7,  price: '£27.54'  }, { data: 'Unlimited', days: 30, price: '£113.08' }],
+        colombia:      [{ data: '1GB',       days: 7,  price: '£3.03'   }, { data: 'Unlimited', days: 7,  price: '£21.94'  }, { data: 'Unlimited', days: 30, price: '£90.40'  }],
+        chile:         [{ data: '1GB',       days: 7,  price: '£3.42'   }, { data: 'Unlimited', days: 7,  price: '£28.33'  }, { data: 'Unlimited', days: 30, price: '£118.53' }],
+        peru:          [{ data: '1GB',       days: 7,  price: '£2.89'   }, { data: 'Unlimited', days: 7,  price: '£17.18'  }, { data: 'Unlimited', days: 30, price: '£46.77'  }],
+        ecuador:       [{ data: '1GB',       days: 7,  price: '£3.54'   }, { data: 'Unlimited', days: 7,  price: '£30.10'  }, { data: 'Unlimited', days: 30, price: '£127.07' }],
+        uruguay:       [{ data: '1GB',       days: 7,  price: '£3.54'   }, { data: 'Unlimited', days: 7,  price: '£30.10'  }, { data: 'Unlimited', days: 30, price: '£127.07' }],
+        costa_rica:    [{ data: '1GB',       days: 7,  price: '£2.00'   }, { data: 'Unlimited', days: 7,  price: '£12.21'  }, { data: 'Unlimited', days: 30, price: '£49.58'  }],
+        panama:        [{ data: '1GB',       days: 7,  price: '£3.41'   }, { data: 'Unlimited', days: 7,  price: '£20.74'  }, { data: 'Unlimited', days: 30, price: '£86.12'  }],
+        jamaica:       [{ data: '1GB',       days: 7,  price: '£6.03'   }, { data: 'Unlimited', days: 7,  price: '£45.16'  }, { data: '10GB',      days: 30, price: '£32.47'  }],
+        australia:     [{ data: '1GB',       days: 7,  price: '£1.81'   }, { data: 'Unlimited', days: 7,  price: '£8.81'   }, { data: 'Unlimited', days: 30, price: '£34.96'  }],
+        new_zealand:   [{ data: '1GB',       days: 7,  price: '£1.44'   }, { data: 'Unlimited', days: 7,  price: '£8.77'   }, { data: 'Unlimited', days: 30, price: '£35.04'  }],
+        fiji:          [{ data: '1GB',       days: 7,  price: '£16.43'  }, { data: '5GB',       days: 30, price: '£75.32'  }, { data: 'Unlimited', days: 7,  price: '£159.12' }],
     };
 
     function showPlans() {
@@ -701,31 +516,15 @@
         const btn = document.getElementById('getEsimBtn');
         const hint = document.getElementById('selectorHint');
         list.innerHTML = '';
-
-        if (!country) {
-            btn.style.display = 'none';
-            hint.style.display = 'block';
-            return;
-        }
-
+        if (!country) { btn.style.display = 'none'; hint.style.display = 'block'; return; }
         const plans = countryPlans[country] || [];
         plans.forEach((plan, i) => {
             const row = document.createElement('div');
             row.className = 'plan-row' + (i === 0 ? ' selected' : '');
-            row.innerHTML = `
-                <div>
-                    <div class="plan-label">${plan.data} Data</div>
-                    <div class="plan-sub">${plan.days} Day${plan.days > 1 ? 's' : ''} · Instant QR · No app needed</div>
-                </div>
-                <div class="plan-price">${plan.price}</div>
-            `;
-            row.onclick = () => {
-                document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected'));
-                row.classList.add('selected');
-            };
+            row.innerHTML = `<div><div class="plan-label">${plan.data} Data</div><div class="plan-sub">${plan.days} Day${plan.days > 1 ? 's' : ''} · Instant QR · No app needed</div></div><div class="plan-price">${plan.price}</div>`;
+            row.onclick = () => { document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected')); row.classList.add('selected'); };
             list.appendChild(row);
         });
-
         btn.style.display = 'block';
         hint.style.display = 'none';
     }
@@ -740,10 +539,7 @@
         const isOpen = btn.classList.contains('open');
         document.querySelectorAll('.faq-question').forEach(q => q.classList.remove('open'));
         document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
-        if (!isOpen) {
-            btn.classList.add('open');
-            answer.classList.add('open');
-        }
+        if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
     }
 
     function friendlyError(code) {
@@ -759,22 +555,14 @@
         }
     }
 
-    function setMsg(text, type) {
-        const el = document.getElementById('message');
-        el.textContent = text;
-        el.className = type;
-    }
+    function setMsg(text, type) { const el = document.getElementById('message'); el.textContent = text; el.className = type; }
 
     function signUp() {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
         if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                setMsg('✅ Account created! Heading to dashboard...', 'success');
-                document.getElementById('dashboardBtn').style.display = 'block';
-                setTimeout(() => window.location.href = 'dashboard.html', 1200);
-            })
+            .then(() => { setMsg('✅ Account created! Heading to dashboard...', 'success'); document.getElementById('dashboardBtn').style.display = 'block'; setTimeout(() => window.location.href = 'dashboard.html', 1200); })
             .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
 
@@ -783,22 +571,18 @@
         const password = document.getElementById('password').value;
         if (!email || !password) return setMsg('❌ Please enter your email and password.', 'error');
         auth.signInWithEmailAndPassword(email, password)
-            .then(() => {
-                setMsg('✅ Logged in! Heading to dashboard...', 'success');
-                document.getElementById('dashboardBtn').style.display = 'block';
-                setTimeout(() => window.location.href = 'dashboard.html', 1200);
-            })
+            .then(() => { setMsg('✅ Logged in! Heading to dashboard...', 'success'); document.getElementById('dashboardBtn').style.display = 'block'; setTimeout(() => window.location.href = 'dashboard.html', 1200); })
             .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
 
     function goToDashboard() { window.location.href = 'dashboard.html'; }
 
     function forgotPassword() {
-        const email = document.getElementById("email").value.trim();
-        if (!email) return setMsg("❌ Enter your email address first.", "error");
+        const email = document.getElementById('email').value.trim();
+        if (!email) return setMsg('❌ Enter your email address first.', 'error');
         auth.sendPasswordResetEmail(email)
-            .then(() => setMsg("✅ Reset email sent! Check your inbox.", "success"))
-            .catch(err => setMsg("❌ " + (err.code === "auth/user-not-found" ? "No account found with that email." : "Something went wrong. Try again."), "error"));
+            .then(() => setMsg('✅ Reset email sent! Check your inbox.', 'success'))
+            .catch(() => setMsg('❌ Something went wrong. Try again.', 'error'));
     }
 </script>
 </body>
