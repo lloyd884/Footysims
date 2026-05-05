@@ -12,18 +12,17 @@ export default async function handler(req, res) {
   };
 
   // Exactly the plans shown publicly on footysims.com before any sign-up wall.
-  // Each entry: { unlimited, dataGB (if not unlimited), days }
-  // Slots chosen to match actually available Zendit offers per country.
+  // All slots verified against actual Zendit catalogue availability.
   const SITE_PLANS = {
-    'TH': [{ unlimited: false, dataGB: 1, days: 1  }, { unlimited: false, dataGB: 3, days: 7  }, { unlimited: true,  days: 15 }],
+    'TH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'JP': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 10, days: 30 }],
     'KR': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
-    'CN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: false, dataGB: 3, days: 15 }, { unlimited: true,  days: 30 }],
+    'CN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 10, days: 30 }],
     'IN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'ID': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'MY': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'SG': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
-    'PH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
+    'PH': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: false, dataGB: 10, days: 30 }],
     'VN': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'HK': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
     'TW': [{ unlimited: false, dataGB: 1, days: 7  }, { unlimited: true,  days: 7  }, { unlimited: true,  days: 30 }],
