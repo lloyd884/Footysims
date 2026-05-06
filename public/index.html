@@ -299,7 +299,6 @@
     <div class="card">
         <h2>Popular Destinations</h2>
         <div class="dest-grid" id="popularGrid">
-            <!-- Populated dynamically from API -->
             <div class="plan-loading">Loading prices...</div>
         </div>
         <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
@@ -331,35 +330,35 @@
         <div class="faq-list">
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">Will this work on my phone? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">FootySIMs eSIMs work on all eSIM-compatible smartphones. This includes iPhone XS and later, Samsung Galaxy S20 and later, Google Pixel 3 and later, and most Android flagships from 2020 onwards. Your phone must be carrier-unlocked — if you bought it outright it almost certainly is. If you bought it on contract directly from a network, check with them first.</div>
+                <div class="faq-answer">FootySIMs eSIMs work on all eSIM-compatible smartphones — iPhone XS and later, Samsung Galaxy S20 and later, Google Pixel 3 and later, and most Android flagships from 2020 onwards. Your phone must be carrier-unlocked. If you bought it outright it almost certainly is; if on contract, check with your network first.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">When do I get my QR code? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Instantly. Your QR code appears on screen as soon as your payment is confirmed. It is also sent to your email address. You can install it straight away and activate it when you land — there is no waiting time.</div>
+                <div class="faq-answer">Instantly. Your QR code appears on screen the moment payment is confirmed and is also sent to your email address. No waiting time.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">Will I keep my existing phone number? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Yes. Your eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number. You get the best of both — local data prices and your normal number.</div>
+                <div class="faq-answer">Yes. Your FootySIMs eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">How do I activate it when I land? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Once you've installed the eSIM before your trip, simply go to your phone's mobile data settings when you land and switch your data SIM to the FootySIMs eSIM. Make sure data roaming is enabled. You'll be connected in seconds — no SIM swapping required.</div>
-            </div>
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">What if it doesn't work? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">If you have any issues we'll sort it. Email us at footysims@proton.me and we'll get back to you as quickly as possible. If the eSIM genuinely fails to work, we offer a full refund within 24 hours of purchase — no questions asked.</div>
+                <div class="faq-answer">Install the eSIM before your trip by scanning the QR code. When you land, go to your phone's mobile data settings, switch your data SIM to the FootySIMs eSIM and enable roaming. You'll be connected in seconds — no SIM swapping required.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">What does "Unlimited" mean? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Unlimited plans give you a high-speed data allowance per day (typically 1–2GB). Once you reach that daily allowance, your speed is reduced for the rest of the day before resetting at midnight. You will never be cut off — data continues at the reduced speed. The exact daily high-speed allowance and throttled speed are shown on each plan.</div>
+                <div class="faq-answer">Unlimited plans include a daily high-speed allowance (typically 1–2GB). Once that daily allowance is used, your speed reduces until midnight when it resets. You are never cut off — data continues at the lower speed. The exact daily allowance and throttled speed are shown on each plan before purchase.</div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">What if it doesn't work? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Email us at footysims@proton.me and we'll get back to you as fast as possible. If the eSIM genuinely fails to work, we offer a full refund within 24 hours — no questions asked.</div>
             </div>
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">Can I use it for tethering / hotspot? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Yes — all FootySIMs plans support tethering. You can use your phone as a hotspot to share data with other devices like laptops or tablets.</div>
+                <div class="faq-answer">Yes — all FootySIMs plans support tethering. Share your data with laptops or tablets via hotspot.</div>
             </div>
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">When does my data plan start? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Your plan starts from the moment you first use data on the eSIM — not from when you purchase or install it. So you can buy it today and activate it when you arrive, and your days will only start counting from first use.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">When does my plan start? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Your plan starts from the moment you first use data — not from purchase or installation. Buy it today, activate when you land.</div>
             </div>
         </div>
     </div>
@@ -388,14 +387,22 @@
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 <script>
+    // ── Cookie & ref tracking ───────────────────────────────────────────────────
     (function() {
-        const ref = new URLSearchParams(window.location.search).get('ref');
+        const params = new URLSearchParams(window.location.search);
+        const ref = params.get('ref');
         if (ref) {
             const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
             document.cookie = `fsRef=${encodeURIComponent(ref)}; expires=${expires}; path=/; SameSite=Lax`;
         }
+        // Auto-select country if deep-linked from eSIMDB (?country=JP etc)
+        const countryParam = params.get('country');
+        if (countryParam) {
+            window._autoSelectCountry = countryParam.toUpperCase();
+        }
     })();
 
+    // ── Firebase ────────────────────────────────────────────────────────────────
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
         authDomain: "footysims-43be5.firebaseapp.com",
@@ -422,34 +429,21 @@
         return _loadingPromise;
     }
 
-    // Preload in background as soon as page loads
-    window.addEventListener('DOMContentLoaded', () => {
-        getPlans().then(populatePopular);
-    });
-
     // ── Plan display helpers ────────────────────────────────────────────────────
     function formatPlanLabel(plan) {
-        const isUnlimited = plan.dataCapPer === 'day';
-        if (isUnlimited) return 'Unlimited Data';
-        return `${plan.dataCap}${plan.dataUnit} Data`;
+        return plan.dataCapPer === 'day' ? 'Unlimited Data' : `${plan.dataCap}${plan.dataUnit} Data`;
     }
 
     function formatPlanSub(plan) {
-        const isUnlimited = plan.dataCapPer === 'day';
         const days = plan.validity;
         const dayStr = `${days} Day${days > 1 ? 's' : ''}`;
-        if (isUnlimited) {
-            const hs = plan.dataCap;
+        if (plan.dataCapPer === 'day') {
             const speed = plan.reducedSpeed >= 1000
                 ? `${(plan.reducedSpeed / 1000).toFixed(1)}Mbps`
                 : `${plan.reducedSpeed}kbps`;
-            return `${dayStr} · ${hs}GB/day full speed, then ${speed}`;
+            return `${dayStr} · ${plan.dataCap}GB/day full speed, then ${speed}`;
         }
         return `${dayStr} · Instant QR · No app needed`;
-    }
-
-    function formatPrice(plan) {
-        return `£${plan.prices.GBP.toFixed(2)}`;
     }
 
     // ── Country selector ────────────────────────────────────────────────────────
@@ -473,13 +467,10 @@
             return;
         }
 
-        const countryPlans = plans.filter(p =>
-            p.coverages && p.coverages[0] && p.coverages[0].code === code
-        );
-
+        const countryPlans = plans.filter(p => p.coverages?.[0]?.code === code);
         list.innerHTML = '';
 
-        if (countryPlans.length === 0) {
+        if (!countryPlans.length) {
             list.innerHTML = '<div class="plan-error">No plans available for this country.</div>';
             return;
         }
@@ -492,7 +483,7 @@
                     <div class="plan-label">${formatPlanLabel(plan)}</div>
                     <div class="plan-sub">${formatPlanSub(plan)}</div>
                 </div>
-                <div class="plan-price">${formatPrice(plan)}</div>
+                <div class="plan-price">£${plan.prices.GBP.toFixed(2)}</div>
             `;
             row.onclick = () => {
                 document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected'));
@@ -517,27 +508,36 @@
     function populatePopular(plans) {
         const grid = document.getElementById('popularGrid');
         if (!plans) { grid.innerHTML = ''; return; }
-
         const html = POPULAR.map(dest => {
-            // Find Unlimited 7d plan for this country
-            const plan = plans.find(p =>
-                p.coverages[0].code === dest.code &&
-                p.dataCapPer === 'day' &&
-                p.validity === 7
-            );
+            const plan = plans.find(p => p.coverages?.[0]?.code === dest.code && p.dataCapPer === 'day' && p.validity === 7);
             if (!plan) return '';
-            return `
-                <div class="dest-card">
-                    <div>
-                        <div class="dest-info">${dest.flag} ${dest.name}</div>
-                        <div class="dest-detail">Unlimited · 7 Days</div>
-                    </div>
-                    <div class="dest-price">£${plan.prices.GBP.toFixed(2)}</div>
-                </div>`;
+            return `<div class="dest-card">
+                <div><div class="dest-info">${dest.flag} ${dest.name}</div><div class="dest-detail">Unlimited · 7 Days</div></div>
+                <div class="dest-price">£${plan.prices.GBP.toFixed(2)}</div>
+            </div>`;
         }).join('');
-
-        grid.innerHTML = html || '<p style="color:var(--muted);font-size:13px;">Prices loading...</p>';
+        grid.innerHTML = html || '';
     }
+
+    // ── On load: preload API + auto-select country if deep-linked ───────────────
+    window.addEventListener('DOMContentLoaded', async () => {
+        const plans = await getPlans();
+        populatePopular(plans);
+
+        if (window._autoSelectCountry) {
+            const sel = document.getElementById('countrySelect');
+            // Find matching option
+            const opt = Array.from(sel.options).find(o => o.value === window._autoSelectCountry);
+            if (opt) {
+                sel.value = window._autoSelectCountry;
+                await showPlans();
+                // Scroll to the selector smoothly
+                setTimeout(() => {
+                    sel.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+    });
 
     // ── UI helpers ──────────────────────────────────────────────────────────────
     function scrollToSignup() {
@@ -555,16 +555,16 @@
 
     // ── Auth ────────────────────────────────────────────────────────────────────
     function friendlyError(code) {
-        switch(code) {
-            case 'auth/invalid-credential':
-            case 'auth/wrong-password':
-            case 'auth/user-not-found': return '❌ Email or password is incorrect.';
-            case 'auth/email-already-in-use': return '❌ An account with this email already exists. Try logging in.';
-            case 'auth/weak-password': return '❌ Password must be at least 6 characters.';
-            case 'auth/invalid-email': return '❌ Please enter a valid email address.';
-            case 'auth/too-many-requests': return '❌ Too many attempts. Please wait a moment and try again.';
-            default: return '❌ Something went wrong. Please try again.';
-        }
+        const msgs = {
+            'auth/invalid-credential': '❌ Email or password is incorrect.',
+            'auth/wrong-password':     '❌ Email or password is incorrect.',
+            'auth/user-not-found':     '❌ Email or password is incorrect.',
+            'auth/email-already-in-use': '❌ An account with this email already exists. Try logging in.',
+            'auth/weak-password':      '❌ Password must be at least 6 characters.',
+            'auth/invalid-email':      '❌ Please enter a valid email address.',
+            'auth/too-many-requests':  '❌ Too many attempts. Please wait a moment and try again.',
+        };
+        return msgs[code] || '❌ Something went wrong. Please try again.';
     }
 
     function setMsg(text, type) { const el = document.getElementById('message'); el.textContent = text; el.className = type; }
