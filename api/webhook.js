@@ -106,15 +106,77 @@ async function sendESIMEmail({ email, offerId, transactionId, smdpAddress, activ
     if (!res.ok) console.error('Resend error:', await res.text());
 }
 
-async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin, db) {
-    //    Deduplication check                                           
-    // Use Firestore to claim this sessionId atomically.
-    // If another process (browser or webhook) already claimed it, skip.
+// ── eSIMDB conversion notification to Shuhei ──────────────────────────────────
+async function sendEsimdbConversionEmail({ offerId, transactionId, amount }) {
+    const now = new Date().toUTCString();
+
+    const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:0;background:#f4f7f4;font-family:Arial,sans-serif;">
+  <div style="max-width:480px;margin:0 auto;padding:32px 16px;">
+    <div style="background:#1a7a1a;border-radius:14px;padding:20px;text-align:center;margin-bottom:20px;">
+      <h1 style="color:white;font-size:22px;margin:0;">Footy<span style="color:#7fff00;">SIMs</span></h1>
+      <p style="color:rgba(255,255,255,0.85);margin:6px 0 0;font-size:13px;">eSIMDB Partner Conversion</p>
+    </div>
+    <div style="background:white;border-radius:14px;padding:24px;margin-bottom:16px;">
+      <h2 style="color:#1a7a1a;font-size:18px;margin:0 0 16px;">✅ New eSIMDB Conversion</h2>
+      <p style="font-size:14px;color:#444;margin:0 0 20px;">
+        A customer referred from eSIMDB has completed a purchase on FootySIMs.
+      </p>
+      <table style="width:100%;font-size:14px;color:#444;border-collapse:collapse;">
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:10px 0;color:#888;font-weight:600;">Date</td>
+          <td style="padding:10px 0;text-align:right;">${now}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:10px 0;color:#888;font-weight:600;">Plan</td>
+          <td style="padding:10px 0;text-align:right;">${offerId}</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f0f0f0;">
+          <td style="padding:10px 0;color:#888;font-weight:600;">Sale Amount</td>
+          <td style="padding:10px 0;text-align:right;font-weight:700;color:#1a7a1a;">£${(amount / 100).toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 0;color:#888;font-weight:600;">Transaction ID</td>
+          <td style="padding:10px 0;text-align:right;font-family:monospace;font-size:11px;">${transactionId}</td>
+        </tr>
+      </table>
+    </div>
+    <div style="background:white;border-radius:14px;padding:16px;text-align:center;font-size:13px;color:#888;">
+      <p>Monthly reports will be sent at the end of each calendar month.</p>
+      <p style="margin-top:8px;">Questions: <a href="mailto:footysims@proton.me" style="color:#1a7a1a;">footysims@proton.me</a></p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            from: 'FootySIMs <noreply@footysims.com>',
+            to: 'shuhei@esimdb.com',
+            subject: `✅ eSIMDB Conversion — ${offerId}`,
+            html
+        })
+    });
+
+    if (!res.ok) console.error('Resend eSIMDB notification error:', await res.text());
+    else console.log('eSIMDB conversion notification sent to Shuhei:', transactionId);
+}
+
+async function purchaseAndSaveESIM(sessionId, offerId, uid, email, fsRef, amount, stripe, admin, db) {
+    // ── Deduplication check ───────────────────────────────────────────────────
     const sessionRef = db.collection('stripe_sessions').doc(sessionId);
     const claimed = await db.runTransaction(async t => {
         const doc = await t.get(sessionRef);
-        if (doc.exists) return false; // already claimed
-        t.set(sessionRef, { claimedAt: admin.firestore.FieldValue.serverTimestamp(), uid, email, offerId });
+        if (doc.exists) return false;
+        t.set(sessionRef, { claimedAt: admin.firestore.FieldValue.serverTimestamp(), uid, email, offerId, fsRef });
         return true;
     });
 
@@ -122,7 +184,7 @@ async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin
         console.log('Session already claimed, skipping duplicate:', sessionId);
         return;
     }
-    //                                                                 
+    // ─────────────────────────────────────────────────────────────────────────
 
     const zenditHeaders = {
         'Authorization': `Bearer ${ZENDIT_KEY}`,
@@ -176,14 +238,22 @@ async function purchaseAndSaveESIM(sessionId, offerId, uid, email, stripe, admin
         smdpAddress,
         activationCode,
         iccid,
+        fsRef: fsRef || '',
         source: 'webhook',
         createdAt: admin.firestore.FieldValue.serverTimestamp()
     });
 
     console.log('eSIM saved for:', email, transactionId);
 
+    // Send eSIM to customer
     await sendESIMEmail({ email, offerId, transactionId, smdpAddress, activationCode, iccid });
     console.log('Email sent to:', email);
+
+    // Send conversion notification to Shuhei if referred from eSIMDB
+    if (fsRef === 'esimdb') {
+        await sendEsimdbConversionEmail({ offerId, transactionId, amount });
+        console.log('eSIMDB conversion notification sent for:', transactionId);
+    }
 }
 
 export default async function handler(req, res) {
@@ -204,14 +274,15 @@ export default async function handler(req, res) {
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
-        const { offerId, uid, email } = session.metadata || {};
+        const { offerId, uid, email, fsRef } = session.metadata || {};
+        const amount = session.amount_total || 0;
 
         if (!offerId || !uid || !email) {
             console.error('Missing metadata in session:', session.id);
             return res.status(200).json({ received: true });
         }
 
-        purchaseAndSaveESIM(session.id, offerId, uid, email, stripe, admin, db).catch(console.error);
+        purchaseAndSaveESIM(session.id, offerId, uid, email, fsRef || '', amount, stripe, admin, db).catch(console.error);
     }
 
     return res.status(200).json({ received: true });
