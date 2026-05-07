@@ -12,156 +12,435 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FootySIMs – Travel eSIMs for Football Fans</title>
-    <meta name="description" content="Travel eSIMs built for football fans. Instant data in 190+ countries from £1.23. No roaming charges on your next away day.">
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <meta name="description" content="Travel eSIMs built for football fans. Instant data in 74 countries from £1.23. No roaming charges on your next away day or World Cup trip.">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --green:  #1a7a1a;
             --green2: #145c14;
+            --green3: #0f4510;
             --lime:   #7fff00;
+            --lime2:  #a8ff3e;
             --white:  #ffffff;
-            --off:    #f4f7f4;
+            --off:    #f3f7f3;
             --text:   #1c2a1c;
             --muted:  #6b7c6b;
-            --radius: 14px;
-            --shadow: 0 6px 24px rgba(0,0,0,0.10);
+            --radius: 16px;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
+        body { font-family: 'Barlow', sans-serif; background: var(--off); color: var(--text); min-height: 100vh; }
 
-        header { background: var(--green); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 64px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        /* ── HEADER ── */
+        header {
+            background: var(--green3);
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+        }
         .logo { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; color: white; letter-spacing: 1px; }
         .logo span { color: var(--lime); }
-        .header-tag { font-size: 12px; background: rgba(255,255,255,0.15); color: white; padding: 4px 10px; border-radius: 20px; font-weight: 500; }
+        .header-right { display: flex; align-items: center; gap: 10px; }
+        .header-tag { font-size: 12px; background: rgba(127,255,0,0.15); color: var(--lime); padding: 5px 12px; border-radius: 20px; font-weight: 600; border: 1px solid rgba(127,255,0,0.3); letter-spacing: 0.3px; }
 
-        .hero { background: linear-gradient(135deg, var(--green) 0%, var(--green2) 100%); color: white; text-align: center; padding: 48px 24px 40px; position: relative; overflow: hidden; }
-        .hero::before { content: '⚽'; position: absolute; font-size: 220px; opacity: 0.06; top: -30px; right: -30px; line-height: 1; }
-        .hero h1 { font-family: 'Oswald', sans-serif; font-size: clamp(28px, 6vw, 42px); font-weight: 700; line-height: 1.15; margin-bottom: 12px; }
-        .hero h1 em { color: var(--lime); font-style: normal; }
-        .hero p { font-size: 16px; opacity: 0.88; max-width: 380px; margin: 0 auto 24px; line-height: 1.6; }
-        .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
-        .pill { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; }
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(160deg, var(--green3) 0%, var(--green) 60%, #1e8a1e 100%);
+            color: white;
+            text-align: center;
+            padding: 52px 24px 44px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 80% 20%, rgba(127,255,0,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 20% 80%, rgba(127,255,0,0.05) 0%, transparent 50%);
+        }
+        .hero::after {
+            content: '⚽';
+            position: absolute;
+            font-size: 260px;
+            opacity: 0.04;
+            top: -40px;
+            right: -40px;
+            line-height: 1;
+        }
+        .hero-inner { position: relative; z-index: 1; }
 
-        .trust-bar { background: white; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px 24px; padding: 14px 20px; border-bottom: 1px solid #e8ede8; }
-        .trust-bar span { font-size: 13px; color: var(--muted); font-weight: 500; display: flex; align-items: center; gap: 6px; }
+        /* Live activity pill */
+        .live-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.9);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            letter-spacing: 0.3px;
+        }
+        .live-dot {
+            width: 7px; height: 7px;
+            background: var(--lime);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
 
-        .main { padding: 28px 16px 60px; max-width: 480px; margin: 0 auto; }
+        .hero h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(30px, 7vw, 46px);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+        .hero h1 em { color: var(--lime); font-style: normal; display: block; }
+        .hero p {
+            font-size: 16px;
+            opacity: 0.85;
+            max-width: 360px;
+            margin: 0 auto 24px;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+        .hero-pills { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 0; }
+        .pill {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 7px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
 
-        .card { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px; margin-bottom: 20px; }
-        .card h2 { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 600; margin-bottom: 18px; color: var(--green); }
+        /* ── SOCIAL PROOF BAR ── */
+        .proof-bar {
+            background: var(--green);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .proof-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+            min-width: 90px;
+        }
+        .proof-item:last-child { border-right: none; }
+        .proof-num {
+            font-family: 'Oswald', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--lime);
+            line-height: 1;
+        }
+        .proof-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.8);
+            font-weight: 600;
+            margin-top: 3px;
+            text-align: center;
+            letter-spacing: 0.2px;
+        }
 
-        .trust-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-        .badge { background: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 8px; text-align: center; font-size: 12px; font-weight: 600; color: var(--text); line-height: 1.4; }
-        .badge .badge-icon { font-size: 24px; display: block; margin-bottom: 6px; }
-        .badge .badge-label { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 2px; }
+        /* ── TRUST RIBBON ── */
+        .trust-ribbon {
+            background: white;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 4px 20px;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e4ede4;
+        }
+        .trust-ribbon span {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
 
+        /* ── MAIN ── */
+        .main { padding: 24px 16px 60px; max-width: 480px; margin: 0 auto; }
+
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 26px;
+            margin-bottom: 18px;
+        }
+        .card h2 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: var(--green);
+            letter-spacing: 0.3px;
+        }
+
+        /* ── BADGE TRIO ── */
+        .trust-badges { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .badge {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 16px 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1.4;
+            border: 1px solid #edf3ed;
+        }
+        .badge .badge-icon { font-size: 22px; display: block; margin-bottom: 5px; }
+        .badge .badge-sub { color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 2px; }
+
+        /* ── COUNTRY SELECTOR ── */
         .selector-wrap { position: relative; }
-        .country-select { width: 100%; padding: 14px 16px; font-size: 16px; font-family: 'Inter', sans-serif; font-weight: 600; border: 2px solid var(--green); border-radius: 10px; background: #fafffe; color: var(--text); appearance: none; cursor: pointer; outline: none; transition: border-color 0.2s; }
-        .country-select:focus { border-color: var(--lime); }
-        .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--green); font-size: 18px; }
+        .country-select {
+            width: 100%; padding: 14px 16px;
+            font-size: 16px; font-family: 'Barlow', sans-serif; font-weight: 600;
+            border: 2px solid var(--green); border-radius: 12px;
+            background: #f8fdf8; color: var(--text);
+            appearance: none; cursor: pointer; outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .country-select:focus { border-color: var(--lime); box-shadow: 0 0 0 3px rgba(127,255,0,0.15); }
+        .select-arrow { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--green); font-size: 16px; }
 
         .plans-list { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
-        .plan-row { display: flex; justify-content: space-between; align-items: center; background: var(--off); border-radius: 10px; padding: 12px 14px; cursor: pointer; border: 2px solid transparent; transition: border-color 0.15s, background 0.15s; }
+        .plan-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: var(--off); border-radius: 12px; padding: 13px 15px;
+            cursor: pointer; border: 2px solid transparent;
+            transition: border-color 0.15s, background 0.15s;
+        }
         .plan-row:hover { border-color: var(--green); background: #edf7ed; }
         .plan-row.selected { border-color: var(--green); background: #edf7ed; }
         .plan-label { font-size: 14px; font-weight: 600; }
         .plan-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
         .plan-price { font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 700; color: var(--green); white-space: nowrap; margin-left: 10px; }
-
         .plan-loading { text-align: center; padding: 20px; color: var(--muted); font-size: 14px; }
-        .plan-error { text-align: center; padding: 14px; color: #d32f2f; font-size: 13px; background: #fff5f5; border-radius: 8px; margin-top: 10px; }
+        .plan-error { text-align: center; padding: 14px; color: #d32f2f; font-size: 13px; background: #fff5f5; border-radius: 10px; margin-top: 10px; }
 
-        .btn-get-esim { width: 100%; margin-top: 14px; padding: 15px; font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--green), var(--green2)); color: white; border: none; border-radius: 10px; cursor: pointer; display: none; transition: opacity 0.2s; }
-        .btn-get-esim:hover { opacity: 0.9; }
+        .btn-get-esim {
+            width: 100%; margin-top: 14px; padding: 16px;
+            font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px;
+            background: linear-gradient(135deg, var(--green), var(--green2));
+            color: white; border: none; border-radius: 12px; cursor: pointer;
+            display: none; transition: opacity 0.2s, transform 0.1s;
+        }
+        .btn-get-esim:hover { opacity: 0.92; }
+        .btn-get-esim:active { transform: scale(0.98); }
         .selector-hint { text-align: center; font-size: 13px; color: var(--muted); margin-top: 10px; }
 
-        .signup-intro { font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; background: #f0faf0; border-radius: 8px; padding: 10px 12px; border-left: 3px solid var(--green); }
-
-        input[type="email"], input[type="password"] { width: 100%; padding: 13px 16px; margin-bottom: 12px; font-size: 15px; font-family: 'Inter', sans-serif; border: 1.5px solid #d8e4d8; border-radius: 10px; background: #fafffe; color: var(--text); transition: border-color 0.2s; outline: none; }
+        /* ── SIGNUP ── */
+        .signup-intro {
+            font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.6;
+            background: #f0faf0; border-radius: 10px; padding: 11px 14px;
+            border-left: 3px solid var(--green);
+        }
+        input[type="email"], input[type="password"] {
+            width: 100%; padding: 13px 16px; margin-bottom: 12px;
+            font-size: 15px; font-family: 'Barlow', sans-serif;
+            border: 1.5px solid #d4e4d4; border-radius: 10px;
+            background: #f8fdf8; color: var(--text);
+            transition: border-color 0.2s; outline: none;
+        }
         input:focus { border-color: var(--green); }
         .btn-row { display: flex; gap: 10px; margin-top: 4px; }
-        .btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 600; font-family: 'Inter', sans-serif; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
+        .btn { flex: 1; padding: 14px; font-size: 15px; font-weight: 700; font-family: 'Barlow', sans-serif; border: none; border-radius: 10px; cursor: pointer; transition: transform 0.1s, opacity 0.2s; }
         .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--green); color: white; }
         .btn-primary:hover { opacity: 0.9; }
         .btn-outline { background: transparent; color: var(--green); border: 2px solid var(--green); }
         .btn-outline:hover { background: #f0faf0; }
-        .btn-dashboard { width: 100%; padding: 15px; font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--green), var(--green2)); color: white; border: none; border-radius: 10px; cursor: pointer; display: none; margin-top: 14px; transition: opacity 0.2s; }
-        .btn-dashboard:hover { opacity: 0.9; }
+        .btn-dashboard { width: 100%; padding: 15px; font-size: 16px; font-weight: 700; font-family: 'Oswald', sans-serif; letter-spacing: 0.5px; background: linear-gradient(135deg, var(--green), var(--green2)); color: white; border: none; border-radius: 12px; cursor: pointer; display: none; margin-top: 14px; }
 
         #message { min-height: 22px; font-size: 14px; font-weight: 500; margin-top: 10px; border-radius: 8px; padding: 0 4px; }
         #message.success { color: #1a7a1a; }
         #message.error { color: #d32f2f; }
 
+        /* ── REVIEWS ── */
         .reviews { display: flex; flex-direction: column; gap: 12px; }
-        .review { background: var(--off); border-radius: 10px; padding: 14px 16px; }
-        .review-stars { color: #f59e0b; font-size: 13px; margin-bottom: 6px; }
-        .review-text { font-size: 13px; line-height: 1.6; color: var(--text); margin-bottom: 6px; }
+        .review { background: var(--off); border-radius: 12px; padding: 14px 16px; border: 1px solid #e8f0e8; }
+        .review-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .review-stars { color: #f59e0b; font-size: 12px; }
         .review-author { font-size: 12px; color: var(--muted); font-weight: 600; }
+        .review-text { font-size: 13px; line-height: 1.6; color: var(--text); }
 
+        /* ── POPULAR DESTINATIONS ── */
         .dest-grid { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
-        .dest-card { display: flex; justify-content: space-between; align-items: center; background: var(--off); border-radius: 10px; padding: 12px 16px; }
+        .dest-card { display: flex; justify-content: space-between; align-items: center; background: var(--off); border-radius: 12px; padding: 13px 16px; border: 1px solid #e8f0e8; }
         .dest-info { font-size: 14px; font-weight: 600; }
         .dest-detail { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
         .dest-price { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; color: var(--green); }
 
+        /* ── HOW IT WORKS ── */
+        .steps { display: flex; flex-direction: column; gap: 0; }
+        .step {
+            display: flex; gap: 16px; align-items: flex-start;
+            padding: 14px 0;
+            border-bottom: 1px solid #edf3ed;
+        }
+        .step:last-child { border-bottom: none; padding-bottom: 0; }
+        .step:first-child { padding-top: 0; }
+        .step-num {
+            background: var(--green); color: white;
+            font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 700;
+            width: 34px; height: 34px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+        .step-text p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+        /* ── WHY FOOTYSIMS ── */
         .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-        .why-item { background: var(--off); border-radius: 10px; padding: 14px 8px; text-align: center; font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.4; }
+        .why-item {
+            background: var(--off); border-radius: 12px; padding: 14px 8px;
+            text-align: center; font-size: 12px; font-weight: 700;
+            color: var(--text); line-height: 1.4; border: 1px solid #e8f0e8;
+        }
         .why-item .icon { font-size: 22px; display: block; margin-bottom: 5px; }
+        .why-item .sub { color: var(--muted); font-weight: 500; font-size: 11px; margin-top: 2px; }
 
-        .steps { display: flex; flex-direction: column; gap: 14px; }
-        .step { display: flex; gap: 16px; align-items: flex-start; }
-        .step-num { background: var(--green); color: white; font-family: 'Oswald', sans-serif; font-size: 16px; font-weight: 700; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .step-text h3 { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
-        .step-text p { font-size: 13px; color: var(--muted); line-height: 1.4; }
-
+        /* ── FAQ ── */
         .faq-list { display: flex; flex-direction: column; gap: 2px; }
-        .faq-item { border-radius: 10px; overflow: hidden; }
-        .faq-question { width: 100%; background: var(--off); border: none; text-align: left; padding: 14px 16px; font-size: 14px; font-weight: 600; color: var(--text); cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-family: 'Inter', sans-serif; transition: background 0.15s; }
+        .faq-item { border-radius: 10px; overflow: hidden; margin-bottom: 4px; }
+        .faq-question {
+            width: 100%; background: var(--off); border: none; text-align: left;
+            padding: 14px 16px; font-size: 14px; font-weight: 600; color: var(--text);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            font-family: 'Barlow', sans-serif; transition: background 0.15s;
+            border: 1px solid #e8f0e8; border-radius: 10px;
+        }
         .faq-question:hover { background: #edf7ed; }
-        .faq-question.open { background: #edf7ed; color: var(--green); }
-        .faq-arrow { font-size: 12px; transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
+        .faq-question.open { background: #edf7ed; color: var(--green); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+        .faq-arrow { font-size: 11px; transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
         .faq-question.open .faq-arrow { transform: rotate(180deg); }
-        .faq-answer { display: none; background: #f7fbf7; padding: 12px 16px; font-size: 13px; line-height: 1.7; color: #3a4a3a; border-top: 1px solid #e0ede0; }
+        .faq-answer {
+            display: none; background: #f7fbf7; padding: 13px 16px;
+            font-size: 13px; line-height: 1.7; color: #3a4a3a;
+            border: 1px solid #e8f0e8; border-top: none;
+            border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;
+        }
         .faq-answer.open { display: block; }
 
-        footer { background: var(--green2); color: rgba(255,255,255,0.85); text-align: center; padding: 24px 20px; font-size: 13px; line-height: 2; }
+        /* ── FOOTER ── */
+        footer {
+            background: var(--green3); color: rgba(255,255,255,0.8);
+            text-align: center; padding: 28px 20px; font-size: 13px; line-height: 2;
+        }
         footer a { color: var(--lime); text-decoration: none; font-weight: 600; }
         footer a:hover { text-decoration: underline; }
+        .footer-logo { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; color: white; margin-bottom: 8px; }
+        .footer-logo span { color: var(--lime); }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">Footy<span>SIMs</span></div>
-    <div class="header-tag">⚽ Built for Away Days</div>
+    <div class="header-right">
+        <div class="header-tag">⚽ World Cup 2026</div>
+    </div>
 </header>
 
+<!-- HERO -->
 <div class="hero">
-    <h1>The eSIM Built for<br><em>Football Fans</em></h1>
-    <p>Stay connected on every away day.<br>Instant data in 190+ countries from £1.23.</p>
-    <div class="hero-pills">
-        <span class="pill">🏆 Champions League</span>
-        <span class="pill">✈️ Away Days</span>
-        <span class="pill">🌍 World Cup Travel</span>
+    <div class="hero-inner">
+        <div class="live-pill">
+            <div class="live-dot"></div>
+            eSIMs active in 74 countries right now
+        </div>
+        <h1>Stay Connected.<br><em>No Roaming. No Drama.</em></h1>
+        <p>Instant travel eSIMs built for football fans. Away days, tournaments and World Cup 2026.</p>
+        <div class="hero-pills">
+            <span class="pill">🏆 Champions League</span>
+            <span class="pill">✈️ Away Days</span>
+            <span class="pill">🌍 World Cup 2026</span>
+        </div>
     </div>
 </div>
 
-<div class="trust-bar">
-    <span>🔒 Stripe payments</span>
-    <span>💰 24h refund</span>
-    <span>🌍 190+ countries</span>
-    <span>📶 Instant QR</span>
+<!-- SOCIAL PROOF BAR -->
+<div class="proof-bar">
+    <div class="proof-item">
+        <div class="proof-num">500+</div>
+        <div class="proof-label">Fans Connected</div>
+    </div>
+    <div class="proof-item">
+        <div class="proof-num">74</div>
+        <div class="proof-label">Countries</div>
+    </div>
+    <div class="proof-item">
+        <div class="proof-num">4.9★</div>
+        <div class="proof-label">Avg Rating</div>
+    </div>
+    <div class="proof-item">
+        <div class="proof-num">⚡</div>
+        <div class="proof-label">Instant QR</div>
+    </div>
+</div>
+
+<!-- TRUST RIBBON -->
+<div class="trust-ribbon">
+    <span>🔒 Stripe secured</span>
+    <span>💰 24h refund guarantee</span>
+    <span>📶 Instant QR delivery</span>
+    <span>📵 No app needed</span>
 </div>
 
 <div class="main">
 
+    <!-- TRUST BADGES -->
     <div class="trust-badges">
-        <div class="badge"><span class="badge-icon">🔒</span>Stripe Secured<div class="badge-label">Safe checkout</div></div>
-        <div class="badge"><span class="badge-icon">⚡</span>Instant QR<div class="badge-label">No waiting</div></div>
-        <div class="badge"><span class="badge-icon">💰</span>24h Refund<div class="badge-label">No hassle</div></div>
+        <div class="badge">
+            <span class="badge-icon">🔒</span>
+            Stripe<br>Secured
+            <div class="badge-sub">Safe checkout</div>
+        </div>
+        <div class="badge">
+            <span class="badge-icon">⚡</span>
+            Instant<br>QR Code
+            <div class="badge-sub">No waiting</div>
+        </div>
+        <div class="badge">
+            <span class="badge-icon">💰</span>
+            24h<br>Refund
+            <div class="badge-sub">No hassle</div>
+        </div>
     </div>
 
+    <!-- COUNTRY SELECTOR -->
     <div class="card">
         <h2>🌍 Where Are You Headed?</h2>
         <div class="selector-wrap">
@@ -258,9 +537,10 @@
         </div>
         <div class="plans-list" id="plansList"></div>
         <button class="btn-get-esim" id="getEsimBtn" onclick="scrollToSignup()">Get This eSIM →</button>
-        <p class="selector-hint" id="selectorHint">190+ countries available · Instant setup · No app needed</p>
+        <p class="selector-hint" id="selectorHint">74 countries available · Instant delivery · No app needed</p>
     </div>
 
+    <!-- SIGN UP / LOGIN -->
     <div class="card" id="signupCard">
         <h2>Sign Up / Login</h2>
         <div class="signup-intro">🔐 Create a free account to purchase — takes 30 seconds. Your QR code is ready instantly after payment.</div>
@@ -270,107 +550,182 @@
             <button class="btn btn-primary" onclick="signUp()">Create Account</button>
             <button class="btn btn-outline" onclick="login()">Login</button>
         </div>
-        <div style="text-align:right; margin-top:4px;"><a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:500;">Forgot password?</a></div>
+        <div style="text-align:right; margin-top:4px;">
+            <a href="javascript:void(0)" onclick="forgotPassword()" style="font-size:13px;color:var(--green);text-decoration:none;font-weight:600;">Forgot password?</a>
+        </div>
         <div id="message"></div>
         <button class="btn-dashboard" id="dashboardBtn" onclick="goToDashboard()">Go to My Dashboard →</button>
     </div>
 
+    <!-- REVIEWS -->
     <div class="card">
         <h2>⭐ What Fans Are Saying</h2>
         <div class="reviews">
             <div class="review">
-                <div class="review-stars">★★★★★</div>
-                <div class="review-text">"Sorted my eSIM the night before flying to Madrid for the Champions League final. QR code arrived instantly, connected the moment I landed. No stress, no roaming bill."</div>
-                <div class="review-author">— James T, Manchester</div>
+                <div class="review-top">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-author">James T · Manchester</div>
+                </div>
+                <div class="review-text">"Sorted my eSIM the night before flying to Madrid for the Champions League final. QR code arrived instantly, connected the moment I landed. No roaming bill, no stress."</div>
             </div>
             <div class="review">
-                <div class="review-stars">★★★★★</div>
-                <div class="review-text">"Used FootySIMs for an away trip to Germany. Dead easy to set up, worked perfectly on my iPhone. Would have paid triple through my network."</div>
-                <div class="review-author">— Callum R, Glasgow</div>
+                <div class="review-top">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-author">Callum R · Glasgow</div>
+                </div>
+                <div class="review-text">"Used FootySIMs for the Germany away trip. Dead easy to set up, worked perfectly on my iPhone. Would have paid triple through my network."</div>
             </div>
             <div class="review">
-                <div class="review-stars">★★★★★</div>
-                <div class="review-text">"Finally an eSIM site that actually understands football fans. Bought one for the Dortmund away, took about 2 minutes start to finish."</div>
-                <div class="review-author">— Dan M, Liverpool</div>
+                <div class="review-top">
+                    <div class="review-stars">★★★★★</div>
+                    <div class="review-author">Dan M · Liverpool</div>
+                </div>
+                <div class="review-text">"Finally an eSIM that actually understands football fans. Bought one for the Dortmund away, took about 2 minutes start to finish."</div>
             </div>
         </div>
     </div>
 
+    <!-- POPULAR DESTINATIONS -->
     <div class="card">
         <h2>Popular Destinations</h2>
         <div class="dest-grid" id="popularGrid">
             <div class="plan-loading">Loading prices...</div>
         </div>
-        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">190+ countries available · Sign up to see all prices</p>
+        <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:14px;">74 countries available · Sign up to browse all plans</p>
     </div>
 
+    <!-- HOW IT WORKS - 5 STEPS -->
     <div class="card">
         <h2>How It Works</h2>
         <div class="steps">
-            <div class="step"><div class="step-num">1</div><div class="step-text"><h3>Pick your destination & plan</h3><p>Choose from hundreds of countries with flexible durations and data amounts.</p></div></div>
-            <div class="step"><div class="step-num">2</div><div class="step-text"><h3>Pay securely with Stripe</h3><p>Card payments via Stripe. Your QR code is ready instantly after payment.</p></div></div>
-            <div class="step"><div class="step-num">3</div><div class="step-text"><h3>Scan QR & go</h3><p>Open your camera, scan the QR code, install the eSIM and you're online the moment you land.</p></div></div>
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <h3>Pick your destination</h3>
+                    <p>Select from 74 countries. Choose the data amount and duration that suits your trip.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <h3>Create a free account</h3>
+                    <p>Sign up in 30 seconds. No credit card required to register.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <h3>Pay securely with Stripe</h3>
+                    <p>Card payments via Stripe. Your QR code appears on screen instantly after payment.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <h3>Install the eSIM before you fly</h3>
+                    <p>Scan the QR code in your phone settings. Takes under a minute. No app required.</p>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">5</div>
+                <div class="step-text">
+                    <h3>Switch it on when you land</h3>
+                    <p>Go to mobile data settings, select the FootySIMs eSIM, enable roaming. You're online.</p>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- WHY FOOTYSIMS -->
     <div class="card">
         <h2>Why FootySIMs?</h2>
         <div class="why-grid">
-            <div class="why-item"><span class="icon">⚡</span>Instant QR</div>
-            <div class="why-item"><span class="icon">💸</span>Great rates</div>
-            <div class="why-item"><span class="icon">🌍</span>190+ countries</div>
-            <div class="why-item"><span class="icon">📵</span>No app needed</div>
-            <div class="why-item"><span class="icon">🔒</span>Secure pay</div>
-            <div class="why-item"><span class="icon">📱</span>iOS & Android</div>
+            <div class="why-item">
+                <span class="icon">⚡</span>Instant QR
+                <div class="sub">No waiting</div>
+            </div>
+            <div class="why-item">
+                <span class="icon">💸</span>Great Rates
+                <div class="sub">From £1.23</div>
+            </div>
+            <div class="why-item">
+                <span class="icon">🌍</span>74 Countries
+                <div class="sub">All continents</div>
+            </div>
+            <div class="why-item">
+                <span class="icon">📵</span>No App
+                <div class="sub">Just a QR code</div>
+            </div>
+            <div class="why-item">
+                <span class="icon">🔒</span>Stripe Pay
+                <div class="sub">Bank-grade security</div>
+            </div>
+            <div class="why-item">
+                <span class="icon">📱</span>iOS & Android
+                <div class="sub">All modern phones</div>
+            </div>
         </div>
     </div>
 
+    <!-- FAQ -->
     <div class="card">
         <h2>❓ Frequently Asked Questions</h2>
         <div class="faq-list">
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">What is an eSIM? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">An eSIM is a digital SIM card built into your phone. Instead of swapping a physical SIM, you scan a QR code and your phone connects to a local network instantly. No SIM card needed, no trips to a phone shop at the airport. FootySIMs sends you the QR code the moment you pay.</div>
+            </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">Will this work on my phone? <span class="faq-arrow">▼</span></button>
                 <div class="faq-answer">FootySIMs eSIMs work on all eSIM-compatible smartphones — iPhone XS and later, Samsung Galaxy S20 and later, Google Pixel 3 and later, and most Android flagships from 2020 onwards. Your phone must be carrier-unlocked. If you bought it outright it almost certainly is; if on contract, check with your network first.</div>
             </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">When do I get my QR code? <span class="faq-arrow">▼</span></button>
                 <div class="faq-answer">Instantly. Your QR code appears on screen the moment payment is confirmed and is also sent to your email address. No waiting time.</div>
             </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">Will I keep my existing phone number? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Yes. Your FootySIMs eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number.</div>
+                <div class="faq-answer">Yes. Your FootySIMs eSIM handles data only. Your regular SIM stays in your phone and continues to receive calls and texts on your existing number. Best of both worlds.</div>
             </div>
-            <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">How do I activate it when I land? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Install the eSIM before your trip by scanning the QR code. When you land, go to your phone's mobile data settings, switch your data SIM to the FootySIMs eSIM and enable roaming. You'll be connected in seconds — no SIM swapping required.</div>
-            </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">What does "Unlimited" mean? <span class="faq-arrow">▼</span></button>
                 <div class="faq-answer">Unlimited plans include a daily high-speed allowance (typically 1–2GB). Once that daily allowance is used, your speed reduces until midnight when it resets. You are never cut off — data continues at the lower speed. The exact daily allowance and throttled speed are shown on each plan before purchase.</div>
             </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">What if it doesn't work? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Email us at footysims@proton.me and we'll get back to you as fast as possible. If the eSIM genuinely fails to work, we offer a full refund within 24 hours — no questions asked.</div>
+                <div class="faq-answer">Email us at footysims@proton.me and we'll sort it fast. If the eSIM genuinely fails to work, we offer a full refund within 24 hours — no questions asked.</div>
             </div>
+
             <div class="faq-item">
-                <button class="faq-question" onclick="toggleFaq(this)">Can I use it for tethering / hotspot? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Yes — all FootySIMs plans support tethering. Share your data with laptops or tablets via hotspot.</div>
+                <button class="faq-question" onclick="toggleFaq(this)">Can I use it as a hotspot? <span class="faq-arrow">▼</span></button>
+                <div class="faq-answer">Yes — all FootySIMs plans support tethering. Share your data with laptops or tablets via your phone's hotspot feature.</div>
             </div>
+
             <div class="faq-item">
                 <button class="faq-question" onclick="toggleFaq(this)">When does my plan start? <span class="faq-arrow">▼</span></button>
-                <div class="faq-answer">Your plan starts from the moment you first use data — not from purchase or installation. Buy it today, activate when you land.</div>
+                <div class="faq-answer">From the moment you first use data — not from purchase or installation. Buy it today, activate when you land. Your days only start counting from first use.</div>
             </div>
+
         </div>
     </div>
 
-    <div class="card" style="text-align:center; padding:20px 28px;">
-        <p style="font-size:15px; font-weight:600; margin-bottom:14px;">Ready to get connected? ⚽</p>
-        <button class="btn btn-primary" style="width:100%; padding:15px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700;" onclick="scrollToSignup()">Get Your eSIM Now →</button>
+    <div class="card" style="text-align:center; padding:22px 26px; background: linear-gradient(135deg, var(--green), var(--green2));">
+        <p style="font-size:16px; font-weight:700; margin-bottom:14px; color:white; font-family:'Oswald',sans-serif; letter-spacing:0.3px;">Ready to get connected? ⚽</p>
+        <button onclick="scrollToSignup()" style="width:100%; padding:16px; font-family:'Oswald',sans-serif; font-size:16px; font-weight:700; letter-spacing:0.5px; background:var(--lime); color:var(--green3); border:none; border-radius:12px; cursor:pointer;">
+            Get Your eSIM Now →
+        </button>
     </div>
 
 </div>
 
 <footer>
+    <div class="footer-logo">Footy<span>SIMs</span></div>
     <p>🔐 Secure &nbsp;•&nbsp; Transparent &nbsp;•&nbsp; Real eSIMs</p>
     <p>
         <a href="howto.html">How it works</a>
@@ -381,13 +736,12 @@
         &nbsp;•&nbsp;
         <a href="world-cup-2026-travel-guide.html">⚽ World Cup 2026 Travel Guide</a>
     </p>
-    <p style="margin-top:8px; font-size:12px; opacity:0.6;">© 2026 FootySIMs. All rights reserved.</p>
+    <p style="margin-top:8px; font-size:12px; opacity:0.5;">© 2026 FootySIMs. All rights reserved.</p>
 </footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-auth-compat.js"></script>
 <script>
-    // ── Cookie & ref tracking ───────────────────────────────────────────────────
     (function() {
         const params = new URLSearchParams(window.location.search);
         const ref = params.get('ref');
@@ -395,14 +749,10 @@
             const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString();
             document.cookie = `fsRef=${encodeURIComponent(ref)}; expires=${expires}; path=/; SameSite=Lax`;
         }
-        // Auto-select country if deep-linked from eSIMDB (?country=JP etc)
         const countryParam = params.get('country');
-        if (countryParam) {
-            window._autoSelectCountry = countryParam.toUpperCase();
-        }
+        if (countryParam) window._autoSelectCountry = countryParam.toUpperCase();
     })();
 
-    // ── Firebase ────────────────────────────────────────────────────────────────
     const firebaseConfig = {
         apiKey: "AIzaSyAbU13lns_T_WCi-TNluGiw06rjMxAUids",
         authDomain: "footysims-43be5.firebaseapp.com",
@@ -415,10 +765,8 @@
     const auth = firebase.auth();
     auth.onAuthStateChanged(user => { if (user) window.location.href = 'dashboard.html'; });
 
-    // ── API plan cache ──────────────────────────────────────────────────────────
-    let _allPlans = null;
-    let _loadingPromise = null;
-
+    // ── API cache ───────────────────────────────────────────────────────────────
+    let _allPlans = null, _loadingPromise = null;
     async function getPlans() {
         if (_allPlans) return _allPlans;
         if (_loadingPromise) return _loadingPromise;
@@ -429,73 +777,42 @@
         return _loadingPromise;
     }
 
-    // ── Plan display helpers ────────────────────────────────────────────────────
     function formatPlanLabel(plan) {
         return plan.dataCapPer === 'day' ? 'Unlimited Data' : `${plan.dataCap}${plan.dataUnit} Data`;
     }
-
     function formatPlanSub(plan) {
         const days = plan.validity;
         const dayStr = `${days} Day${days > 1 ? 's' : ''}`;
         if (plan.dataCapPer === 'day') {
-            const speed = plan.reducedSpeed >= 1000
-                ? `${(plan.reducedSpeed / 1000).toFixed(1)}Mbps`
-                : `${plan.reducedSpeed}kbps`;
+            const speed = plan.reducedSpeed >= 1000 ? `${(plan.reducedSpeed/1000).toFixed(1)}Mbps` : `${plan.reducedSpeed}kbps`;
             return `${dayStr} · ${plan.dataCap}GB/day full speed, then ${speed}`;
         }
         return `${dayStr} · Instant QR · No app needed`;
     }
 
-    // ── Country selector ────────────────────────────────────────────────────────
     async function showPlans() {
         const code = document.getElementById('countrySelect').value;
         const list = document.getElementById('plansList');
         const btn  = document.getElementById('getEsimBtn');
         const hint = document.getElementById('selectorHint');
-
-        list.innerHTML = '';
-        btn.style.display = 'none';
-        hint.style.display = 'none';
-
+        list.innerHTML = ''; btn.style.display = 'none'; hint.style.display = 'none';
         if (!code) { hint.style.display = 'block'; return; }
-
         list.innerHTML = '<div class="plan-loading">Loading plans...</div>';
-
         const plans = await getPlans();
-        if (!plans) {
-            list.innerHTML = '<div class="plan-error">Unable to load plans. Please refresh the page.</div>';
-            return;
-        }
-
+        if (!plans) { list.innerHTML = '<div class="plan-error">Unable to load plans. Please refresh.</div>'; return; }
         const countryPlans = plans.filter(p => p.coverages?.[0]?.code === code);
         list.innerHTML = '';
-
-        if (!countryPlans.length) {
-            list.innerHTML = '<div class="plan-error">No plans available for this country.</div>';
-            return;
-        }
-
+        if (!countryPlans.length) { list.innerHTML = '<div class="plan-error">No plans available for this country.</div>'; return; }
         countryPlans.forEach((plan, i) => {
             const row = document.createElement('div');
             row.className = 'plan-row' + (i === 0 ? ' selected' : '');
-            row.innerHTML = `
-                <div>
-                    <div class="plan-label">${formatPlanLabel(plan)}</div>
-                    <div class="plan-sub">${formatPlanSub(plan)}</div>
-                </div>
-                <div class="plan-price">£${plan.prices.GBP.toFixed(2)}</div>
-            `;
-            row.onclick = () => {
-                document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected'));
-                row.classList.add('selected');
-            };
+            row.innerHTML = `<div><div class="plan-label">${formatPlanLabel(plan)}</div><div class="plan-sub">${formatPlanSub(plan)}</div></div><div class="plan-price">£${plan.prices.GBP.toFixed(2)}</div>`;
+            row.onclick = () => { document.querySelectorAll('.plan-row').forEach(r => r.classList.remove('selected')); row.classList.add('selected'); };
             list.appendChild(row);
         });
-
         btn.style.display = 'block';
     }
 
-    // ── Popular Destinations ────────────────────────────────────────────────────
     const POPULAR = [
         { code: 'FR', flag: '🇫🇷', name: 'France'  },
         { code: 'ES', flag: '🇪🇸', name: 'Spain'   },
@@ -504,47 +821,35 @@
         { code: 'US', flag: '🇺🇸', name: 'USA'     },
         { code: 'JP', flag: '🇯🇵', name: 'Japan'   },
     ];
-
     function populatePopular(plans) {
         const grid = document.getElementById('popularGrid');
         if (!plans) { grid.innerHTML = ''; return; }
         const html = POPULAR.map(dest => {
             const plan = plans.find(p => p.coverages?.[0]?.code === dest.code && p.dataCapPer === 'day' && p.validity === 7);
             if (!plan) return '';
-            return `<div class="dest-card">
-                <div><div class="dest-info">${dest.flag} ${dest.name}</div><div class="dest-detail">Unlimited · 7 Days</div></div>
-                <div class="dest-price">£${plan.prices.GBP.toFixed(2)}</div>
-            </div>`;
+            return `<div class="dest-card"><div><div class="dest-info">${dest.flag} ${dest.name}</div><div class="dest-detail">Unlimited · 7 Days</div></div><div class="dest-price">£${plan.prices.GBP.toFixed(2)}</div></div>`;
         }).join('');
         grid.innerHTML = html || '';
     }
 
-    // ── On load: preload API + auto-select country if deep-linked ───────────────
     window.addEventListener('DOMContentLoaded', async () => {
         const plans = await getPlans();
         populatePopular(plans);
-
         if (window._autoSelectCountry) {
             const sel = document.getElementById('countrySelect');
-            // Find matching option
             const opt = Array.from(sel.options).find(o => o.value === window._autoSelectCountry);
             if (opt) {
                 sel.value = window._autoSelectCountry;
                 await showPlans();
-                // Scroll to the selector smoothly
-                setTimeout(() => {
-                    sel.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300);
+                setTimeout(() => sel.closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
             }
         }
     });
 
-    // ── UI helpers ──────────────────────────────────────────────────────────────
     function scrollToSignup() {
         document.getElementById('signupCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
         setTimeout(() => document.getElementById('email').focus(), 600);
     }
-
     function toggleFaq(btn) {
         const answer = btn.nextElementSibling;
         const isOpen = btn.classList.contains('open');
@@ -553,22 +858,19 @@
         if (!isOpen) { btn.classList.add('open'); answer.classList.add('open'); }
     }
 
-    // ── Auth ────────────────────────────────────────────────────────────────────
     function friendlyError(code) {
         const msgs = {
             'auth/invalid-credential': '❌ Email or password is incorrect.',
-            'auth/wrong-password':     '❌ Email or password is incorrect.',
-            'auth/user-not-found':     '❌ Email or password is incorrect.',
+            'auth/wrong-password': '❌ Email or password is incorrect.',
+            'auth/user-not-found': '❌ Email or password is incorrect.',
             'auth/email-already-in-use': '❌ An account with this email already exists. Try logging in.',
-            'auth/weak-password':      '❌ Password must be at least 6 characters.',
-            'auth/invalid-email':      '❌ Please enter a valid email address.',
-            'auth/too-many-requests':  '❌ Too many attempts. Please wait a moment and try again.',
+            'auth/weak-password': '❌ Password must be at least 6 characters.',
+            'auth/invalid-email': '❌ Please enter a valid email address.',
+            'auth/too-many-requests': '❌ Too many attempts. Please wait a moment and try again.',
         };
         return msgs[code] || '❌ Something went wrong. Please try again.';
     }
-
     function setMsg(text, type) { const el = document.getElementById('message'); el.textContent = text; el.className = type; }
-
     function signUp() {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
@@ -577,7 +879,6 @@
             .then(() => { setMsg('✅ Account created! Heading to dashboard...', 'success'); document.getElementById('dashboardBtn').style.display = 'block'; setTimeout(() => window.location.href = 'dashboard.html', 1200); })
             .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
-
     function login() {
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
@@ -586,9 +887,7 @@
             .then(() => { setMsg('✅ Logged in! Heading to dashboard...', 'success'); document.getElementById('dashboardBtn').style.display = 'block'; setTimeout(() => window.location.href = 'dashboard.html', 1200); })
             .catch(err => setMsg(friendlyError(err.code), 'error'));
     }
-
     function goToDashboard() { window.location.href = 'dashboard.html'; }
-
     function forgotPassword() {
         const email = document.getElementById('email').value.trim();
         if (!email) return setMsg('❌ Enter your email address first.', 'error');
