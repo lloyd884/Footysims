@@ -160,7 +160,7 @@ async function sendEsimdbConversionEmail({ offerId, transactionId, amount }) {
         },
         body: JSON.stringify({
             from: 'FootySIMs <noreply@footysims.com>',
-            to: 'shuhei@esimdb.com',
+            to: 'support@esimdb.com',
             subject: `✅ eSIMDB Conversion — ${offerId}`,
             html
         })
